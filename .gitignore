@@ -12,6 +12,15 @@
 *.user
 *.userosscache
 *.sln.docstates
+bin/
+obj/
+[Debug]
+[Release]
+.vs/
+.vscode/
+appsettings.Development.json
+usersecrets.json
+appsettings.json
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

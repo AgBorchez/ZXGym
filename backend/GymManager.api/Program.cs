@@ -34,12 +34,30 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowFrontEnd");
+app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+//para la migracion a render
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<DataContext>();
+
+        context.Database.Migrate();
+        Console.WriteLine("DB de Render actualizada con éxito");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error al migrar la DB D: : {ex.Message}");
+    }
+}
+
 
 app.Run();
