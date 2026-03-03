@@ -42,6 +42,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+//Render
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<GymContext>(options =>
+    options.UseNpgsql(connectionString));
+
 //para la migracion a render
 using (var scope = app.Services.CreateScope())
 {
@@ -51,7 +57,7 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<DataContext>();
 
         context.Database.Migrate();
-        Console.WriteLine("DB de Render actualizada con éxito");
+        Console.WriteLine("DB de Render actualizada con Ã©xito");
     }
     catch (Exception ex)
     {
