@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ZXGym - Recepción</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/tablas.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/formularios.css">
+</head>
+<body>
+
+<nav class="main-nav">
+    <div class="nav-container">
+        <div class="logo">ZXGym</div>
+        <ul class="nav-links">
+            <li><a href="#">Entrenadores</a></li>
+            
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Socios</a>
+                <div class="dropdown-content">
+                    <a href="" onclick="cambiarVista('general')">Datos Generales</a>
+                    <a href="Index_Patologias.html">Patologías</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="nav-spacer"></div>
+
+<main class="content-area">
+    <h1>Datos Generales</h1>
+    <label class="switch">
+        <input type="checkbox" id="theme-toggle">
+        <span class="slider"></span>
+        Modo Oscuro
+</label>
+
+    <div class="tarjeta">
+        <button class="btn-guardar" onclick="abrirFormulario()">Agregar Nuevo Socio</button>
+    </div>
+
+    <div class="tarjeta">
+        <h2>Buscar Socio</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="inputBusqueda" placeholder="Buscar por nombre o apellido..." style="flex-grow: 1;">
+            <button class="btn-eliminar" onclick="limpiarBusqueda()">Limpiar</button>
+        </div>
+    </div>
+    <div class="Header-Tabla">
+        <h2>Lista Oficial</h2>
+        <div>
+            <button id="filtro-Activo" class="btn-filtro" onclick="FiltroEstado(true, 'filtro-Activo')">Mostrar Activos</button>
+            <button id="filtro-Vencido" class="btn-filtro" onclick="FiltroEstado(false, 'filtro-Vencido')">Mostrar Vencidos</button>
+        </div>
+    </div>
+    <div class="tabla-scroll">
+        <table>
+            <thead>
+                <tr class="tr-tablaInicio">
+                    <th onclick="ordenarPor('dni')" style="cursor:pointer">DNI ⬍</th>
+                    <th onclick="ordenarPor('name')" style="cursor:pointer">Nombre ⬍</th>
+                    <th onclick="ordenarPor('lastName')" style="cursor:pointer">Apellido ⬍</th>
+                    <th onclick="ordenarPor('email')" style="cursor:pointer">Email ⬍</th>
+                    <th onclick="ordenarPor('phone')" style="cursor:pointer">Teléfono</th>
+                    <th onclick="ordenarPor('joinDate')" style="cursor:pointer">Fecha ingreso ⬍</th>
+                    <th onclick="ordenarPor('endDate')" style="cursor:pointer">Fecha vencimiento ⬍</th>
+                    <th >Plan</th>
+                    <th>Acciones</th> </tr>
+                </thead>
+                <tbody id="tablaSocios">
+                </tbody>
+            </table>
+        </div>
+</main>
+    <script type="module" src="js/main.js"></script>
+
+    
+
+</body>
+</html>

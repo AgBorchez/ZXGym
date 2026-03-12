@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ZXGym - Crear Socio</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/tablas.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/formularios.css">
+</head>
+<body>
+    <div class="tarjeta" id="DivTarjeta_CrearSocio1">
+        <h1 id="tituloFormulario">Alta de Nuevo Socio</h1>
+        <form id="formSocio" novalidate>
+        <div class="AltaSocio_1" id="Div_Altasocio1">
+            <input type="text" id="dni" placeholder="DNI">            
+            <input type="text" id="nombre" placeholder="Nombre">
+            <input type="text" id="apellido" placeholder="Apellido">
+            <input type="email" id="email" placeholder="Email">
+            <input type="tel" id="telefono" placeholder="Teléfono">
+            <label>Seleccionar Membresia</label>
+            <div class="Selector-Planes">
+                <button id="btn-1mes" type="button" class="btn-Plan" onclick="SelectorPlanes(1, 'btn-1mes')">1 Mes</button>
+                <button id="btn-3meses" type="button" class="btn-Plan" onclick="SelectorPlanes(3, 'btn-3meses')">3 Meses</button>
+                <button id="btn-6meses" type="button" class="btn-Plan" onclick="SelectorPlanes(6, 'btn-6meses')">6 Meses</button>
+                <button id="btn-12meses" type="button" class="btn-Plan" onclick="SelectorPlanes(12, 'btn-12meses')">12 Meses</button>
+            </div>
+            <p id="infoFechaVencimiento" class="text-muted"></p>
+        </div>
+        <div class="AltaSocio_2" id="Div_Altasocio2" style="display: none;"> <h2>Información Médica</h2>
+            <div class="patologias-container">
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="1" name="patologia" value="1"> Hipertensión Arterial</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="2" name="patologia" value="2"> Problemas Cardíacos</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="3" name="patologia" value="3"> Lesiones de Columna</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="4" name="patologia" value="4"> Lesiones Articulares</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="5" name="patologia" value="5"> Asma / Problemas Respiratorios</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="6" name="patologia" value="6"> Diabetes</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="7" name="patologia" value="7"> Cirugías Recientes</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="8" name="patologia" value="8"> Mareos / Vértigo</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="9" name="patologia" value="9"> Embarazo</label>
+                <label><input class="CheckboxPatologias_CrearSocio" type="checkbox" id="10" name="patologia" value="10"> Medicación Crónica</label>
+            </div>
+            
+        </div>
+        <div class="AltaSocio_1" id="Btns_Paso1">
+            <div style="margin-top: 20px;">
+                <button type="button" class="btn-eliminar" id="btnClose" onclick="window.close()">Cancelar</button>
+                <button type="button" class="btn-guardar" onclick="EstadoFormulario(2)">Siguiente</button>
+            </div>
+        </div>
+        <div class="AltaSocio_2" style="display: none;" id="Btns_Paso2">
+            <div style="margin-top: 20px;">
+                <button type="button" class="btn-eliminar" onclick="EstadoFormulario(1)">Volver</button>
+                <button type="submit" class="btn-guardar" id="btnSubmit">Guardar Socio</button>
+            </div>
+        </div>
+    </form>
+    </div>
+            
+</body>
+
+<script type="module" src="js/main.js"></script>
+</html>

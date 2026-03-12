@@ -1,0 +1,153 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0; 
+    background-color: var(--bg-color);
+    color: var(--text-color); 
+    font-size: 18px; 
+}
+
+h1, h2 { 
+    color: var(--text-color); 
+    margin-top: 0; 
+}
+
+input { 
+    background-color: var(--card-bg); 
+    color: var(--text-color); 
+}
+
+input, button { 
+    margin: 5px 0; 
+    border: 1px solid var(--bdr-color); 
+    border-radius: 4px; 
+    font-size: 16px; 
+    padding: 12px 18px; 
+}
+
+table { 
+    width: 100%;
+    min-width: 1200px; 
+    border-collapse: collapse; 
+    border-spacing: 0;
+    background-color: var(--card-bg); 
+}
+
+th, td { 
+    border: 1px solid var(--bdr-color); 
+    padding: 10px; 
+    box-sizing: border-box; 
+    text-align: left; 
+    color: var(--thtd-textColor);
+    font-size: 18px;
+    white-space: nowrap; 
+}
+
+th { 
+    background-color: var(--thback-color); 
+}
+
+.tr-tablaInicio th, 
+.tr-tablaInicio td { 
+    border: 1px solid var(--bdr-color); 
+    text-align: left; 
+    color: var(--thtd-textColor);
+    font-size: 16px; 
+}
+
+.content-area {
+    width: 92%; 
+    max-width: 2500px; 
+    margin: 40px auto 40px auto; 
+    padding: 0; 
+}
+
+.tarjeta {
+    width: 100%;
+    background: var(--card-bg);
+    padding: 20px;
+    border: 1px solid var(--bdr-color);
+    border-radius: 8px;
+    margin-bottom: 20px; 
+}
+
+.header-tabla { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+    padding: 0 5px; 
+}
+
+.btn-guardar { 
+    background-color: var(--save-Btn); 
+    color: white; 
+    cursor: pointer; 
+    font-weight: bold; 
+    border: none; 
+}
+
+.btn-guardar:hover { 
+    background-color: var(--save-Btn); 
+}
+
+.btn-editar { 
+    background-color: var(--edit-Btn); 
+    color: black; 
+    cursor: pointer; 
+    border: none; 
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+}
+
+.btn-eliminar { 
+    background-color: var(--delete-Btn); 
+    color: white; 
+    cursor: pointer; 
+    border: none; 
+    padding: 5px 10px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+}
+
+.btn-Plan { 
+    background-color: var(--plan-Btn); 
+}
+
+.btn-filtro { 
+    background-color: var(--bg-color); 
+    color: var(--text-color); 
+    cursor: pointer; 
+    border: 1px solid var(--bdr-color); 
+    padding: 10px 20px; 
+    border-radius: 4px; 
+    font-weight: 600; 
+}
+
+.tr-patologias th,
+.tr-patologias td {
+    border: 1px solid var(--bdr-color); 
+    text-align: left; 
+    color: var(--thtd-textColor);
+    font-size: 16px;
+    white-space: normal;
+    text-align: left;
+}
+
+.tr-patologias th:nth-child(1), .tr-patologias td:nth-child(1),
+.tr-patologias th:nth-child(2), .tr-patologias td:nth-child(2),
+.tr-patologias th:nth-child(3), .tr-patologias td:nth-child(3) {
+    white-space: nowrap; 
+    text-align: left;
+}
+
+.tabla-scroll {
+    width: 100%;
+    overflow-x: auto; /* Esto crea la barra horizontal si no entra */
+    -webkit-overflow-scrolling: touch; /* Suavidad en celulares */
+    border: 1px solid var(--bdr-color); 
+}

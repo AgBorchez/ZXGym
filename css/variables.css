@@ -1,0 +1,27 @@
+:root {
+    --bg-color: #ffffff;
+    --bdr-color: black;
+    --text-color: #333333;
+    --card-bg: #f4f4f4;
+    --table-header: #eeeeee;
+    --edit-Btn: #ffc107;
+    --delete-Btn: #dc3545;
+    --save-Btn: #28a745;
+    --thback-color: #00ffea;
+    --plan-Btn: #00bedb;
+    --thtd-textColor: black;
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1b;
+    --bdr-color: white;
+    --text-color: #8a8a8a;
+    --card-bg: #2d2d2e;
+    --table-header: #3e3e3f;
+    --edit-Btn: #a57e09;
+    --delete-Btn: #8f1420;
+    --save-Btn: #056319;
+    --thback-color: #007ccf;
+    --plan-Btn: #0095ac;
+    --thtd-textColor: white;
+}

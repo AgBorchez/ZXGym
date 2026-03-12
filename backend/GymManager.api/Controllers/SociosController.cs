@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using GymManager.api.Data;
 using GymManager.api.Models;
-using GymManager.api.Data;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace GymManager.api.Controllers
 {
@@ -20,8 +21,9 @@ namespace GymManager.api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Socio>>> GetAll(
+        public async Task<ActionResult<IEnumerable<SocioResponseDTO>>> GetAll(
             [FromQuery] string? buscar,
+            [FromQuery] bool Tabla_Patologias = false,
             [FromQuery] string SortBy = "DNI",
             [FromQuery] bool IsAscending = true,
             [FromQuery] bool ActiveOnly = true)
@@ -29,15 +31,7 @@ namespace GymManager.api.Controllers
             var query = _context.Socios.AsQueryable();
             var FechaActual = DateTime.UtcNow;
 
-
-            if (ActiveOnly)
-            {
-                query = query.Where(s => s.EndDate > FechaActual);
-            }
-            else
-            {
-                query = query.Where(s => s.EndDate < FechaActual);
-            }
+            query = ActiveOnly ? query.Where(s => s.EndDate > FechaActual) : query = query.Where(s => s.EndDate < FechaActual);
 
             if (!string.IsNullOrEmpty(buscar))
             {
@@ -54,34 +48,92 @@ namespace GymManager.api.Controllers
                 _ => IsAscending ? query.OrderBy(s => s.DNI) : query.OrderByDescending(s => s.DNI),
             };
 
-            var socios = await query.ToListAsync();
-            return Ok(socios);
+            var SociosResponse = await query.Select(s => new SocioResponseDTO
+            {
+                DNI = s.DNI,
+                Name = s.Name,
+                LastName = s.LastName,
+                Email = s.Email,
+                Phone = s.Phone,
+                JoinDate = s.JoinDate,
+                EndDate = s.EndDate,
+                PlanId = s.PlanId,
+                Patologias = Tabla_Patologias ? _context.Socios_Patologias.Where(sp => sp.Socio_DNI == s.DNI).Select(sp => sp.Patologia_id).ToList() : null
+            }).ToListAsync();
+            
+            return Ok(SociosResponse);
         }
-
         [HttpPost]
 
-        public async Task<ActionResult<Socio>> Create(Socio nuevoSocio)
+        public async Task<ActionResult<Socio>> Create(SocioCreateDTO nuevoSocio)
         {
             if (nuevoSocio.JoinDate == default) return BadRequest("Error al determinar fecha de ingreso");
 
-            nuevoSocio.JoinDate = DateTime.SpecifyKind(nuevoSocio.JoinDate, DateTimeKind.Utc);
-            nuevoSocio.EndDate = DateTime.SpecifyKind(nuevoSocio.EndDate, DateTimeKind.Utc);
-            
-            _context.Socios.Add(nuevoSocio);
-            await _context.SaveChangesAsync();
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            return CreatedAtAction(nameof(GetAll), new { DNI = nuevoSocio.DNI }, nuevoSocio);
+            try
+            {
+
+                Socio socioToAppend = new Socio
+                {
+                    DNI = nuevoSocio.DNI,
+                    Name = nuevoSocio.Name,
+                    LastName = nuevoSocio.LastName,
+                    Email = nuevoSocio.Email,
+                    Phone = nuevoSocio.Phone,
+                    JoinDate = DateTime.SpecifyKind(nuevoSocio.JoinDate, DateTimeKind.Utc),
+                    EndDate = DateTime.SpecifyKind(nuevoSocio.EndDate, DateTimeKind.Utc),
+                    PlanId = nuevoSocio.PlanId
+                };
+
+                _context.Socios.Add(socioToAppend);
+                await _context.SaveChangesAsync();
+
+                if (nuevoSocio.Patologias != null && nuevoSocio.Patologias.Any())
+                {
+                    foreach (var patologiaId in nuevoSocio.Patologias)
+                    {
+                        var relacion = new Socio_Patologia
+                        {
+                            Socio_DNI = socioToAppend.DNI,
+                            Patologia_id = patologiaId
+                        };
+                        _context.Socios_Patologias.Add(relacion);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+
+                return CreatedAtAction(nameof(GetAll), new { DNI = socioToAppend.DNI }, socioToAppend);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return StatusCode(500, $"Error al crear el socio: {ex.Message}");
+            }
         }
 
         [HttpGet("{DNI}")]
-        public async Task<ActionResult<Socio>> GetByDNI(int DNI)
+        public async Task<ActionResult<SocioResponseDTO>> GetByDNI(int DNI)
         {
-            var socio = await _context.Socios.FindAsync(DNI);
+            var socioDto = await _context.Socios.Where(s => s.DNI == DNI).Select(s => new SocioResponseDTO
+            {
+                    DNI = s.DNI,
+                    Name = s.Name,
+                    LastName = s.LastName,
+                    Email = s.Email,    
+                    Phone = s.Phone,
+                    JoinDate = s.JoinDate,
+                    EndDate = s.EndDate,
+                    PlanId = s.PlanId,
+                Patologias = _context.Socios_Patologias.Where(sp => sp.Socio_DNI == s.DNI).Select(sp => sp.Patologia_id).ToList()
+            }).FirstOrDefaultAsync();
 
-            if (socio == null)
+            if (socioDto == null)
                 return NotFound("el socio no existe");
 
-            return Ok(socio);
+            return Ok(socioDto);
         }
 
         [HttpPut("{DNI}")]
