@@ -147,7 +147,7 @@ th {
 
 .tabla-scroll {
     width: 100%;
-    overflow-x: auto; /* Esto crea la barra horizontal si no entra */
-    -webkit-overflow-scrolling: touch; /* Suavidad en celulares */
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
     border: 1px solid var(--bdr-color); 
 }

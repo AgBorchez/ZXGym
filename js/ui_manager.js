@@ -168,7 +168,7 @@ export async function cargarSocios_TablaPatologias(textoBusqueda = '') {
             return (socio.patologias || []).includes(id) ? '✔️' : '❌';
         }
             const fila = `
-                        <tr>
+                        <tr class="tr-patologias">
                             <td>${socio.dni}</td>
                             <td>${socio.name}</td>
                             <td>${socio.lastName}</td>

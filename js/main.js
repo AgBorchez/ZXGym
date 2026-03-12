@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             const socio = await respuesta.json();
             let checkboxes = document.querySelectorAll('.CheckboxPatologias_CrearSocio')
-            console.log(checkboxes)
-            console.log("array de patologias backend: ", socio.patologias)
 
             document.getElementById('dni').value = socio.dni;
             document.getElementById('dni').readOnly = true;
@@ -67,14 +65,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('btnSubmit').innerText = "Actualizar Cambios";
             document.getElementById('btnSubmit').className = "btn-editar";
             checkboxes.forEach(checkb => {
-                console.log("checkboxid: ", Number(checkb.id));
                 if(socio.patologias.includes(Number(checkb.id))){
-                    
                     checkb.checked = true;
                 }
             }); 
         }
-
-        
     }
 });

@@ -48,7 +48,7 @@ export function SelectorPlanes(meses, idboton) {
         EstadoSocios.fechaVencimiento = fechabaja.toISOString().split('T')[0];
         EstadoSocios.PlanSeleccionado = meses;
     }else{
-        const fechabaja = new Date(fechaAlta);
+        const fechabaja = new Date(EstadoSocios.fechaAlta);
         fechabaja.setMonth(fechabaja.getMonth() + meses);
         EstadoSocios.fechaVencimiento = fechabaja.toISOString().split('T')[0];
         EstadoSocios.PlanSeleccionado = meses;

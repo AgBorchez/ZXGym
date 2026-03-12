@@ -1,5 +1,5 @@
-// const API_URL = 'https://zxgym.onrender.com/api/socios';
-export const API_URL = 'https://localhost:7102/api/socios';
+export const API_URL = 'https://zxgym.onrender.com/api/socios';
+//export const API_URL = 'https://localhost:7102/api/socios';
 
 //variables globales de estado
 export const EstadoSocios = {
