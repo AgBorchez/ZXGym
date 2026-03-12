@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>ZXGym - Patologías_Usuarios</title>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/tablas.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/formularios.css">
+</head>
+<body>
+
+    <nav class="main-nav">
+    <div class="nav-container">
+        <div class="logo">ZXGym</div>
+        <ul class="nav-links">
+            <li><a href="#">Entrenadores</a></li>
+            
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn">Socios</a>
+                <div class="dropdown-content">
+                    <a href="Pagina_Inicio.html">Datos Generales</a>
+                    <a href="Index_Patologias.html">Patologías</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="nav-spacer"></div>
+
+<main class="content-area">
+<h1>Socios - Problemas de Salud</h1>
+    <label class="switch">
+  <input type="checkbox" id="theme-toggle">
+  <span class="slider"></span>
+  Modo Oscuro
+</label>
+<div class="tarjeta">
+        <h2>Buscar Socio</h2>
+        <div style="display: flex; gap: 10px;">
+            <input type="text" id="inputBusqueda_tablaPatologias" placeholder="Buscar por nombre o apellido..." style="flex-grow: 1;">
+            <button class="btn-eliminar" onclick="limpiarBusqueda()">Limpiar</button>
+        </div>
+</div>
+<div class="tabla-contenedor">
+    <h2>Lista Oficial</h2>
+    <div class="tabla-scroll">
+    <table>
+        <thead>
+            <tr class="tr-patologias">
+                <th onclick="ordenarPor('dni')" style="cursor:pointer">DNI ⬍</th>
+                <th onclick="ordenarPor('name')" style="cursor:pointer">Nombre ⬍</th>
+                <th onclick="ordenarPor('lastName')" style="cursor:pointer">Apellido ⬍</th>
+                <th style="cursor:pointer">Hipertensión</th>
+                <th style="cursor:pointer">Problemas Cardíacos</th>
+                <th style="cursor:pointer">Lesiones de Columna</th>
+                <th style="cursor:pointer">Lesiones Articulares</th>
+                <th style="cursor:pointer">Problemas Respiratorios</th>
+                <th style="cursor:pointer">Diabetes</th>
+                <th style="cursor:pointer">Cirugías Recientes</th>
+                <th style="cursor:pointer">Mareos</th>
+                <th style="cursor:pointer">Embarazo</th>
+                <th style="cursor:pointer">Medicación</th> 
+            </tr>
+        </thead>
+        <tbody id="tablaSocios">
+            </tbody>
+    </table>
+    </div>
+</div>
+
+</main>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
