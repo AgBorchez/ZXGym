@@ -137,9 +137,11 @@ namespace GymManager.api.Controllers
         }
 
         [HttpPut("{DNI}")]
-        public async Task<ActionResult<Socio>> Update(int DNI, Socio SocioActualizado)
+        public async Task<ActionResult<SocioResponseDTO>> Update(int DNI, SocioResponseDTO SocioActualizado)
         {
             if (DNI != SocioActualizado.DNI) return BadRequest("El dni no coincide -.-");
+
+
             var dbsocio = await _context.Socios.FindAsync(DNI);
 
             if (dbsocio == null)
@@ -148,12 +150,32 @@ namespace GymManager.api.Controllers
             dbsocio.Name = SocioActualizado.Name;
             dbsocio.LastName = SocioActualizado.LastName;
             dbsocio.Email = SocioActualizado.Email;
+            dbsocio.Phone = SocioActualizado.Phone; 
             dbsocio.JoinDate = DateTime.SpecifyKind(SocioActualizado.JoinDate, DateTimeKind.Utc);
             dbsocio.EndDate = DateTime.SpecifyKind(SocioActualizado.EndDate, DateTimeKind.Utc);
 
+            var idsNuevos = SocioActualizado.Patologias ?? new List<int>();
+
+            var relacionesActuales = await _context.Socios_Patologias.Where(sp => sp.Socio_DNI == DNI).ToListAsync();
+
+            var relacionesABorrar = relacionesActuales.Where(sp => !idsNuevos.Contains(sp.Patologia_id)).ToList();
+
+            _context.Socios_Patologias.RemoveRange(relacionesABorrar);
+
+            var idsActualesEnDb = relacionesActuales.Select(sp => sp.Patologia_id).ToList();
+
+            var relacionesAAgregar = idsNuevos.Where(id => !idsActualesEnDb.Contains(id)).Select(id => new Socio_Patologia
+                {
+                    Socio_DNI = DNI,
+                    Patologia_id = id
+                })
+                .ToList();
+
+            _context.Socios_Patologias.AddRange(relacionesAAgregar);
+
             await _context.SaveChangesAsync();
 
-            return Ok(dbsocio);
+            return Ok(SocioActualizado);
         }
 
         [HttpDelete("{DNI}")]
