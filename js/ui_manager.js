@@ -51,6 +51,7 @@ export async function cargarSocios(textoBusqueda = '') {
 }
 
 export async function prepararEdicionSocios(dni) {
+    EstadoSocios.dniActual = dni;
     window.open(`Crear_Socio.html?editarDni=${dni}`, 'AltaSocio', 'width=550,height=650,resizable=no,scrollbars=yes');
 }
 
@@ -181,6 +182,7 @@ export async function cargarEntrenadores(textoBusqueda = '') {
 }
 
 export async function prepararEdicionEntrenador(dni) {
+    EstadoSocios.dniActual = dni;
     window.open(`Registrar_Entrenador.html?editarDni=${dni}`, 'AltaEntrenador', 'width=550,height=650,resizable=no,scrollbars=yes');
 }
 
