@@ -1,0 +1,290 @@
+/* ==========================================================================
+   TABLA DE SOCIOS - ESTILO DASHBOARD PRO (DARK THEME) - MODO EMPUJE REAL
+   ========================================================================== */
+
+/* Contenedor principal con efecto de profundidad y scroll inteligente */
+.tabla-container-pro {
+    background-color: #1b2235;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #2d3748;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    margin: 20px 0;
+    width: 100%;
+    overflow-x: auto; 
+    display: block;
+}
+
+/* --- NIVEL 1: Controles Superiores (Switch y Filtros) --- */
+.controles-superiores-pro {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+/* Switch de Vistas (General vs Salud) */
+.view-switcher {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #242c44;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid #3d4663;
+}
+
+.btn-view {
+    background: transparent;
+    border: none;
+    color: #718096;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+}
+
+.btn-view.active {
+    color: #4299e1;
+}
+
+.toggle-track {
+    width: 44px;
+    height: 22px;
+    background: #1b2235;
+    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #3d4663;
+}
+
+.toggle-dot {
+    width: 16px;
+    height: 16px;
+    background: #4299e1;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 3px;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.toggle-dot.right {
+    left: 23px;
+    background: #48bb78;
+}
+
+/* Filtros de Estado (Todos, Activos...) */
+.grupo-filtros {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-filtro {
+    padding: 10px 18px;
+    border: 1px solid #3d4663;
+    background-color: #242c44;
+    color: #a0aec0;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.btn-filtro.activo {
+    background-color: #1a56db;
+    color: white;
+    border-color: #1a56db;
+}
+
+/* --- NIVEL 2: Fila de Búsqueda (Ancho Completo) --- */
+.fila-busqueda {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.input-busqueda-pro {
+    width: 100%;
+    padding: 12px 16px 12px 45px;
+    background-color: #242c44;
+    border: 1px solid #3d4663;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-busqueda-pro:focus {
+    border-color: #4299e1;
+    background-color: #2a3454;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* --- ESTRUCTURA DE TABLA --- */
+.tabla-scroll-area {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+.tabla-estilo {
+    width: max-content; 
+    min-width: 100%; 
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.tabla-estilo th {
+    position: relative;
+    padding: 12px 16px;
+    background-color: #1b2235;
+    color: #718096;
+    border-bottom: 2px solid #2d3748;
+    overflow: visible !important; 
+    text-align: left;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-sizing: border-box;
+}
+
+.header-label {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.header-label:hover { color: #4299e1; }
+
+.resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 8px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 50;
+    background: transparent;
+}
+
+.resizer:hover {
+    background: rgba(66, 153, 225, 0.4);
+    border-right: 3px solid #4299e1;
+}
+
+/* --- CELDAS Y DATOS --- */
+.tabla-estilo td {
+    padding: 16px;
+    border-bottom: 1px solid #2d3748;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    box-sizing: border-box;
+    text-align: left; 
+    
+    /* 🛡️ FIX PARA ACHICAR COLUMNAS */
+    min-width: 0 !important; 
+    max-width: 0 !important; 
+    width: inherit; 
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Badges para la Vista de Salud (Afecciones) */
+.afeccion-badge {
+    display: inline-block;
+    background: rgba(72, 187, 120, 0.1);
+    color: #68d391;
+    border: 1px solid rgba(72, 187, 120, 0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+/* Ajustes especiales para columna de acciones */
+.col-acciones, .tabla-estilo td:last-child {
+    text-align: center !important;
+    max-width: none !important;
+    width: 160px;
+}
+
+.tabla-estilo tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* --- ACCIONES --- */
+.btn-editar-pro, .btn-borrar-pro {
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    min-width: 90px;
+    border: none;
+    color: white;
+    transition: background 0.2s;
+}
+
+.btn-editar-pro { background-color: #2b6cb0; }
+.btn-editar-pro:hover { background-color: #3182ce; }
+
+.btn-borrar-pro { background-color: #c53030; }
+.btn-borrar-pro:hover { background-color: #e53e3e; }
+
+.btn-switch {
+    background-color: #2d3748;
+    color: #a0aec0;
+    border: 1px solid #4a5568;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    transition: all 0.2s;
+}
+
+.btn-switch:hover {
+    background-color: #4a5568;
+    color: white;
+}
+
+.acciones-container {
+    display: flex;         /* Activa el modo fila */
+    flex-direction: row;   /* Los pone uno al lado del otro */
+    flex-wrap: nowrap;     /* 🛡️ PROHIBE que el botón baje */
+    align-items: center;   /* Los centra verticalmente */
+    gap: 8px;              /* Espacio entre botones */
+    width: 100%;           /* Que ocupe todo el ancho de la celda */
+    justify-content: center;
+}
+
+.badge-plan {
+    background-color: rgba(66, 153, 225, 0.15);
+    color: #90cdf4;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(66, 153, 225, 0.3);
+}
