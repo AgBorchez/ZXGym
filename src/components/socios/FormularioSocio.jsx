@@ -3,7 +3,7 @@ import { API_SOCIOS_URL } from '../../Constants/config.js';
 import '../../styles/FormularioSocio.css';
 
   const estadoInicial = {
-    id ,DNI: '', Name: '', LastName: '', Email: '',
+    id: '' ,DNI: '', Name: '', LastName: '', Email: '',
     Phone: '', JoinDate: '', EndDate: '', PlanId: ''
   };
 
