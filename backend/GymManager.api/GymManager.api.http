@@ -1,0 +1,6 @@
+@GymManager.api_HostAddress = http://localhost:5031
+
+GET {{GymManager.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

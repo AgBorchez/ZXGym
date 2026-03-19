@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { API_SOCIOS_URL } from '../Constants/config.js';
+import { API_SOCIOS_URL } from '../../Constants/config.js';
 import FilaSocio from './FilaSocio';
-import '../styles/TablaSocios.css';
+import '../../styles/TablaSocios.css';
 
 function TablaSocios({ onEditar }) {
   const [socios, setSocios] = useState([]);
@@ -11,7 +11,7 @@ function TablaSocios({ onEditar }) {
   const [vistaAfecciones, setVistaAfecciones] = useState(false);
   
   // Sincronizado con las keys de tu switch en C#
-  const [sortConfig, setSortConfig] = useState({ key: 'DNI', isAscending: true });
+  const [sortConfig, setSortConfig] = useState({ key: 'id', isAscending: true });
 
   const traerSocios = useCallback(async () => {
     try {
@@ -61,12 +61,12 @@ function TablaSocios({ onEditar }) {
     }));
   };
 
-  const manejarBorrar = async (dni) => {
+  const manejarBorrar = async (id) => {
     if (window.confirm("¿Estás seguro de que querés borrar este socio?")) {
       try {
-        const res = await fetch(`${API_SOCIOS_URL}/${dni}`, { method: 'DELETE' });
+        const res = await fetch(`${API_SOCIOS_URL}/${id}`, { method: 'DELETE' });
         if (res.ok) {
-          setSocios(socios.filter((s) => s.dni !== dni));
+          setSocios(socios.filter((s) => s.id !== id));
           alert("Socio borrado con éxito");
         }
       } catch (error) {
@@ -177,7 +177,7 @@ function TablaSocios({ onEditar }) {
             ) : (
               socios.map((socio) => (
                 <FilaSocio 
-                  key={socio.dni} 
+                  key={socio.id} 
                   socio={socio} 
                   onEditar={onEditar} 
                   onBorrar={manejarBorrar}

@@ -1,4 +1,5 @@
 import '../styles/Navbar.css';
+import { Link, NavLink } from 'react-router-dom';
 
 function Navbar() {
   return (
@@ -8,14 +9,16 @@ function Navbar() {
           <a href="/" className="logo">ZXGym</a>
           
           <ul className="nav-links">
-            <li className="dropdown">
-              <a href="#" className="active">Socios</a>
-              <ul className="dropdown-content">
-                <li><a href="#">Datos Generales</a></li>
-                <li><a href="#">Patologías</a></li>
-              </ul>
+            <li>
+              <NavLink to="/socios" className={({ isActive }) => isActive ? "active" : ""}>
+                Socios
+              </NavLink>
             </li>
-            <li><a href="#">Entrenadores</a></li>
+            <li>
+              <NavLink to="/entrenadores" className={({ isActive }) => isActive ? "active" : ""}>
+                Entrenadores
+              </NavLink>
+            </li>
             <li><a href="#">Planes</a></li>
           </ul>
         </div>

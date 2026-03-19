@@ -53,7 +53,7 @@ function FilaSocio({ socio, onEditar, onBorrar, vistaAfecciones }) {
               Editar
             </button>
           ) : (
-            <button className="btn-borrar-pro" onClick={() => onBorrar(socio.dni || socio.DNI)}>
+            <button className="btn-borrar-pro" onClick={() => onBorrar(socio.id || socio.ID)}>
               Borrar
             </button>
           )}

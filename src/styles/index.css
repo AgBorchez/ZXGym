@@ -39,3 +39,30 @@ body { margin: 0; }
   padding: 20px 0;
   text-align: center;
 }
+
+/* Estilo para el botón "+ Nuevo Socio" */
+.btn-nuevo-socio-verde {
+  background-color: #28a745; /* Verde éxito */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px; /* Redondeado como la foto 2 */
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espacio entre el + y el texto */
+  transition: all 0.2s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-nuevo-socio-verde:hover {
+  background-color: #218838;
+  transform: translateY(-2px); /* Efecto de levante */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-nuevo-socio-verde:active {
+  transform: translateY(0);
+}
