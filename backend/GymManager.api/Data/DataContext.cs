@@ -2,6 +2,7 @@
 using GymManager.api.Models.Entrenadores;
 using GymManager.api.Models.Patologias;
 using GymManager.api.Models.Socios;
+using GymManager.api.Models.Usuarios;
 
 namespace GymManager.api.Data
 {
@@ -14,6 +15,8 @@ namespace GymManager.api.Data
         public DbSet<Socio_Patologia> Socios_Patologias { get; set; }
 
         public DbSet<Entrenador> Entrenadores {  get; set; }
+
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

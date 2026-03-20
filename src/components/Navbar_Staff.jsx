@@ -1,12 +1,12 @@
 import '../styles/Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
 
-function Navbar() {
+function Navbar_Staff() {
   return (
     <>
       <nav className="main-nav"> 
         <div className="nav-container">
-          <a href="/" className="logo">ZXGym</a>
+          <NavLink to="/" className="logo">ZXGym</NavLink>
           
           <ul className="nav-links">
             <li>
@@ -29,4 +29,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Navbar_Staff;

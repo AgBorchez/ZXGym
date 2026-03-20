@@ -1,4 +1,4 @@
-Si queres ver como funciona la app podes entrar desde este link https://zxgym-frontend.onrender.com :D
+Si queres ver como funciona la app podes entrar desde este link https://agborchez.github.io/ZXGym/Pagina_Inicio.html o tambien desde el deployment mas reciente :D
 
 Si te aparece la "Lista oficial" vacia solo espera entre 50-30 segundos. La db esta creada con un plan gratuito y cada 15 minutos entra en modo reposo, por lo que se tiene que reactivar cada que alguien entra.
 
