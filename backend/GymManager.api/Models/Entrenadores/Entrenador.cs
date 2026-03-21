@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using GymManager.api.Models.Usuarios;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GymManager.api.Models.Entrenadores
@@ -11,6 +12,10 @@ namespace GymManager.api.Models.Entrenadores
         public int DNI { get; set; }
 
         [Required]
+
+        [ForeignKey("DNI")]
+
+        public virtual Usuario? Usuario { get; set; }
         public string Name { get; set; } = string.Empty;
 
         [Required]
