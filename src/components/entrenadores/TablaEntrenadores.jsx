@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_ENTRENADORES_URL } from '../../Constants/config.js'; // Acordate de agregar esta URL
 import FilaEntrenador from './FilaEntrenador'; 
-import '../../styles/TablaSocios.css'; // Reutilizamos los estilos generales
+import '../../styles/components/TablaSocios.css'; // Reutilizamos los estilos generales
 
 function TablaEntrenadores({ onEditar }) {
   const [entrenadores, setEntrenadores] = useState([]);

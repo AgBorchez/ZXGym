@@ -1,0 +1,150 @@
+/* src/styles/Navbar.css */
+
+/* 1. Contenedor Principal (Fixed + Glassmorphism) */
+.main-nav {
+    position: fixed; 
+    top: 0;           
+    left: 0;
+    width: 100%;     
+    height: 80px; 
+    
+    /* Efecto de cristal oscuro */
+    background-color: rgba(13, 13, 13, 0.75); 
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    
+    display: flex;
+    align-items: center;
+    z-index: 1000;   
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 8%; /* Ajustado para dar aire a los costados */
+    width: 100%;
+    height: 100%; 
+    box-sizing: border-box
+}
+
+/* 2. Logo */
+.logo {
+    font-size: 30px; 
+    font-weight: 800; /* Super grueso */
+    color: white; /* Color para "ZX" */
+    text-decoration: none;
+    letter-spacing: -1.5px;
+}
+
+.logo span {
+    color: #ff4d4d; /* El rojo característico de ZXGym */
+}
+
+/* 3. Enlaces de Navegación */
+.nav-links { 
+    list-style: none; 
+    display: flex; 
+    gap: 35px; /* Espacio entre links */
+    margin: 0; 
+    padding: 0; 
+    height: 100%; 
+}
+
+.nav-links li { 
+    display: flex; 
+    align-items: center; 
+    position: relative;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.6); /* Estética de la foto: grisáceos si no están activos */
+    text-decoration: none;
+    font-size: 16px; 
+    font-weight: 500;
+    padding: 10px 0;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: white;
+}
+
+/* Línea roja debajo del link activo (Estilo Foto 1) */
+.nav-links a.active { 
+    color: white;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: 20px; /* Alineado al fondo de la nav */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #ff4d4d;
+    border-radius: 2px;
+}
+
+/* 4. Botón de Ingreso (Estirado) */
+.btn-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Aumentamos el padding lateral a 55px para que sea bien largo */
+    padding: 10px 55px; 
+    min-width: 160px; /* Asegura un ancho mínimo consistente */
+    
+    /* 2. Bordes y Fondo */
+    border: 2px solid rgba(168, 0, 0, 0.4); /* Borde un poco más visible */
+    background-color: transparent;
+    border-radius: 9px; /* Redondeado sutil como la foto */
+    
+    /* 3. Tipografía */
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    line-height: 1; /* Evita desplazamientos verticales del texto */
+    
+    /* 4. Animación */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.btn-login:hover {
+    background-color: #ff4d4d;
+    border-color: #ff4d4d;
+    box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+}
+
+/* 5. Dropdown */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 80px;
+    right: 0;
+    background-color: #1a1a1a;
+    min-width: 200px;
+    box-shadow: 0px 10px 20px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.nav-links li:hover .dropdown-content { 
+    display: block; 
+}
+
+/* 6. Espaciador */
+.nav-spacer {
+    height: 80px;
+}
+
+.nav-auth {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 150px; /* Espacio reservado para el botón */
+}

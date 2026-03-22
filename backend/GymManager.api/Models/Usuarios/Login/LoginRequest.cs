@@ -1,8 +1,8 @@
 ﻿namespace GymManager.api.Models.Usuarios.Login
 {
-    public class LoginRequest
+    public class LoginRequestOriginal //le agregue original porque sino hacia colosion con loginrequest de aspnet
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

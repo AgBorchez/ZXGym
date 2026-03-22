@@ -40,9 +40,6 @@ namespace GymManager.api.Data
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.DNI).IsUnique();
 
-            //modelBuilder.Entity<Socio>().HasOne(s => s.Usuario).WithOne().HasForeignKey<Socio>(s => s.DNI).HasPrincipalKey<Usuario>(u => u.DNI);
-
-            //modelBuilder.Entity<Entrenador>().HasOne(s => s.Usuario).WithOne().HasForeignKey<Entrenador>(E => E.DNI).HasPrincipalKey<Usuario>(u => u.DNI);
         }
 
         

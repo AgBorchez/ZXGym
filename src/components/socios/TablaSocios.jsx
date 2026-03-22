@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_SOCIOS_URL } from '../../Constants/config.js';
 import FilaSocio from './FilaSocio';
-import '../../styles/TablaSocios.css';
+import '../../styles/components/TablaSocios.css';
 
 function TablaSocios({ onEditar }) {
   const [socios, setSocios] = useState([]);

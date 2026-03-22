@@ -1,4 +1,5 @@
 using GymManager.api.Data;
+using GymManager.api.Models.Usuarios;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddCors(options =>
         .AllowAnyHeader();
     });
 });
+
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 // Add services to the container.
 

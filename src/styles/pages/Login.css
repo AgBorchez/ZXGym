@@ -1,0 +1,150 @@
+/* src/styles/Login.css */
+
+.login-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+    /* Podés usar la misma imagen de fondo del Hero con un filtro oscuro */
+    background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-card {
+    background: rgba(26, 26, 26, 0.85);
+    backdrop-filter: blur(15px);
+    padding: 50px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 450px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.login-header h2 {
+    color: white;
+    margin: 20px 0 10px;
+    font-size: 1.8rem;
+}
+
+.login-header p {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.login-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ccc;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #ff4d4d;
+    outline: none;
+}
+
+.btn-login-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-login-submit:hover {
+    background-color: #e63939;
+    transform: translateY(-2px);
+}
+
+.login-footer {
+    margin-top: 30px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.login-footer a {
+    color: #ff4d4d;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-form input, 
+.form-input-readonly {
+    width: 100%;
+    padding: 12px 15px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.3s;
+}
+
+/* --- Ajustes exclusivos para el campo bloqueado de Rol --- */
+.form-input-readonly {
+    cursor: not-allowed;
+    outline: none;
+    border-color: #333; /* Mismo color que los otros para no resaltar */
+    color: #a0a0a0;     /* Gris suave igual al placeholder */
+    font-weight: 400;   /* Peso normal, sin bold */
+    text-transform: none; 
+}
+
+/* El efecto rojo solo cuando el usuario hace foco en campos editables */
+.login-form input:focus {
+    border-color: #ff4d4d;
+    outline: none;
+}
+
+input.form-input-readonly[readOnly] {
+    cursor: not-allowed;
+    outline: none;
+    border-color: #333 !important; /* Forzamos el color del borde original */
+    
+    /* TIPOGRAFÍA: Forzamos el gris exacto y el peso fino */
+    color: #666 !important; /* Un gris más oscuro para que coincida con el placeholder */
+    font-weight: 400 !important; 
+    font-family: 'Inter', sans-serif !important;
+    text-transform: none !important; /* Evita que se vea en mayúsculas si no querés */
+    
+    /* Evitamos que el navegador le ponga opacidad extra */
+    opacity: 1; 
+    -webkit-text-fill-color: #666; /* Necesario para algunos navegadores como Safari/Chrome */
+}
+
+/* Evitamos que cambie el borde al hacer clic (focus) */
+input.form-input-readonly[readOnly]:focus {
+    border-color: #333 !important;
+    box-shadow: none !important;
+}
