@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../../styles/pages/Login.css';
+import '../../styles/pages/Inicio/Login.css';
 import { API_SOCIOS_URL } from '../../Constants/config';
 
 const RegisterSocio = () => {

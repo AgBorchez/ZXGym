@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import '../../styles/pages/Login.css';
+import '../../styles/pages/Inicio/Login.css';
 import { API_ENTRENADORES_URL } from '../../Constants/config'; // Usamos la base de tu API
 
 const RegisterEntrenador = () => {

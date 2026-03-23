@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/pages/Login.css';
-import { API_USUARIOS_URL } from '../Constants/config';
-import { useAuth } from '../context/AuthContext'; // 1. IMPORTAR EL HOOK
+import '../../styles/pages/Inicio/Login.css';
+import { API_USUARIOS_URL } from '../../Constants/config';
+import { useAuth } from '../../context/AuthContext'; // 1. IMPORTAR EL HOOK
 
 const Login = () => {
   const [email, setEmail] = useState('');

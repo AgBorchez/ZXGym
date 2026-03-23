@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import '../../styles/pages/Login.css';
+import '../../styles/pages/Inicio/Login.css';
 import { API_USUARIOS_URL } from '../../Constants/config';
 
 const RegisterManager = () => {

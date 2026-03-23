@@ -178,3 +178,69 @@
     background: #ff4d4d;
     color: white;
 }
+
+/* ... (Todo tu código anterior se mantiene igual hasta el final) ... */
+
+/* 7. RESPONSIVIDAD (Ajustes para pantallas chicas) */
+
+@media (max-width: 950px) {
+    .nav-container {
+        padding: 0 4%; /* Reducimos el aire a los costados */
+    }
+    .nav-links {
+        gap: 20px; /* Acortamos espacio entre links */
+    }
+}
+
+@media (max-width: 850px) {
+    .main-nav {
+        height: auto;
+        padding: 15px 0;
+        position: fixed;
+    }
+
+    .nav-container {
+        flex-direction: column; /* Apilamos Logo arriba y Links abajo */
+        gap: 15px;
+    }
+
+    .nav-links {
+        height: auto;
+        flex-wrap: wrap; /* Si no entran, que bajen a la siguiente línea */
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .nav-links a.active::after {
+        bottom: 0; /* Ajustamos la línea roja para que no flote */
+    }
+
+    .nav-auth {
+        margin-top: 10px;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .nav-spacer {
+        height: 140px; /* Aumentamos el spacer porque la nav ahora es más alta al ser vertical */
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 24px;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .btn-login {
+        padding: 8px 30px; /* Botón más chico para celulares */
+        min-width: 120px;
+    }
+    
+    .user-name {
+        display: none; /* Ocultamos el nombre en móviles muy chicos para ahorrar espacio */
+    }
+}

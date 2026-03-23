@@ -1,0 +1,201 @@
+/* --- Variables y Globales --- */
+:root {
+  --bg-dark: #121212;
+  --card-dark: #1a1a1a;
+  --input-bg: #222222;
+  --red-zx: #ff4d4d;
+  --red-zx-hover: #e64040;
+  --text-white: #ffffff;
+  --text-gray: #b3b3b3;
+  --border-card: rgba(255, 255, 255, 0.05);
+}
+
+.page-contacto-dark {
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  font-family: 'Poppins', sans-serif;
+  padding-bottom: 100px; /* Espacio al final ya que no hay mapa */
+}
+
+.container-pro {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+/* --- 1. HERO SECTION --- */
+.contacto-hero {
+  height: 250px;
+  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+}
+
+.contacto-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -2px;
+}
+
+.contacto-hero p {
+  color: var(--text-gray);
+  font-size: 1.2rem;
+  margin: 5px 0 0 0;
+}
+
+/* --- 2. MAIN SECTION & GRID (Nivelación Aplicada) --- */
+.contacto-main {
+  padding: 80px 5%;
+}
+
+.text-center-pro {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.contacto-grid {
+  display: flex;
+  gap: 50px;
+  align-items: stretch; /* 👈 Obliga a ambas columnas a medir lo mismo */
+  flex-wrap: wrap;
+}
+
+.contacto-form-wrapper, 
+.contacto-info-wrapper {
+  flex: 1;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column; /* Permite control interno del alto */
+}
+
+h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+/* --- FORMULARIO NIVELADO --- */
+.dark-form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* 👈 Hace que el formulario use todo el alto disponible */
+}
+
+.dark-form .form-group {
+  margin-bottom: 20px;
+}
+
+.dark-form input, 
+.dark-form textarea {
+  width: 100%;
+  padding: 18px;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  color: var(--text-white);
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.dark-form textarea {
+  flex-grow: 1 !important; /* 👈 Se estira para rellenar el hueco */
+  min-height: 150px;
+  resize: none;
+}
+
+.dark-form input:focus, 
+.dark-form textarea:focus {
+  outline: none;
+  border-color: var(--red-zx);
+}
+
+.btn-rojo-full {
+  width: 100%;
+  padding: 18px !important;
+  background-color: var(--red-zx);
+  color: var(--text-white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: auto; /* 👈 Se pega a la base de la columna */
+  transition: all 0.3s;
+}
+
+.btn-rojo-full:hover {
+  background-color: var(--red-zx-hover);
+  transform: translateY(-2px);
+}
+
+/* --- TARJETAS DE INFORMACIÓN (Distribuidas) --- */
+.contacto-info-wrapper {
+  justify-content: space-between; /* 👈 Separa las 3 tarjetas proporcionalmente */
+}
+
+.info-card-pro {
+  background-color: var(--card-dark);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1; /* 👈 Se estiran para llenar el alto */
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.info-card-pro:last-child {
+  margin-bottom: 0 !important;
+}
+
+.info-card-pro:hover {
+  transform: translateX(10px);
+  border-color: rgba(255, 77, 77, 0.3);
+}
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  background-color: var(--red-zx);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.info-text h4 {
+  margin: 0 0 5px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.info-text p {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.info-sub {
+  color: var(--text-gray);
+  font-size: 0.85rem;
+}
+
+/* --- RESPONSIVIDAD --- */
+@media (max-width: 850px) {
+  .contacto-grid {
+    flex-direction: column;
+  }
+  .contacto-info-wrapper {
+    gap: 20px;
+  }
+  .info-card-pro {
+    margin-bottom: 0;
+  }
+}

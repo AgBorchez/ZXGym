@@ -1,0 +1,283 @@
+/* --- Variables Pro ZXGym --- */
+:root {
+  --bg-dark: #101010; 
+  --card-dark: #1a1a1a;
+  --red-zx: #ff4d4d;
+  --red-zx-hover: #e64040;
+  --text-white: #ffffff;
+  --text-gray: #b3b3b3;
+  --border-card: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+}
+
+/* --- Resets y Globales --- */
+.page-entrenamiento-dark {
+  background-color: var(--bg-dark);
+  color: var(--text-white);
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Animación de entrada para las tarjetas */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- TITULARES (Corregido line-height para evitar solapamiento) --- */
+h2 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 0; /* Usamos padding en la sección en su lugar */
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+  line-height: 1.1; /* 👈 Arregla que las letras se pisen verticalmente */
+}
+
+.subtitulo-seccion {
+  text-align: center;
+  color: var(--text-gray);
+  max-width: 650px;
+  margin: 0 auto 60px auto;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+/* --- 1. HERO SECTION --- */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  min-height: 550px;
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(16,16,16,1)), 
+                    url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;    /* Centrado vertical */
+  justify-content: center; /* 👈 AGREGADO: Centrado horizontal del contenido */
+  padding: 0 20px;         /* Cambiado para que no se pegue a los bordes en mobile */
+  z-index: 1;
+  text-align: center;      /* 👈 AGREGADO: Asegura que el texto interno se alinee al medio */
+}
+
+/* --- 1. HERO SECTION (Contenedor Padre) --- */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  min-height: 550px;
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(16,16,16,1)), 
+                    url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  
+  display: flex;
+  align-items: center;      /* Centrado vertical */
+  justify-content: center;   /* Centrado horizontal */
+  
+  /* ❌ ELIMINADO: padding: 0 10% (Esto causaba el desfasaje) */
+  padding: 0; 
+  width: 100%;
+  z-index: 1;
+}
+
+/* --- 2. HERO CONTENT (Contenedor del Texto) --- */
+/* --- 1. HERO SECTION (Contenedor Padre) --- */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  min-height: 550px;
+  width: 100vw;           /* 👈 Ocupa el 100% del ancho de pantalla real */
+  margin-left: calc(-50vw + 50%); /* 👈 Truco para centrar si el padre tiene padding */
+  left: 0;
+  
+  background-image: linear-gradient(rgba(0,0,0,0.5), rgba(16,16,16,1)), 
+                    url('https://images.unsplash.com/photo-1540497077202-7c8a3999166f?q=80&w=1470&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  
+  display: flex;
+  flex-direction: column; /* Cambiamos a column para control total */
+  align-items: center;    /* Centrado horizontal total */
+  justify-content: center; /* Centrado vertical total */
+  
+  padding: 0 !important;  /* 👈 Forzamos a quitar cualquier padding molesto */
+  text-align: center;
+  z-index: 1;
+}
+
+/* --- 2. HERO CONTENT (Contenedor del Texto) --- */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* Centra el botón */
+  justify-content: center;
+  
+  width: 100%;            /* Ocupa todo el ancho disponible del padre */
+  max-width: 900px;       /* Pero no se estira más de esto */
+  margin: 0 auto !important; /* Forzamos el margen automático */
+  padding: 0 20px;        /* Solo un poco de aire para que no toque los bordes */
+  box-sizing: border-box; /* Asegura que el padding no sume ancho */
+}
+
+.hero-content h1 {
+  font-size: 4.5rem;
+  font-weight: 900;
+  letter-spacing: -3px;
+  margin: 0 0 20px 0 !important; /* Limpiamos cualquier margen residual */
+  width: 100%;
+  line-height: 1;
+}
+
+.hero-content p {
+  color: var(--text-gray);
+  max-width: 650px;       /* Un ancho elegante para el párrafo */
+  font-size: 1.25rem;
+  margin: 0 auto 40px auto !important; /* Centrado horizontal del bloque */
+  line-height: 1.6;
+}
+
+.btn-rojo-pro {
+  background-color: var(--red-zx);
+  color: var(--text-white);
+  border: none;
+  padding: 18px 50px;
+  font-weight: 800;
+  font-size: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-rojo-pro:hover {
+  background-color: var(--red-zx-hover);
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(255, 77, 77, 0.4);
+}
+
+/* --- 2. SECCIÓN SERVICIOS (Con aire extra de seguridad) --- */
+.servicios-section {
+  /* Padding superior aumentado para evitar que se pegue a la Navbar móvil */
+  padding: 120px 10% 120px 10%; 
+  background-color: var(--bg-dark);
+  position: relative;
+  z-index: 2;
+}
+
+.tarjetas-container {
+  display: flex;
+  gap: 35px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tarjeta-servicio-pro {
+  position: relative;
+  height: 500px;
+  flex: 1;
+  min-width: 320px;
+  max-width: 400px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--border-card);
+  display: flex;
+  align-items: flex-end;
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.tarjeta-servicio-pro:nth-child(2) { animation-delay: 0.2s; }
+.tarjeta-servicio-pro:nth-child(3) { animation-delay: 0.4s; }
+
+.tarjeta-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(to bottom, 
+    rgba(0,0,0,0) 0%, 
+    rgba(0,0,0,0.4) 50%, 
+    rgba(0,0,0,0.95) 90%);
+  z-index: 1;
+  transition: opacity 0.4s ease;
+}
+
+.tarjeta-content {
+  position: relative;
+  z-index: 2;
+  padding: 45px 30px;
+  text-align: center;
+  width: 100%;
+}
+
+.tarjeta-servicio-pro.active {
+  border: 2px solid rgba(255, 77, 77, 0.5);
+  transform: translateY(-15px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+}
+
+.tarjeta-servicio-pro.active .icon-wrapper {
+  background-color: var(--red-zx);
+}
+
+.tarjeta-servicio-pro:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* --- ÍCONO GLASSMORPHISM --- */
+.icon-wrapper {
+  width: 75px;
+  height: 75px;
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px auto;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.icon-servicio {
+  font-size: 2.3rem;
+}
+
+.tarjeta-servicio-pro h3 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  margin-bottom: 15px;
+  line-height: 1.2; /* 👈 Arregla solapamiento en títulos de tarjetas */
+}
+
+/* --- AJUSTES RESPONSIVOS (Críticos) --- */
+@media (max-width: 1024px) {
+  .hero-content h1 { font-size: 3.5rem; }
+}
+
+@media (max-width: 850px) {
+  .servicios-section {
+    padding-top: 160px; /* 👈 Empuja el contenido hacia abajo cuando la nav colapsa */
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section { 
+    height: auto; 
+    padding: 140px 5% 80px 5%; /* 👈 Evita que el texto del hero choque con la nav */
+    text-align: center; 
+    justify-content: center;
+  }
+  .hero-content h1 { font-size: 2.8rem; line-height: 1.1; }
+  .hero-content p { margin: 0 auto 30px auto; }
+  .tarjeta-servicio-pro { height: 420px; min-width: 100%; }
+}

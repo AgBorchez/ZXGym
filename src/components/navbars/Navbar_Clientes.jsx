@@ -19,13 +19,12 @@ const NavbarPublico = () => {
               <li><NavLink to="/" end className={({ isActive }) => isActive ? "active" : ""}>Inicio</NavLink></li>
               
               {/* Visible para Todos (o podés ocultarlo para visitantes si preferís) */}
-              <li><NavLink to="/entrenamiento" className={({ isActive }) => isActive ? "active" : ""}>Entrenamiento</NavLink></li>
+              
 
               {/* OPCIONES SOLO PARA VISITANTES (Se ocultan si ya es socio) */}
               {!isMember && (
                 <>
-                  <li><NavLink to="/clases" className={({ isActive }) => isActive ? "active" : ""}>Clases</NavLink></li>
-                  <li><NavLink to="/planes" className={({ isActive }) => isActive ? "active" : ""}>Planes</NavLink></li>
+                <li><NavLink to="/entrenamiento" className={({ isActive }) => isActive ? "active" : ""}>Entrenamiento</NavLink></li>
                   <li><NavLink to="/contacto" className={({ isActive }) => isActive ? "active" : ""}>Contacto</NavLink></li>
                 </>
               )}

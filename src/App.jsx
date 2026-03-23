@@ -8,15 +8,16 @@ import NavbarStaff from './components/navbars/Navbar_Staff'; // Esta es la de Ma
 import NavbarEntrenador from './components/navbars/Navbar_Entrenador'; // La nueva
 
 // Pages
-import Home from './pages/Home';
-import Login from './pages/Login';
+import Home from './pages/Inicio/Home';
+import Login from './pages/Inicio/Login';
 import Socios from './pages/Socios/Socios';
 import Entrenadores from './pages/Entrenadores/Entrenadores';
 import RegisterSocio from './pages/Socios/RegisterSocio';
 import RegisterEntrenador from './pages/Entrenadores/RegisterEntrenadores';
 import RegisterManager from './pages/Managers/RegisterManager';
-import Usuarios from './pages/Managers/ControlUsuarios';
 import ControlUsuarios from './pages/Managers/ControlUsuarios';
+import Entrenamiento from './pages/Inicio/Entrenamiento';
+import Contacto from './pages/Inicio/Contacto';
 
 // --- EL SELECTOR DE NAVBAR ---
 const NavbarSelector = () => {
@@ -51,6 +52,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterSocio />} />
+          <Route path='/entrenamiento' element={<Entrenamiento />} />
+          <Route path='/contacto' element={<Contacto />} />
           
           {/* REGISTROS POR INVITACIÓN (Staff) */}
           <Route path="/register-entrenador/:tokenSucio" element={<RegisterEntrenador />} />
