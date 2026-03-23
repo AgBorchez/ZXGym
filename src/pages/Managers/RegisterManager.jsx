@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import '../styles/pages/Login.css';
-import { API_USUARIOS_URL } from '../Constants/config';
+import '../../styles/pages/Login.css';
+import { API_USUARIOS_URL } from '../../Constants/config';
 
 const RegisterManager = () => {
-  const { token } = useParams(); // Captura el MN-code de la URL
+  const { tokenSucio } = useParams(); 
+  const token = tokenSucio 
+    ? (tokenSucio.startsWith(':') ? tokenSucio.slice(1) : tokenSucio) 
+    : "";
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -36,6 +39,7 @@ const RegisterManager = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("token:", token)
     e.preventDefault();
     setLoading(true);
 
@@ -47,11 +51,11 @@ const RegisterManager = () => {
       email: formData.email,
       password: formData.password,
       type: "Manager", // Forzamos el rol para el backend
-      token: token     // El token enviado por el Manager actual
+      Token: token     // El token enviado por el Manager actual
     };
 
     try {
-      const response = await fetch(`${API_USUARIOS_URL}/Usuario/register-Manager`, {
+      const response = await fetch(`${API_USUARIOS_URL}/register-Manager`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSubmit),
@@ -61,8 +65,21 @@ const RegisterManager = () => {
         alert("¡Registro de Manager exitoso! Ya podés gestionar el gimnasio.");
         navigate('/login');
       } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message || 'No se pudo completar el registro'}`);
+        // 1. Obtenemos el texto plano primero
+        const textError = await response.text();
+        console.log("Cuerpo del error crudo:", textError);
+
+        try {
+          // 2. Intentamos convertirlo a objeto
+          const errorData = JSON.parse(textError);
+          
+          // 3. Buscamos el mensaje en cualquier variante posible
+          const finalMsg = errorData.message || errorData.title || textError || "Error desconocido";
+          alert(`Error: ${finalMsg}`);
+        } catch (e) {
+          // 4. Si no es JSON, mostramos el texto que llegó
+          alert(`Error del servidor: ${textError}`);
+        }
       }
     } catch (error) {
       console.error("Error:", error);

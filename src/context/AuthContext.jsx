@@ -47,10 +47,21 @@ export const AuthProvider = ({ children }) => {
         window.location.href = '/login'; 
     };
 
+    const isStaff = user && (user.tipo === 'Manager' || user.tipo === 'Entrenador');
+    const isManager = user?.tipo === 'Manager';
+    const isSocio = user?.tipo === 'Socio';
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
-            {!loading && children} 
-            {/* 👆 IMPORTANTE: No renderizar nada hasta que sepamos si hay usuario */}
+        <AuthContext.Provider value={{ 
+            user, 
+            login, 
+            logout, 
+            loading, 
+            isStaff, 
+            isManager, 
+            isSocio 
+        }}>
+            {!loading && children}
         </AuthContext.Provider>
     );
 };

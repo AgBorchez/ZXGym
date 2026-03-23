@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import TablaSocios from '../components/socios/TablaSocios.jsx';
-import FormularioSocio from '../components/socios/FormularioSocio.jsx';
+import TablaSocios from '../../components/socios/TablaSocios.jsx';
+import FormularioSocio from '../../components/socios/FormularioSocio.jsx';
 
 function Socios() {
   const [actualizarTabla, setActualizarTabla] = useState(0);

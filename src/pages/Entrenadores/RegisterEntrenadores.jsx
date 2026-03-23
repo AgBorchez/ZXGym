@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import '../styles/pages/Login.css';
-import { API_USUARIOS_URL } from '../Constants/config'; // Usamos la base de tu API
+import '../../styles/pages/Login.css';
+import { API_ENTRENADORES_URL } from '../../Constants/config'; // Usamos la base de tu API
 
 const RegisterEntrenador = () => {
   const { token } = useParams(); // Obtenemos el TR-code de la URL
@@ -58,7 +58,7 @@ const RegisterEntrenador = () => {
     };
 
     try {
-      const response = await fetch(`${API_USUARIOS_URL}/Entrenador/register-Entrenador`, {
+      const response = await fetch(`${API_ENTRENADORES_URL}/register-Entrenador`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSubmit),

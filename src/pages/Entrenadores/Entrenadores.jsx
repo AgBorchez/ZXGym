@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import TablaEntrenadores from '../components/entrenadores/TablaEntrenadores.jsx';
-import FormularioEntrenador from '../components/entrenadores/FormularioEntrenador.jsx';
+import TablaEntrenadores from '../../components/entrenadores/TablaEntrenadores.jsx';
+import FormularioEntrenador from '../../components/entrenadores/FormularioEntrenador.jsx';
 
 function Entrenadores() {
   const [actualizarTabla, setActualizarTabla] = useState(0);

@@ -53,14 +53,46 @@ namespace GymManager.api.Models.Usuarios.Register.Tokens
 
         public async Task<bool> ValidarTokenAsync(string tokenEnviado, string rol)
         {
-            var fechaLimite = DateTime.UtcNow.AddHours(-24);
+            Console.WriteLine($"\n--- DEBUG TOKEN START ---");
+            Console.WriteLine($"Recibido: '{tokenEnviado}' | Rol buscado: '{rol}'");
 
-            // Buscamos un token que coincida, que sea del rol correcto,
-            // que NO haya sido usado y que NO tenga más de 24hs.
-            var invitacion = await _context.InvitacionesStaff.FirstOrDefaultAsync(i => i.Codigo == tokenEnviado 
-            && i.Rol == rol.ToLower() && !i.Usado && i.FechaCreacion > fechaLimite);
+            // 1. Buscamos el registro SOLO por el código (sin filtros de fecha ni usado)
+            var invitacion = await _context.InvitacionesStaff
+                .FirstOrDefaultAsync(i => i.Codigo == tokenEnviado);
 
-            if (invitacion == null) return false;
+            if (invitacion == null)
+            {
+                Console.WriteLine("❌ FALLO: El código no existe en la base de datos.");
+                return false;
+            }
+
+            // 2. Validar el Rol (Case Insensitive y sin espacios)
+            bool rolCoincide = string.Equals(invitacion.Rol.Trim(), rol.Trim(), StringComparison.OrdinalIgnoreCase);
+            if (!rolCoincide)
+            {
+                Console.WriteLine($"❌ FALLO ROL: DB tiene '{invitacion.Rol}' pero el Form mandó '{rol}'");
+                return false;
+            }
+
+            // 3. Validar si ya fue usado
+            if (invitacion.Usado)
+            {
+                Console.WriteLine("❌ FALLO ESTADO: El token ya figura como USADO (true) en la DB.");
+                return false;
+            }
+
+            // 4. Validar Fecha (Usamos DateTime.Now para comparar con el offset local de tu DB)
+            var fechaLimite = DateTime.Now.AddHours(-24);
+            Console.WriteLine($"Fecha Creación DB: {invitacion.FechaCreacion} | Límite: {fechaLimite}");
+
+            if (invitacion.FechaCreacion < fechaLimite)
+            {
+                Console.WriteLine("❌ FALLO FECHA: El token tiene más de 24hs de antigüedad.");
+                return false;
+            }
+
+            Console.WriteLine("✅ ÉXITO: Token validado correctamente.");
+            Console.WriteLine("--- DEBUG TOKEN END ---\n");
 
             return true;
         }

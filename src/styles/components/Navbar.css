@@ -148,3 +148,33 @@
     justify-content: flex-end;
     min-width: 150px; /* Espacio reservado para el botón */
 }
+
+.user-logged-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-name {
+    color: white;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border-right: 1px solid rgba(255,255,255,0.2);
+    padding-right: 15px;
+}
+
+.btn-logout-nav {
+    background: transparent;
+    border: 1px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 6px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.btn-logout-nav:hover {
+    background: #ff4d4d;
+    color: white;
+}

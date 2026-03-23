@@ -1,26 +1,44 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext'; // Importamos el contexto
+import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './context/ProtectedRoute';
 
-import NavbarStaff from './components/Navbar_Staff';
-import NavbarPublico from './components/Navbar_Clientes';
+// Navbars
+import NavbarPublico from './components/navbars/Navbar_Clientes';
+import NavbarStaff from './components/navbars/Navbar_Staff'; // Esta es la de Manager
+import NavbarEntrenador from './components/navbars/Navbar_Entrenador'; // La nueva
 
+// Pages
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Socios from './pages/Socios';
-import Entrenadores from './pages/Entrenadores';
-import RegisterSocio from './pages/RegisterSocio';
-import RegisterEntrenador from './pages/RegisterEntrenadores';
-import RegisterManager from './pages/RegisterManager';
+import Socios from './pages/Socios/Socios';
+import Entrenadores from './pages/Entrenadores/Entrenadores';
+import RegisterSocio from './pages/Socios/RegisterSocio';
+import RegisterEntrenador from './pages/Entrenadores/RegisterEntrenadores';
+import RegisterManager from './pages/Managers/RegisterManager';
+import Usuarios from './pages/Managers/ControlUsuarios';
+import ControlUsuarios from './pages/Managers/ControlUsuarios';
 
-// Componente auxiliar para decidir qué Navbar mostrar
+// --- EL SELECTOR DE NAVBAR ---
 const NavbarSelector = () => {
-  const { user } = useAuth();
-  // Si no hay usuario o es "Socio", mostramos el público. 
-  // Si es Manager o Entrenador, mostramos el de Staff.
-  const isStaff = user && (user.tipo === 'Manager' || user.tipo === 'Entrenador');
-  
-  return isStaff ? <NavbarStaff /> : <NavbarPublico />;
+  const { user, loading } = useAuth();
+
+  // No mostramos nada mientras React lee el localStorage para evitar parpadeos
+  if (loading) return null;
+
+  // 1. Si no hay usuario, es un visitante
+  if (!user) return <NavbarPublico />;
+
+  // 2. Lógica por Rol
+  switch (user.tipo) {
+    case 'Manager':
+      return <NavbarStaff />;
+    case 'Entrenador':
+      return <NavbarEntrenador />;
+    case 'Socio':
+      return <NavbarPublico />; // El componente interno ya sabe mostrar "Hola, agustin"
+    default:
+      return <NavbarPublico />;
+  }
 };
 
 function App() {
@@ -35,8 +53,8 @@ function App() {
           <Route path="/register" element={<RegisterSocio />} />
           
           {/* REGISTROS POR INVITACIÓN (Staff) */}
-          <Route path="/register-entrenador/:token" element={<RegisterEntrenador />} />
-          <Route path="/register-manager/:token" element={<RegisterManager />} />
+          <Route path="/register-entrenador/:tokenSucio" element={<RegisterEntrenador />} />
+          <Route path="/register-manager/:tokenSucio" element={<RegisterManager />} />
 
           {/* RUTAS PROTEGIDAS (Solo Staff) */}
           <Route 
@@ -48,16 +66,20 @@ function App() {
             } 
           />
 
-          <Route 
-            path="/entrenadores" 
-            element={
+          <Route path="/entrenadores" element={
               <ProtectedRoute allowedRoles={['Manager']}>
                 <Entrenadores />
-              </ProtectedRoute>
-            } 
+              </ProtectedRoute>} 
           />
+          
+          <Route path="/usuarios" element={
+              <ProtectedRoute allowedRoles={['Manager']}>
+                <ControlUsuarios />
+              </ProtectedRoute>} />
 
-          {/* Redirección por defecto si la ruta no existe */}
+              
+
+          {/* Redirección por defecto */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

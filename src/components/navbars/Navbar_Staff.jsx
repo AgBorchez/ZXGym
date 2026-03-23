@@ -1,4 +1,4 @@
-import '../styles/components/Navbar.css';
+import '../../styles/components/Navbar.css';
 import { Link, NavLink } from 'react-router-dom';
 
 function Navbar_Staff() {
@@ -19,11 +19,16 @@ function Navbar_Staff() {
                 Entrenadores
               </NavLink>
             </li>
-            <li><a href="#">Planes</a></li>
+            {/* NUEVA RUTA: Usuarios (Solo visible/accesible para Managers) */}
+            <li>
+              <NavLink to="/usuarios" className={({ isActive }) => isActive ? "active" : ""}>
+                Usuarios
+              </NavLink>
+            </li>
           </ul>
         </div>
       </nav>
-      {/* Este div evita que el título "Gestión de Socios" se meta atrás de la barra */}
+      {/* Este div evita que el contenido se meta atrás de la barra fija */}
       <div className="nav-spacer"></div>
     </>
   );

@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/pages/Login.css';
-import { API_USUARIOS_URL } from '../Constants/config'; // Asegurate que esta URL sea la base de tu API
+import { API_USUARIOS_URL } from '../Constants/config';
+import { useAuth } from '../context/AuthContext'; // 1. IMPORTAR EL HOOK
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
+  // 2. EXTRAER LA FUNCIÓN LOGIN DEL CONTEXTO
+  const { login } = useAuth(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,37 +20,34 @@ const Login = () => {
     try {
       const response = await fetch(`${API_USUARIOS_URL}/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        // CASO 1: El usuario debe configurar su contraseña (tu lógica de PENDING_PASSWORD)
         if (data.status === "PENDING_PASSWORD") {
           alert(data.message);
-          // Redirigir a una página de "Set Password" pasando el DNI
           navigate(`/set-password/${data.dni}`);
           return;
         }
 
-        // CASO 2: Login exitoso
-        console.log('Usuario autenticado:', data);
+        // --- EL CAMBIO MÁGICO ESTÁ ACÁ ---
         
-        // Guardamos los datos básicos en localStorage (Temporalmente, hasta usar JWT)
-        localStorage.setItem('user', JSON.stringify(data));
+        // 3. LLAMAR A LOGIN DEL CONTEXTO
+        // Esto hace el localStorage.setItem Y ADEMÁS le avisa a React que el usuario existe.
+        login(data); 
 
-        // Redirigir según el tipo de usuario (Manager, Entrenador o Socio)
-        if (data.tipo === "Manager") navigate('/admin/dashboard');
-        else if (data.tipo === "Entrenador") navigate('/staff/dashboard');
-        else navigate('/dashboard');
+        // --------------------------------
+
+        // Redirigir según el tipo
+        if (data.tipo === "Manager") navigate('/socios'); // O tu dashboard de admin
+        else if (data.tipo === "Entrenador") navigate('/socios'); 
+        else navigate('/'); // Socio vuelve al home pero ya logueado
 
       } else {
-        // CASO 3: Error (Unauthorized u otros)
-        alert(data.message || "Error al iniciar sesión");
+        alert(data.message || "Email o contraseña incorrectos");
       }
     } catch (error) {
       console.error('Error de red:', error);

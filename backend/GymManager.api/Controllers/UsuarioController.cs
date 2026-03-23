@@ -30,9 +30,57 @@ namespace GymManager.api.Controllers
             _tokenService = tokenService;
         }
 
-        // --- MÉTODOS PRIVADOS DE APOYO (REUTILIZABLES) ---
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsuarios(
+    [FromQuery] string? buscar,
+    [FromQuery] string? Type, // Filtro por rol: Socio, Entrenador, Manager
+    [FromQuery] string SortBy = "Name",
+    [FromQuery] bool IsAscending = true)
+        {
+            // 1. Iniciamos la query sobre la tabla Usuarios (Base)
+            var query = _context.Usuarios.AsQueryable();
 
-        // --- ENDPOINTS ---
+            // 2. Filtro por Rol (Tipo de usuario)
+            if (!string.IsNullOrEmpty(Type) && Type.ToLower() != "todos")
+            {
+                // Usamos ILike para que no importe si viene "socio" o "Socio"
+                query = query.Where(u => EF.Functions.ILike(u.Type, Type));
+            }
+
+            // 3. Filtro de búsqueda global (DNI, Nombre, Apellido, Email)
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                query = query.Where(u =>
+                    EF.Functions.ILike(u.Name, $"%{buscar}%") ||
+                    EF.Functions.ILike(u.LastName, $"%{buscar}%") ||
+                    EF.Functions.ILike(u.Email, $"%{buscar}%") ||
+                    u.DNI.ToString().Contains(buscar)); // Búsqueda por DNI
+            }
+
+            // 4. Ordenamiento dinámico
+            query = SortBy.ToLower() switch
+            {
+                "dni" => IsAscending ? query.OrderBy(u => u.DNI) : query.OrderByDescending(u => u.DNI),
+                "name" => IsAscending ? query.OrderBy(u => u.Name) : query.OrderByDescending(u => u.Name),
+                "lastname" => IsAscending ? query.OrderBy(u => u.LastName) : query.OrderByDescending(u => u.LastName),
+                "email" => IsAscending ? query.OrderBy(u => u.Email) : query.OrderByDescending(u => u.Email),
+                "type" => IsAscending ? query.OrderBy(u => u.Type) : query.OrderByDescending(u => u.Type),
+                _ => IsAscending ? query.OrderBy(u => u.Id) : query.OrderByDescending(u => u.Id),
+            };
+
+            // 5. Proyectamos a un objeto anónimo o un DTO para no devolver la contraseña (seguridad)
+            var usuariosResponse = await query.Select(u => new UsuarioResponseDTO
+            {
+                Id = u.Id,
+                DNI = u.DNI,
+                Name = u.Name,
+                LastName = u.LastName,
+                Email = u.Email,
+                Type = u.Type,
+            }).ToListAsync();
+
+            return Ok(usuariosResponse);
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -53,7 +101,7 @@ namespace GymManager.api.Controllers
         public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaffRequest request)
         {
             // 1. IMPORTANTE: Agregamos el 'await' y cambiamos al nuevo nombre del método
-            bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "Manager");
+            bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "manager");
 
             if (!esTokenValido)
             {
@@ -86,7 +134,8 @@ namespace GymManager.api.Controllers
             {
                 // Si falla el insert, deshacemos todo
                 await transaction.RollbackAsync();
-                return BadRequest(new { message = ex.Message });
+                var mensajeReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { message = mensajeReal });
             }
         }
 
