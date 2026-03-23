@@ -1,5 +1,6 @@
 using GymManager.api.Data;
 using GymManager.api.Models.Usuarios;
+using GymManager.api.Models.Usuarios.Register.Tokens;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+builder.Services.AddScoped<ITokenService, TokenStaffHelper>();
 
 // Add services to the container.
 

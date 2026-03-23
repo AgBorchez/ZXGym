@@ -1,6 +1,8 @@
 ﻿using GymManager.api.Data;
 using GymManager.api.Models;
 using GymManager.api.Models.Socios;
+using GymManager.api.Models.Usuarios;
+using GymManager.api.Models.Usuarios.Register.Socios;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +18,13 @@ namespace GymManager.api.Controllers
 
         private readonly DataContext _context;
 
-        public SociosController(DataContext context)
+        private readonly IUsuarioService _usuarioService;
+
+        public SociosController(DataContext context, IUsuarioService usuarioService)
         {
             _context = context;
+            _usuarioService = usuarioService;
+
         }
 
         [HttpGet]
@@ -194,6 +200,41 @@ namespace GymManager.api.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Socio eliminado correctamente");
+        }
+
+        [HttpPost("register-socio")]
+        public async Task<IActionResult> RegisterSocio([FromBody] RegistroSocioRequest request)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(request.DNI, request.Name, request.LastName, request.Email, request.Password, "Socio");
+
+                var nuevoSocio = new Socio
+                {
+                    DNI = nuevoUsuario.DNI,
+                    Name = request.Name,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    PlanId = request.PlanId,
+                    JoinDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddMonths(request.PlanId)
+                };
+
+                _context.Usuarios.Add(nuevoUsuario);
+                await _context.SaveChangesAsync();
+                _context.Socios.Add(nuevoSocio);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Socio registrado con éxito" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
     }

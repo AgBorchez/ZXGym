@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using GymManager.api.Models.Entrenadores;
+﻿using GymManager.api.Models.Entrenadores;
 using GymManager.api.Models.Patologias;
 using GymManager.api.Models.Socios;
 using GymManager.api.Models.Usuarios;
+using GymManager.api.Models.Usuarios.Register.Tokens;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymManager.api.Data
 {
@@ -17,6 +18,8 @@ namespace GymManager.api.Data
         public DbSet<Entrenador> Entrenadores {  get; set; }
 
         public DbSet<Usuario> Usuarios { get; set; }
+
+        public DbSet<InvitacionStaff> InvitacionesStaff { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +43,7 @@ namespace GymManager.api.Data
 
             modelBuilder.Entity<Usuario>().HasIndex(u => u.DNI).IsUnique();
 
+            modelBuilder.Entity<InvitacionStaff>().HasIndex(i => i.Codigo).IsUnique();
         }
 
         

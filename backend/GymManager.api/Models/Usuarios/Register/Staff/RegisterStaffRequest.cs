@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GymManager.api.Models.Usuarios.Register
+namespace GymManager.api.Models.Usuarios.Register.Staff
 {
     public class RegisterStaffRequest
     {

@@ -3,7 +3,8 @@ using GymManager.api.Models;
 using GymManager.api.Models.Socios;
 using GymManager.api.Models.Usuarios;
 using GymManager.api.Models.Usuarios.Login;
-using GymManager.api.Models.Usuarios.Register;
+using GymManager.api.Models.Usuarios.Register.Staff;
+using GymManager.api.Models.Usuarios.Register.Tokens;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,14 @@ namespace GymManager.api.Controllers
 
         private readonly IUsuarioService _usuarioService;
 
+        private readonly ITokenService _tokenService;
+
         // 2. INYECTARLO EN EL CONSTRUCTOR
-        public UsuarioController(DataContext context, IUsuarioService usuarioService)
+        public UsuarioController(DataContext context, IUsuarioService usuarioService, ITokenService tokenService)
         {
             _context = context;
             _usuarioService = usuarioService;
+            _tokenService = tokenService;
         }
 
         // --- MÉTODOS PRIVADOS DE APOYO (REUTILIZABLES) ---
@@ -44,56 +48,44 @@ namespace GymManager.api.Controllers
             return Ok(new { id = usuario.Id, nombre = usuario.Name, tipo = usuario.Type, dni = usuario.DNI });
         }
 
-        [HttpPost("register-socio")]
-        public async Task<IActionResult> RegisterSocio([FromBody] RegistroSocioRequest request)
+
+        [HttpPost("register-Manager")]
+        public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaffRequest request)
         {
+            // 1. IMPORTANTE: Agregamos el 'await' y cambiamos al nuevo nombre del método
+            bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "Manager");
+
+            if (!esTokenValido)
+            {
+                return BadRequest(new { message = "Código de invitación inválido, ya utilizado o expirado (24hs)." });
+            }
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(request.DNI, request.Name, request.LastName, request.Email, request.Password, "Socio");
+                // 2. Creamos el usuario base (Identidad)
+                var nuevoStaff = await _usuarioService.CrearUsuarioBaseAsync(
+                    request.DNI,
+                    request.Name,
+                    request.LastName,
+                    request.Email,
+                    request.Password,
+                    "Manager"
+                );
 
-                var nuevoSocio = new Socio
-                {
-                    DNI = nuevoUsuario.DNI,
-                    Name = request.Name,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    Phone = request.Phone,
-                    PlanId = request.PlanId,
-                    JoinDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddMonths(1)
-                };
-
-                _context.Usuarios.Add(nuevoUsuario);
-                _context.Socios.Add(nuevoSocio);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return Ok(new { message = "Socio registrado con éxito" });
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        [HttpPost("register-staff")]
-        public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaffRequest request)
-        {
-            if (!TokenStaffHelper.ValidarToken(request.Token, request.Type))
-                return BadRequest(new { message = "Código de invitación inválido o expirado." });
-
-            try
-            {
-                var nuevoStaff = await _usuarioService.CrearUsuarioBaseAsync(request.DNI, request.Name, request.LastName, request.Email, request.Password, request.Type);
                 _context.Usuarios.Add(nuevoStaff);
                 await _context.SaveChangesAsync();
+                await _tokenService.AnularTokenAsync(request.Token, "Manager");
+
+                // 3. Consolidamos la transacción
+                await transaction.CommitAsync();
 
                 return Ok(new { message = $"Registro de {request.Type} exitoso." });
             }
             catch (Exception ex)
             {
+                // Si falla el insert, deshacemos todo
+                await transaction.RollbackAsync();
                 return BadRequest(new { message = ex.Message });
             }
         }
@@ -110,11 +102,48 @@ namespace GymManager.api.Controllers
             return Ok(new { message = "Contraseña configurada con éxito" });
         }
 
-        [HttpGet("get-current-tokens")]
-        public IActionResult GetCurrentTokens() => Ok(new
+        [HttpGet("generate-Manager-token")]
+        public async Task<IActionResult> GenerateEntrenadorToken()
         {
-            entrenadorCode = TokenStaffHelper.GenerarTokenActual("entrenador"),
-            managerCode = TokenStaffHelper.GenerarTokenActual("manager")
-        });
+            try
+            {
+                
+                var managerToken = await _tokenService.GenerarNuevoTokenAsync("manager");
+
+                return Ok(new
+                {
+                    managerCode = managerToken,
+                    expiresAt = DateTime.UtcNow.AddHours(24) 
+                });
+            }
+            catch (Exception ex)
+            {
+                // Loguear el error si es necesario
+                return StatusCode(500, new { message = "Error al generar los tokens de invitación", error = ex.Message });
+            }
+        }
+
+        [HttpGet("generate-Entrenador-token")]
+        public async Task<IActionResult> GenerateManagerToken()
+        {
+            try
+            {
+                // 1. Generamos los tokens llamando a la lógica asíncrona del servicio
+                // Esto limpia la tabla de tokens viejos e inserta los nuevos
+                var entrenadorToken = await _tokenService.GenerarNuevoTokenAsync("entrenador");
+
+                // 2. Devolvemos los códigos al Manager (Front-end)
+                return Ok(new
+                {
+                    entrenadorCode = entrenadorToken,
+                    expiresAt = DateTime.UtcNow.AddHours(24) // Referencia visual para el Front
+                });
+            }
+            catch (Exception ex)
+            {
+                // Loguear el error si es necesario
+                return StatusCode(500, new { message = "Error al generar los tokens de invitación", error = ex.Message });
+            }
+        }
     }
 }

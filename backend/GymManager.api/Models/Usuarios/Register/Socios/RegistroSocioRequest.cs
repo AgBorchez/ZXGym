@@ -1,6 +1,6 @@
 ﻿using GymManager.api.Models.Socios;
 
-namespace GymManager.api.Models.Usuarios.Register
+namespace GymManager.api.Models.Usuarios.Register.Socios
 {
     public class RegistroSocioRequest : SocioCreateDTO
     {

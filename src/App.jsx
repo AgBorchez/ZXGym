@@ -1,31 +1,67 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar_Staff from './components/Navbar_Staff';
-import Socios from './pages/Socios'; // La nueva ubicación
-import Entrenadores from './pages/Entrenadores'; // El que vas a crear
-import Home from './pages/Home';
-import { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext'; // Importamos el contexto
+import ProtectedRoute from './context/ProtectedRoute';
+
+import NavbarStaff from './components/Navbar_Staff';
 import NavbarPublico from './components/Navbar_Clientes';
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
+
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Socios from './pages/Socios';
+import Entrenadores from './pages/Entrenadores';
+import RegisterSocio from './pages/RegisterSocio';
+import RegisterEntrenador from './pages/RegisterEntrenadores';
+import RegisterManager from './pages/RegisterManager';
+
+// Componente auxiliar para decidir qué Navbar mostrar
+const NavbarSelector = () => {
+  const { user } = useAuth();
+  // Si no hay usuario o es "Socio", mostramos el público. 
+  // Si es Manager o Entrenador, mostramos el de Staff.
+  const isStaff = user && (user.tipo === 'Manager' || user.tipo === 'Entrenador');
+  
+  return isStaff ? <NavbarStaff /> : <NavbarPublico />;
+};
 
 function App() {
-
-const [IsAdmin, SetIsAdmin] = useState(false);
-
   return (
-    <>
-      {IsAdmin ? <Navbar_Staff /> : <NavbarPublico />}
+    <AuthProvider>
+      <NavbarSelector />
       <div className="container-principal">
         <Routes>
-          {/* Si entran a localhost:5173/ (vacío), los mandamos a /socios */}
+          {/* RUTAS PÚBLICAS */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/socios" element={<Socios />} />
-          <Route path="/entrenadores" element={<Entrenadores />} />
-          <Route path='/register' element={<Register />}/>
+          <Route path="/register" element={<RegisterSocio />} />
+          
+          {/* REGISTROS POR INVITACIÓN (Staff) */}
+          <Route path="/register-entrenador/:token" element={<RegisterEntrenador />} />
+          <Route path="/register-manager/:token" element={<RegisterManager />} />
+
+          {/* RUTAS PROTEGIDAS (Solo Staff) */}
+          <Route 
+            path="/socios" 
+            element={
+              <ProtectedRoute allowedRoles={['Manager', 'Entrenador']}>
+                <Socios />
+              </ProtectedRoute>
+            } 
+          />
+
+          <Route 
+            path="/entrenadores" 
+            element={
+              <ProtectedRoute allowedRoles={['Manager']}>
+                <Entrenadores />
+              </ProtectedRoute>
+            } 
+          />
+
+          {/* Redirección por defecto si la ruta no existe */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
-    </>
+    </AuthProvider>
   );
 }
 

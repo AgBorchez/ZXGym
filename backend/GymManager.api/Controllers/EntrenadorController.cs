@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using GymManager.api.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using GymManager.api.Data;
 using GymManager.api.Models.Entrenadores;
 using GymManager.api.Models.Socios;
+using GymManager.api.Models.Usuarios;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using GymManager.api.Models.Usuarios.Register.Staff;
+using GymManager.api.Models.Usuarios.Register.Tokens;
 
 
 namespace GymManager.api.Controllers
@@ -14,9 +17,15 @@ namespace GymManager.api.Controllers
     {
         private readonly DataContext _context;
 
-        public EntrenadorController(DataContext context)
+        private readonly IUsuarioService _usuarioService;
+
+        private readonly ITokenService _tokenService;
+
+        public EntrenadorController(DataContext context, IUsuarioService usuarioService, ITokenService tokenService)
         {
             _context = context;
+            _usuarioService = usuarioService;
+            _tokenService = tokenService;
         }
 
         // GET: api/entrenadores
@@ -53,20 +62,20 @@ namespace GymManager.api.Controllers
                 _ => IsAscending ? query.OrderBy(e => e.Id) : query.OrderByDescending(e => e.Id),
             };
 
-        var EntrenadoresResponseDTO = await query.Select(s => new EntrenadorResponseDTO
-        {
-            Id = s.Id,
-            DNI = s.DNI,
-            Name = s.Name,
-            LastName = s.LastName,
-            Email = s.Email,
-            Phone = s.Phone,
-            Specialty = s.Specialty,
-            Shift = s.Shift,
-            JoinDate = s.JoinDate,
-            RCPExpirationDate = s.RCPExpirationDate,
-            IsActive = s.IsActive   
-        }).ToListAsync();
+            var EntrenadoresResponseDTO = await query.Select(s => new EntrenadorResponseDTO
+            {
+                Id = s.Id,
+                DNI = s.DNI,
+                Name = s.Name,
+                LastName = s.LastName,
+                Email = s.Email,
+                Phone = s.Phone,
+                Specialty = s.Specialty,
+                Shift = s.Shift,
+                JoinDate = s.JoinDate,
+                RCPExpirationDate = s.RCPExpirationDate,
+                IsActive = s.IsActive
+            }).ToListAsync();
 
             return EntrenadoresResponseDTO;
         }
@@ -155,6 +164,72 @@ namespace GymManager.api.Controllers
             await _context.SaveChangesAsync();
 
             return Ok("Entrenador eliminado con éxito.");
+        }
+
+
+        [HttpPost("register-Entrenador")]
+        public async Task<IActionResult> RegisterEntrenador([FromBody] RegistroEntrenadorRequest request)
+        {
+            // 1. Validar el Token (IMPORTANTE: ahora es asincrónico y con Estado)
+            // El método ValidarTokenAsync busca el token, chequea que no tenga +24hs y lo marca como Usado.
+            bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "entrenador");
+
+            if (!esTokenValido)
+            {
+                return BadRequest(new { message = "El código de invitación es inválido, ya fue utilizado o ha expirado." });
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 2. Crear la Identidad (Usuario Base)
+                // Usamos el servicio para generar el hash de la password y el objeto Usuario
+                var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(
+                    request.DNI,
+                    request.Name,
+                    request.LastName,
+                    request.Email,
+                    request.Password,
+                    "Entrenador"
+                );
+
+                _context.Usuarios.Add(nuevoUsuario);
+                await _context.SaveChangesAsync();
+
+                // 3. Crear el Perfil de Entrenador (Tabla específica del dominio)
+                var nuevoEntrenador = new Entrenador
+                {
+                    DNI = nuevoUsuario.DNI,
+                    Name = request.Name,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    Specialty = request.Specialty,
+                    Shift = request.Shift,
+                    IsActive = true,
+                    // Consistencia UTC para PostgreSQL
+                    JoinDate = DateTime.SpecifyKind(request.JoinDate == default ? DateTime.UtcNow : request.JoinDate, DateTimeKind.Utc),
+                    RCPExpirationDate = DateTime.SpecifyKind(request.RCPExpirationDate, DateTimeKind.Utc)
+                };
+
+                // 4. Persistencia Atómica: Guardamos Identidad + Perfil
+                
+                _context.Entrenadores.Add(nuevoEntrenador);
+                await _context.SaveChangesAsync();
+                await _tokenService.AnularTokenAsync(request.Token, "Entrenador");
+
+                // Si todo salió bien hasta acá, consolidamos los cambios
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Entrenador registrado con éxito. ¡Bienvenido al staff!" });
+            }
+            catch (Exception ex)
+            {
+                // Si falla algo (ej. el DNI ya existe en la DB), deshacemos todo para no dejar datos huérfanos
+                await transaction.RollbackAsync();
+                var realMessage = ex.InnerException?.Message ?? ex.Message;
+                return BadRequest(new { message = realMessage });
+            }
         }
     }
 }
