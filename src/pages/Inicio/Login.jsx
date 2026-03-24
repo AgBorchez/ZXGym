@@ -2,20 +2,21 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/pages/Inicio/Login.css';
 import { API_USUARIOS_URL } from '../../Constants/config';
-import { useAuth } from '../../context/AuthContext'; // 1. IMPORTAR EL HOOK
+import { useAuth } from '../../context/AuthContext'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(''); // Estado para manejar errores visualmente
   const navigate = useNavigate();
   
-  // 2. EXTRAER LA FUNCIÓN LOGIN DEL CONTEXTO
   const { login } = useAuth(); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError(''); // Limpiamos errores previos
 
     try {
       const response = await fetch(`${API_USUARIOS_URL}/login`, {
@@ -27,31 +28,32 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
+        // --- LÓGICA DE CONTRASEÑA PENDIENTE ---
         if (data.status === "PENDING_PASSWORD") {
-          alert(data.message);
-          navigate(`/set-password/${data.dni}`);
+          // Redirigimos a la página de configuración de clave pasando el DNI
+          // Usamos el DNI que viene del back para identificar al usuario
+          navigate(`/set-password/${data.dni}`, { 
+            state: { message: "Es tu primer ingreso. Por favor, configurá tu contraseña." } 
+          });
           return;
         }
 
-        // --- EL CAMBIO MÁGICO ESTÁ ACÁ ---
-        
-        // 3. LLAMAR A LOGIN DEL CONTEXTO
-        // Esto hace el localStorage.setItem Y ADEMÁS le avisa a React que el usuario existe.
+        // --- LOGIN EXITOSO ---
         login(data); 
 
-        // --------------------------------
-
-        // Redirigir según el tipo
-        if (data.tipo === "Manager") navigate('/socios'); // O tu dashboard de admin
-        else if (data.tipo === "Entrenador") navigate('/socios'); 
-        else navigate('/'); // Socio vuelve al home pero ya logueado
+        // Redirección por rol
+        if (data.tipo === "Manager" || data.tipo === "Entrenador") {
+          navigate('/socios');
+        } else {
+          navigate('/'); // Home para socios normales
+        }
 
       } else {
-        alert(data.message || "Email o contraseña incorrectos");
+        setError(data.message || "Email o contraseña incorrectos");
       }
-    } catch (error) {
-      console.error('Error de red:', error);
-      alert("No se pudo conectar con el servidor.");
+    } catch (err) {
+      console.error('Error de red:', err);
+      setError("No se pudo conectar con el servidor.");
     } finally {
       setLoading(false);
     }
@@ -67,6 +69,12 @@ const Login = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
+          {error && (
+            <div className="form-error-msg" style={{ marginBottom: '15px', textAlign: 'center', marginLeft: 0 }}>
+              {error}
+            </div>
+          )}
+
           <div className="form-group">
             <label>Email</label>
             <input 
@@ -74,6 +82,7 @@ const Login = () => {
               placeholder="ejemplo@zxgym.com" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              className={error ? "form-input-invalid" : ""}
               required 
               disabled={loading}
             />
@@ -86,6 +95,7 @@ const Login = () => {
               placeholder="••••••••" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className={error ? "form-input-invalid" : ""}
               required 
               disabled={loading}
             />

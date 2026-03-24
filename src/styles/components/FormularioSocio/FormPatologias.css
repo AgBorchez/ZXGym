@@ -1,0 +1,86 @@
+/* ==========================================
+   4. MÓDULO DE FASES Y PATOLOGÍAS
+   ========================================== */
+.fase-patologias.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+  padding: 10px;
+}
+
+.instruccion-fase { color: #888; font-size: 0.85rem; margin-bottom: 5px; text-align: center; }
+.titulo-fase { font-size: 1.5rem; color: #fff; margin-bottom: 5px; text-align: center; }
+.subtitulo-fase { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; text-align: center; }
+
+.grid-patologias {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas */
+  gap: 10px;
+  max-height: 300px; /* Por si agregás más, que tenga scroll */
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.grid-patologias-limpio {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 15px 40px; /* 15px de espacio vertical, 40px horizontal */
+  margin-bottom: 30px;
+}
+
+.item-patologia {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.item-patologia:active { transform: scale(0.98); }
+
+.item-patologia input {
+  margin-right: 8px;
+}
+
+/* Escondemos el checkbox original */
+.item-patologia input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #555; /* Gris oscuro para el borde */
+  border-radius: 4px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  flex-shrink: 0; /* Para que no se achique con textos largos */
+}
+
+/* Cuando el input real está tildado */
+.item-patologia input:checked + .custom-checkbox {
+  background-color: #007bff; /* El azul de tu sistema */
+  border-color: #007bff;
+}
+
+/* El tilde blanco (v) */
+.item-patologia input:checked + .custom-checkbox::after {
+  content: '✔';
+  color: white;
+  font-size: 11px;
+}
+
+.nombre-patologia {
+  color: #ccc;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.item-patologia input:checked + .nombre-patologia {
+  background-color: #007bff22; /* Un fondo celeste suave al marcar */
+  font-weight: bold;
+}

@@ -26,5 +26,10 @@ namespace GymManager.api.Models.Socios
         public DateTime EndDate { get; set; }
 
         public int PlanId { get; set; }
+
+        public int? EntrenadorId { get; set; } // Lo ponemos nulable por si un socio aún no tiene asignado uno
+
+        [ForeignKey("EntrenadorId")]
+        public virtual Usuario? Entrenador { get; set; }
     }
 }

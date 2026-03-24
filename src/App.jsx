@@ -18,6 +18,9 @@ import RegisterManager from './pages/Managers/RegisterManager';
 import ControlUsuarios from './pages/Managers/ControlUsuarios';
 import Entrenamiento from './pages/Inicio/Entrenamiento';
 import Contacto from './pages/Inicio/Contacto';
+import PageNotFoundRedirect from './pages/PageNotFoundRedirect';
+import SetInitialPassword from './pages/Inicio/SetInicialPassword';
+import Alumnos from './pages/Entrenadores/Alumnos';
 
 // --- EL SELECTOR DE NAVBAR ---
 const NavbarSelector = () => {
@@ -42,6 +45,21 @@ const NavbarSelector = () => {
   }
 };
 
+const HomePageSelector = () => {
+  const { user } = useAuth();
+
+  if (!user) return <Home />; // La landing de siempre
+
+  switch (user.tipo) {
+    case 'Manager':
+      return <Navigate to="/usuarios" replace />;
+    case 'Entrenador':
+      return <Navigate to="/alumnos" replace />;
+    default:
+      return <Navigate to={"/home"} />; // O un Dashboard para el Socio
+  }
+};
+
 function App() {
   return (
     <AuthProvider>
@@ -49,8 +67,10 @@ function App() {
       <div className="container-principal">
         <Routes>
           {/* RUTAS PÚBLICAS */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<HomePageSelector />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/set-password/:dni" element={<SetInitialPassword />} />
           <Route path="/register" element={<RegisterSocio />} />
           <Route path='/entrenamiento' element={<Entrenamiento />} />
           <Route path='/contacto' element={<Contacto />} />
@@ -69,6 +89,15 @@ function App() {
             } 
           />
 
+          <Route 
+            path="/alumnos" 
+            element={
+              <ProtectedRoute allowedRoles={['Entrenador']}>
+                <Alumnos />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route path="/entrenadores" element={
               <ProtectedRoute allowedRoles={['Manager']}>
                 <Entrenadores />
@@ -83,7 +112,7 @@ function App() {
               
 
           {/* Redirección por defecto */}
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<PageNotFoundRedirect />} />
         </Routes>
       </div>
     </AuthProvider>

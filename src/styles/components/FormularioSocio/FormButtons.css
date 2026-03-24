@@ -1,0 +1,91 @@
+/* ==========================================
+   3. BOTONERAS Y FOOTERS
+   ========================================== */
+.modal-footer {
+    padding: 20px 25px;
+    background-color: #1b2235;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-footer-abajo {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  /* --- LA BARRITA SEPARADORA --- */
+  margin-top: 25px;          /* Espacio arriba de la línea */
+  padding-top: 25px;      /* Espacio entre la línea y los botones */
+  border-top: 1px solid #333; /* Línea sutil (ajustá el color si lo querés más claro) */
+}
+
+.btn-cancelar {
+    background-color: #37415f;
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-guardar-azul {
+    background-color: #1a56db; /* El azul vibrante del botón 'Guardar' */
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-volver-minimal {
+  background: #333;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 10px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-registrar-pro {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 35px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.btn-registrar-pro:hover {
+  background: #0056b3;
+}
+
+.btn-cerrar-x {
+    background-color: #5b678f; /* Un gris azulado que destaque del fondo */
+    border: none;
+    color: #cbd5e0;
+    cursor: pointer;
+    
+    /* Dimensiones para que parezca un botón estirado */
+    padding: 4px 25px; 
+    border-radius: 4px;
+    
+    font-size: 18px;
+    line-height: 1;
+    transition: all 0.2s ease;
+    
+    /* Alineación manual si quieres pegarla más al borde */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-cerrar-x:hover {
+    background-color: #e53e3e; /* Rojo intenso al pasar el mouse */
+    color: white;
+}

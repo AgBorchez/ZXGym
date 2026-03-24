@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_ENTRENADORES_URL } from '../../Constants/config.js';
-import '../../styles/components/FormularioSocio.css'; 
+import '../../styles/components/FormularioSocio/FormularioSocio.css';
 
 const estadoInicial = {
   Name: '', LastName: '', Email: '', Phone: '',

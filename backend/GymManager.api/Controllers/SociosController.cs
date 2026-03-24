@@ -188,18 +188,44 @@ namespace GymManager.api.Controllers
         }
 
         [HttpDelete("{Id}")]
-        
-        public async Task<ActionResult<Socio>> Delete(int Id)
+        public async Task<IActionResult> Delete(int Id)
         {
-            var dbsocio = await _context.Socios.FindAsync(Id);
+            // Iniciamos una transacción para asegurar la integridad de las dos tablas
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            if (dbsocio == null)
-                return NotFound("Socio no encontrado para eliminar");
+            try
+            {
+                // 1. Buscamos el registro en la tabla Socios
+                var dbsocio = await _context.Socios.FindAsync(Id);
 
-            _context.Socios.Remove(dbsocio);
-            await _context.SaveChangesAsync();
+                if (dbsocio == null)
+                    return NotFound(new { message = "Socio no encontrado para eliminar" });
 
-            return Ok("Socio eliminado correctamente");
+                // 2. Buscamos el Usuario vinculado por el DNI
+                // (Asumiendo que DNI es el nexo entre ambas tablas)
+                var dbusuario = await _context.Usuarios
+                    .FirstOrDefaultAsync(u => u.DNI == dbsocio.DNI);
+
+                // 3. Marcamos ambos para eliminación
+                _context.Socios.Remove(dbsocio);
+
+                if (dbusuario != null)
+                {
+                    _context.Usuarios.Remove(dbusuario);
+                }
+
+                // 4. Guardamos cambios y confirmamos la transacción
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Socio y cuenta de usuario eliminados correctamente" });
+            }
+            catch (Exception ex)
+            {
+                // Si algo falla (ej: error de FK), deshacemos todo para no dejar datos huérfanos
+                await transaction.RollbackAsync();
+                return BadRequest(new { message = "Error al eliminar: " + ex.Message });
+            }
         }
 
         [HttpPost("register-socio")]

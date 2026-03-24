@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react';
-import { API_SOCIOS_URL } from '../../Constants/config.js';
-import '../../styles/components/FormularioSocio.css';
+import { API_SOCIOS_URL } from '../../Constants/config.js'; // Asegúrate que apunte a la base de tu API
+import '../../styles/components/FormularioSocio/FormularioSocio.css';
 
-  const estadoInicial = {
-    id: '' ,DNI: '', Name: '', LastName: '', Email: '',
-    Phone: '', JoinDate: '', EndDate: '', PlanId: ''
-  };
+const estadoInicial = {
+  id: '', DNI: '', Name: '', LastName: '', Email: '',
+  Phone: '', JoinDate: '', EndDate: '', PlanId: ''
+};
 
 const PlanesPrueba = [
-    { id: 1, nombre: "Mensual", dias: 30 },
-    { id: 2, nombre: "Trimestral", dias: 90 },
-    { id: 3, nombre: "Semestral", dias: 180 },
-    { id: 4, nombre: "Anual", dias: 365 }
-  ];
+  { id: 1, nombre: "Mensual", dias: 30 },
+  { id: 2, nombre: "Trimestral", dias: 90 },
+  { id: 3, nombre: "Semestral", dias: 180 },
+  { id: 4, nombre: "Anual", dias: 365 }
+];
 
-  const PATOLOGIAS_DB = [
+const PATOLOGIAS_DB = [
   { id: 1, nombre: "Hipertensión Arterial" },
   { id: 2, nombre: "Problemas Cardíacos" },
   { id: 3, nombre: "Lesiones de Columna" },
@@ -28,15 +28,13 @@ const PlanesPrueba = [
 ];
 
 function FormularioSocio({ alGuardar, socioExistente }) {
-  
   const [formData, setFormData] = useState(estadoInicial);
   const [fase, setFase] = useState(1);
   const [patologiasSeleccionadas, setPatologiasSeleccionadas] = useState([]);
-  const [errores, seterrores] = useState({});
+  const [errores, setErrores] = useState({});
 
   const validarFase1 = () => {
-    let nuevosErrores = {}
-
+    let nuevosErrores = {};
     if (!formData.DNI) nuevosErrores.DNI = "El DNI es obligatorio";
     if (!formData.Name) nuevosErrores.Name = "El nombre es obligatorio";
     if (!formData.LastName) nuevosErrores.LastName = "El apellido es obligatorio";
@@ -44,72 +42,66 @@ function FormularioSocio({ alGuardar, socioExistente }) {
     if (!formData.JoinDate) nuevosErrores.JoinDate = "La fecha de ingreso es obligatoria";
     if (!formData.PlanId) nuevosErrores.PlanId = "Debes seleccionar un plan";
 
-    seterrores(nuevosErrores)
-
-    return Object.keys(nuevosErrores).length === 0
-  }
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
-    
-    // 1. Creamos la "copia" con el dato nuevo
     let nuevoEstado = { ...formData, [name]: value };
 
-    // 2. Lógica de cálculo de fecha (se ejecuta al cambiar PlanId o JoinDate)
     if (name === "PlanId" || name === "JoinDate") {
-      // Buscamos el plan usando el ID que acaba de cambiar (value) o el que ya estaba
       const planIdABuscar = name === "PlanId" ? parseInt(value) : parseInt(nuevoEstado.PlanId);
       const planElegido = PlanesPrueba.find(p => p.id === planIdABuscar);
-      
       if (planElegido && nuevoEstado.JoinDate) {
         const fechaInicio = new Date(nuevoEstado.JoinDate);
-        // Sumamos los días del plan
         fechaInicio.setDate(fechaInicio.getDate() + planElegido.dias);
-        
-        // Formateamos la fecha a YYYY-MM-DD para que el input tipo date la entienda
         nuevoEstado.EndDate = fechaInicio.toISOString().split('T')[0];
       }
     }
-
-    // 3. Actualizamos el estado con todo listo
     setFormData(nuevoEstado);
   };
 
   useEffect(() => {
-    if(socioExistente && socioExistente.id !== formData.id) {
-        setFormData({
-            // 2. EVITAR UNDEFINED: Usamos || '' para que si el dato no viene, sea un string vacío
-            DNI: socioExistente.dni || '',
-            Name: socioExistente.name || '',
-            LastName: socioExistente.lastName || '',
-            Email: socioExistente.email || '',
-            Phone: socioExistente.phone || '',
-            PlanId: socioExistente.planId || '',
-            JoinDate: socioExistente.joinDate ? socioExistente.joinDate.split('T')[0] : '',
-            EndDate: socioExistente.endDate ? socioExistente.endDate.split('T')[0] : ''
-        });
-    } 
-
-    if (!socioExistente && formData.id !== '') {
-      setFormData(estadoInicial);
+    if (socioExistente && socioExistente.id !== formData.id) {
+      setFormData({
+        id: socioExistente.id || '',
+        DNI: socioExistente.dni || '',
+        Name: socioExistente.name || '',
+        LastName: socioExistente.lastName || '',
+        Email: socioExistente.email || '',
+        Phone: socioExistente.phone || '',
+        PlanId: socioExistente.planId || '',
+        JoinDate: socioExistente.joinDate ? socioExistente.joinDate.split('T')[0] : '',
+        EndDate: socioExistente.endDate ? socioExistente.endDate.split('T')[0] : ''
+      });
+      // Si el socio tiene patologías registradas, cargarlas aquí si el backend las envía
+      if (socioExistente.patologias) setPatologiasSeleccionadas(socioExistente.patologias);
     }
-    
-  }, [socioExistente])
+    if (!socioExistente && formData.id !== '') setFormData(estadoInicial);
+  }, [socioExistente]);
 
-  // ENviar formulario Post - Put
   const enviarFormulario = async (e) => {
     e.preventDefault();
-    
     const Edicion = !!socioExistente;
-    const urlFinal = Edicion ? `${API_SOCIOS_URL}/${formData.id}` : API_SOCIOS_URL;
+    
+    // Cambiamos la URL para que apunte al nuevo método de registro que maneja la transacción
+    const urlFinal = Edicion 
+      ? `${API_SOCIOS_URL}/${formData.id}` 
+      : `${API_SOCIOS_URL}/register-socio`; 
+
     const metodo = Edicion ? 'PUT' : 'POST';
 
+    // Mapeamos los datos para que coincidan con RegistroSocioRequest de C#
     const datosParaCsharp = {
-      ...formData,
-      DNI: parseInt(formData.DNI),           
-      PlanId: parseInt(formData.PlanId),     
-      JoinDate: new Date(formData.JoinDate).toISOString(),
-      EndDate: new Date(formData.EndDate).toISOString(),
+      DNI: parseInt(formData.DNI),
+      Name: formData.Name,
+      LastName: formData.LastName,
+      Email: formData.Email,
+      Phone: formData.Phone,
+      PlanId: parseInt(formData.PlanId),
+      // Enviamos Password como null o vacío para que el backend sepa que está pendiente
+      Password: "", 
       Patologias: patologiasSeleccionadas
     };
 
@@ -121,13 +113,14 @@ function FormularioSocio({ alGuardar, socioExistente }) {
       });
 
       if (res.ok) {
-        alert(Edicion ? "¡Socio actualizado con éxito!" : "¡Socio registrado con éxito!");
+        alert(Edicion ? "¡Socio actualizado!" : "¡Socio y Usuario creados! El socio podrá configurar su clave al ingresar.");
         setFormData(estadoInicial);
-        setFase(1)
+        setPatologiasSeleccionadas([]);
+        setFase(1);
         alGuardar();
       } else {
-        const errorTexto = await res.text();
-        alert("Error al guardar: " + errorTexto);
+        const errorData = await res.json();
+        alert("Error: " + (errorData.message || "No se pudo procesar el registro"));
       }
     } catch (error) {
       console.error("Error en la red:", error);
@@ -137,9 +130,7 @@ function FormularioSocio({ alGuardar, socioExistente }) {
   return (
     <form onSubmit={enviarFormulario}>
       {fase === 1 && (
-      <div>
-        {/* Usamos la clase form-row para alinear Label a la izquierda e Input a la derecha */}
-        
+        <div className="form-animate-fade">
           {errores.DNI && <span className="error-text">{errores.DNI}</span>}
           <div className="form-row">
             <label>DNI</label>
@@ -148,23 +139,17 @@ function FormularioSocio({ alGuardar, socioExistente }) {
               type="number"
               placeholder='Ej: 47892421' 
               value={formData.DNI} 
-              onChange={(e) => { // Agregamos las llaves del cuerpo de la función
+              onChange={(e) => {
                 manejarCambio(e); 
-                // Si existe un error específicamente en DNI, lo limpiamos
-                if (errores.DNI) {
-                  setErrores({ ...errores, DNI: null });
-                }
+                if (errores.DNI) setErrores({ ...errores, DNI: null });
               }} 
               required 
               readOnly={!!socioExistente}
               className={socioExistente ? "input-readonly" : (errores.DNI ? "input-error" : "")}
             />
           </div>
-          {/* No te olvides de poner el span acá abajo si querés ver el texto rojo */}
-          
 
-        {/* --- NOMBRE --- */}
-        {errores.Name && <span className="error-text">{errores.Name}</span>}
+          {errores.Name && <span className="error-text">{errores.Name}</span>}
           <div className="form-row">
             <label>Nombre</label>
             <input 
@@ -180,8 +165,6 @@ function FormularioSocio({ alGuardar, socioExistente }) {
             />
           </div>
 
-
-          {/* --- APELLIDO --- */}
           {errores.LastName && <span className="error-text">{errores.LastName}</span>}
           <div className="form-row">
             <label>Apellido</label>
@@ -198,8 +181,6 @@ function FormularioSocio({ alGuardar, socioExistente }) {
             />
           </div>
 
-
-          {/* --- EMAIL --- */}
           {errores.Email && <span className="error-text">{errores.Email}</span>}
           <div className="form-row">
             <label>Email</label>
@@ -217,50 +198,43 @@ function FormularioSocio({ alGuardar, socioExistente }) {
             />
           </div>
 
-
-          {/* --- TELÉFONO --- */}
           <div className="form-row">
             <label>Teléfono</label>
             <input 
               name="Phone" 
               placeholder='Ej: +54 9 11 0293 1325' 
               value={formData.Phone} 
-              onChange={(e) => {
-                manejarCambio(e);
-                if (errores.Phone) setErrores({ ...errores, Phone: null });
-              }} 
-              /* El teléfono suele ser opcional, pero si querés validarlo usá: 
-                className={errores.Phone ? "input-error" : ""} */
+              onChange={manejarCambio} 
             />
           </div>
-          {/* {errores.Phone && <span className="error-text">{errores.Phone}</span>} */}
 
-        <div className="form-row">
-          <label>Fecha Ingreso</label>
-          <input name="JoinDate" type="date" value={formData.JoinDate} onChange={manejarCambio} required />
-        </div>
+          <div className="form-row">
+            <label>Fecha Ingreso</label>
+            <input name="JoinDate" type="date" value={formData.JoinDate} onChange={manejarCambio} required />
+          </div>
 
-        <div className="form-row">
-          <label>Plan</label>
-          <select name="PlanId" value={formData.PlanId} onChange={manejarCambio} required>
-            <option value="">-- Seleccioná duración --</option>
-            {PlanesPrueba.map((plan) => (
-              <option key={plan.id} value={plan.id}>{plan.nombre} ({plan.dias} días)</option>
-            ))}
-          </select>
-        </div>
+          <div className="form-row">
+            <label>Plan</label>
+            <select name="PlanId" value={formData.PlanId} onChange={manejarCambio} required>
+              <option value="">-- Seleccioná duración --</option>
+              {PlanesPrueba.map((plan) => (
+                <option key={plan.id} value={plan.id}>{plan.nombre} ({plan.dias} días)</option>
+              ))}
+            </select>
+          </div>
 
-        <div className="form-row">
-          <label>Vencimiento</label>
-          <input name="EndDate" type="date" value={formData.EndDate} readOnly className="input-readonly" />
-        </div>
+          <div className="form-row">
+            <label>Vencimiento</label>
+            <input name="EndDate" type="date" value={formData.EndDate} readOnly className="input-readonly" />
+          </div>
 
-        <div className="modal-footer-abajo">
-        <button className='btn-registrar-pro' type='button' 
-        onClick={() =>{if(validarFase1()) {setFase(2);} }}>Siguiente</button>
+          <div className="modal-footer-abajo">
+            <button className='btn-registrar-pro' type='button' 
+              onClick={() => { if(validarFase1()) { setFase(2); } }}>Siguiente</button>
+          </div>
         </div>
-      </div>
       )}
+
       {fase === 2 && (
         <div className="fase-patologias animate-fade-in">
           <p className="instruccion-fase">Completa los siguientes campos:</p>
@@ -274,7 +248,6 @@ function FormularioSocio({ alGuardar, socioExistente }) {
                   type="checkbox" 
                   checked={patologiasSeleccionadas.includes(pat.id)}
                   onChange={() => {
-                    // Lógica para agregar o quitar el ID del array
                     setPatologiasSeleccionadas(prev => 
                       prev.includes(pat.id) 
                         ? prev.filter(id => id !== pat.id) 

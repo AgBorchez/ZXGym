@@ -156,14 +156,40 @@ namespace GymManager.api.Controllers
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            var entrenador = await _context.Entrenadores.FindAsync(Id);
-            if (entrenador == null)
-                return NotFound("Entrenador no encontrado.");
+            // Usamos una transacción para asegurar que se borren ambos registros (Entrenador y Usuario)
+            using var transaction = await _context.Database.BeginTransactionAsync();
 
-            _context.Entrenadores.Remove(entrenador);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // 1. Buscamos el registro en la tabla Entrenadores
+                var entrenador = await _context.Entrenadores.FindAsync(Id);
+                if (entrenador == null)
+                    return NotFound(new { message = "Entrenador no encontrado." });
 
-            return Ok("Entrenador eliminado con éxito.");
+                // 2. Buscamos el Usuario vinculado por el DNI
+                var usuario = await _context.Usuarios
+                    .FirstOrDefaultAsync(u => u.DNI == entrenador.DNI);
+
+                // 3. Removemos de ambas tablas
+                _context.Entrenadores.Remove(entrenador);
+
+                if (usuario != null)
+                {
+                    _context.Usuarios.Remove(usuario);
+                }
+
+                // 4. Guardamos y confirmamos impacto en la DB
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new { message = "Entrenador y cuenta de usuario eliminados con éxito." });
+            }
+            catch (Exception ex)
+            {
+                // Si falla (por ejemplo, si el entrenador tiene socios asignados y hay restricción de FK)
+                await transaction.RollbackAsync();
+                return BadRequest(new { message = "Error al eliminar: " + ex.Message });
+            }
         }
 
 
@@ -230,6 +256,14 @@ namespace GymManager.api.Controllers
                 var realMessage = ex.InnerException?.Message ?? ex.Message;
                 return BadRequest(new { message = realMessage });
             }
+        }
+
+        [HttpGet("mis-socios/{entrenadorId}")]
+        public async Task<ActionResult<IEnumerable<Socio>>> GetSociosPorEntrenador(int entrenadorId)
+        {
+            return await _context.Socios
+                .Where(s => s.EntrenadorId == entrenadorId)
+                .ToListAsync();
         }
     }
 }

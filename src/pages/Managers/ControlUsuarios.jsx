@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import TablaUsuarios from '../../components/Managers/TablaUsuarios'; // Ajustá la ruta según tu carpeta
-import '../../styles/pages/Usuarios.css'; // Estilos específicos para el layout de la página
+import TablaUsuarios from '../../components/Managers/TablaUsuarios';
+import ModalInvitacion from '../../components/Managers/ModalInvitacion';
+import '../../styles/pages/Usuarios.css';
 
 const ControlUsuarios = () => {
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [mostrarModalEdit, setMostrarModalEdit] = useState(false);
+  const [mostrarModalInvite, setMostrarModalInvite] = useState(false);
 
-  // Función que se dispara al tocar "Editar" en una fila
   const manejarEditar = (usuario) => {
     setUsuarioSeleccionado(usuario);
-    setMostrarModal(true);
-    console.log("Editando a:", usuario.name);
-    // Aquí podrías abrir un modal con un formulario pre-cargado
+    setMostrarModalEdit(true);
   };
 
   return (
@@ -23,8 +22,7 @@ const ControlUsuarios = () => {
         </div>
         
         <div className="header-actions">
-          {/* Este botón podría llevar a la lógica de "Generar Invitación" que hablamos antes */}
-          <button className="btn-primario-pro" onClick={() => window.location.href='/invitar'}>
+          <button className="btn-primario-pro" onClick={() => setMostrarModalInvite(true)}>
             + Invitar Staff
           </button>
         </div>
@@ -36,20 +34,24 @@ const ControlUsuarios = () => {
             <span className="stat-label">Total Usuarios</span>
             <span className="stat-value">---</span>
           </div>
-          {/* Podés agregar más tarjetitas de resumen aquí */}
         </section>
 
-        {/* Renderizamos el componente de la Tabla que ya tenemos listo */}
         <TablaUsuarios onEditar={manejarEditar} />
       </main>
 
-      {/* Aquí iría tu componente Modal si mostrarModal es true */}
-      {mostrarModal && (
+      {/* MODAL DE INVITACIONES SEPARADO */}
+      <ModalInvitacion
+        isOpen={mostrarModalInvite} 
+        onClose={() => setMostrarModalInvite(false)} 
+      />
+
+      {/* MODAL DE EDICIÓN (Podrías separarlo también en el futuro) */}
+      {mostrarModalEdit && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Editar Usuario: {usuarioSeleccionado?.name}</h3>
             {/* Formulario de edición... */}
-            <button onClick={() => setMostrarModal(false)}>Cerrar</button>
+            <button className="btn-secondary" onClick={() => setMostrarModalEdit(false)}>Cerrar</button>
           </div>
         </div>
       )}

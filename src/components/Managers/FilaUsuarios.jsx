@@ -1,9 +1,6 @@
-import { useState } from 'react';
+import React from 'react';
 
-function FilaUsuario({ usuario, onEditar, onBorrar }) {
-  // Estado local para alternar entre el botón de Editar y el de Borrar
-  const [mostrarEditar, setMostrarEditar] = useState(true);
-
+function FilaUsuario({ usuario, onBorrar }) {
   // Función para asignar color al badge según el rol
   const getBadgeClass = (tipo) => {
     switch (tipo?.toLowerCase()) {
@@ -19,39 +16,31 @@ function FilaUsuario({ usuario, onEditar, onBorrar }) {
       {/* 1. DNI */}
       <td style={{ fontWeight: '500' }}>{usuario.dni}</td>
 
-      {/* 2. Nombre y Apellido */}
+      {/* 2. Nombre */}
       <td>{usuario.name}</td>
+
+      {/* 3. Apellido */}
       <td>{usuario.lastName || usuario.lastname}</td>
       
-      {/* 3. Email */}
+      {/* 4. Email */}
       <td className="mail-col">{usuario.email}</td>
 
-      {/* 4. Rol con Badge de color */}
+      {/* 5. Rol con Badge de color */}
       <td>
         <span className={`badge-rol ${getBadgeClass(usuario.type)}`}>
           {usuario.type}
         </span>
       </td>
 
-      {/* 5. Columna de Acciones */}
+      {/* 6. Columna de Acciones (Solo Borrado) */}
       <td>
-        <div className="acciones-container">
-          {mostrarEditar ? (
-            <button className="btn-editar-pro" onClick={() => onEditar(usuario)}>
-              Editar
-            </button>
-          ) : (
-            <button className="btn-borrar-pro" onClick={() => onBorrar(usuario.id)}>
-              Eliminar
-            </button>
-          )}
-          
+        <div className="acciones-container" style={{ justifyContent: 'center' }}>
           <button 
-            className={`btn-switch ${!mostrarEditar ? 'activo-rojo' : ''}`} 
-            onClick={() => setMostrarEditar(!mostrarEditar)}
-            title="Cambiar entre Editar/Eliminar"
+            className="btn-borrar-pro" 
+            onClick={() => onBorrar(usuario.id)}
+            style={{ width: '100%' }} // Para que ocupe el ancho del contenedor de acciones
           >
-            ⚙️
+            Eliminar
           </button>
         </div>
       </td>

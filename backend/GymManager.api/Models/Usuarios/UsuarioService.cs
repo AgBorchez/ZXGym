@@ -19,15 +19,26 @@ namespace GymManager.api.Models.Usuarios
             if (await _context.Usuarios.AnyAsync(u => u.Email == email || u.DNI == dni))
                 throw new Exception("El Email o DNI ya existen en el sistema.");
 
-            return new Usuario
+            var usuario = new Usuario
             {
                 DNI = dni,
                 Name = name,
                 LastName = lastName,
                 Email = email,
                 Type = type,
-                Password = BCrypt.Net.BCrypt.HashPassword(password)
+                
             };
+
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                usuario.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            }
+            else
+            {
+                usuario.Password = null; // O string.Empty, según prefieras
+            }
+
+            return usuario;
         }
     }
 }

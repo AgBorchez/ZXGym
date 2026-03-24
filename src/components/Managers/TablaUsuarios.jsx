@@ -3,7 +3,7 @@ import { API_USUARIOS_URL } from '../../Constants/config.js';
 import FilaUsuario from './FilaUsuarios'; 
 import '../../styles/components/TablaSocios.css';
 
-function TablaUsuarios({ onEditar }) {
+function TablaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState('');
   const [filtroRol, setFiltroRol] = useState('todos'); 
@@ -65,7 +65,6 @@ function TablaUsuarios({ onEditar }) {
     }
   };
 
-  // 1. Eliminamos JoinDate de la configuración de columnas
   const columnasConfig = [
     { label: "DNI", key: "DNI", width: "120px" },
     { label: "Nombre", key: "Name", width: "180px" },
@@ -74,9 +73,32 @@ function TablaUsuarios({ onEditar }) {
     { label: "Rol / Tipo", key: "Type", width: "150px" }
   ];
 
+  const iniciarRedimensionado = (e) => {
+    e.preventDefault();
+    const th = e.target.closest('th');
+    const inicioX = e.pageX;
+    const anchoInicio = th.offsetWidth;
+    const alMover = (ev) => {
+      const nuevoAncho = anchoInicio + (ev.pageX - inicioX);
+      if (nuevoAncho > 60) {
+        th.style.width = `${nuevoAncho}px`;
+        th.style.minWidth = `${nuevoAncho}px`;
+      }
+    };
+    const alSoltar = () => {
+      document.removeEventListener('mousemove', alMover);
+      document.removeEventListener('mouseup', alSoltar);
+    };
+    document.addEventListener('mousemove', alMover);
+    document.addEventListener('mouseup', alSoltar);
+  };
+
   return (
     <div className="tabla-container-pro">
+      {/* 1. CONTROLES SUPERIORES: Título a la izquierda, Filtros a la derecha */}
       <div className="controles-superiores-pro">
+        
+        {/* AGREGAMOS EL TÍTULO ACÁ (Igual que en Entrenadores) */}
         <h2 style={{ color: 'white', margin: 0 }}>Gestión Global de Usuarios</h2>
         
         <div className="grupo-filtros">
@@ -92,6 +114,7 @@ function TablaUsuarios({ onEditar }) {
         </div>
       </div>
 
+      {/* 2. BUSCADOR (Mismo estilo) */}
       <div className="fila-busqueda">
         <div className="input-wrapper">
           <span className="search-icon">🔍</span>
@@ -105,6 +128,7 @@ function TablaUsuarios({ onEditar }) {
         </div>
       </div>
 
+      {/* 3. ÁREA DE TABLA */}
       <div className="tabla-scroll-area">
         <table className="tabla-estilo">
           <thead>
@@ -120,13 +144,12 @@ function TablaUsuarios({ onEditar }) {
                   </div>
                 </th>
               ))}
-              <th className="col-acciones" style={{ width: '160px' }}>Acciones</th>
+              <th className="col-acciones" style={{ width: '120px' }}>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {cargando ? (
-              // 2. Ajustamos colSpan a 6 (5 columnas + acciones)
-              <tr><td colSpan="6" style={{ textAlign: 'center', padding: '40px', opacity: 0.5 }}>Cargando usuarios...</td></tr>
+              <tr><td colSpan="6" style={{ textAlign: 'center', padding: '40px', opacity: 0.5 }}>Cargando...</td></tr>
             ) : usuarios.length === 0 ? (
               <tr><td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No se encontraron usuarios</td></tr>
             ) : (
@@ -134,7 +157,6 @@ function TablaUsuarios({ onEditar }) {
                 <FilaUsuario 
                   key={usuario.id} 
                   usuario={usuario} 
-                  onEditar={onEditar} 
                   onBorrar={manejarBorrar}
                 />
               ))

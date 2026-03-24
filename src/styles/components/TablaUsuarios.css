@@ -1,0 +1,186 @@
+/* ==========================================================================
+   TABLA DE USUARIOS - DASHBOARD PRO (ADAPTATIVO)
+   ========================================================================== */
+
+/* Contenedor principal con límites para pantallas grandes y resuello en chicas */
+.tabla-container-pro {
+    background-color: #1b2235;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #2d3748;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+    margin: 20px auto;
+    width: 95%;
+    max-width: 1400px;
+    display: block;
+    overflow: hidden; /* El scroll lo maneja el área de la tabla */
+}
+
+/* Controles superiores (Filtros) */
+.controles-superiores-pro {
+    display: flex;
+    justify-content: flex-end; /* Alinea los filtros a la derecha */
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+    flex-wrap: wrap; /* Para que bajen en monitores muy chicos */
+}
+
+.grupo-filtros {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-filtro {
+    padding: 8px 14px;
+    border: 1px solid #3d4663;
+    background-color: #242c44;
+    color: #a0aec0;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+}
+
+.btn-filtro.activo {
+    background-color: #1a56db;
+    color: white;
+    border-color: #1a56db;
+}
+
+/* Fila de Búsqueda */
+.fila-busqueda {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    color: #718096;
+}
+
+.input-busqueda-pro {
+    width: 100%;
+    padding: 10px 16px 10px 45px;
+    background-color: #242c44;
+    border: 1px solid #3d4663;
+    border-radius: 10px;
+    color: white;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-busqueda-pro:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+/* ESTRUCTURA DE TABLA CON SCROLL INTERNO */
+.tabla-scroll-area {
+    width: 100%;
+    overflow-x: auto; /* Scroll horizontal si la tabla no cabe */
+    border-radius: 8px;
+    scrollbar-width: thin; /* Para navegadores modernos */
+    scrollbar-color: #4a5568 #1b2235;
+}
+
+.tabla-estilo {
+    width: 100%;
+    min-width: 800px; /* Evita que las columnas se colapsen en monitores chicos */
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.tabla-estilo th {
+    position: relative;
+    padding: 12px 16px;
+    background-color: #1b2235;
+    color: #718096;
+    border-bottom: 2px solid #2d3748;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.header-label {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-label:hover { color: #4299e1; }
+
+.resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    cursor: col-resize;
+    z-index: 10;
+}
+
+/* CELDAS Y DATOS */
+.tabla-estilo td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #2d3748;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tabla-estilo tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* BADGES DE ROL */
+.badge-rol {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-manager { background: rgba(246, 173, 85, 0.2); color: #f6ad55; }
+.badge-entrenador { background: rgba(66, 153, 225, 0.2); color: #63b3ed; }
+.badge-socio { background: rgba(72, 187, 120, 0.2); color: #68d391; }
+
+/* ACCIONES */
+.col-acciones {
+    text-align: center !important;
+    width: 120px;
+}
+
+.btn-borrar-pro {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    background-color: #c53030;
+    color: white;
+    transition: background 0.2s;
+}
+
+.btn-borrar-pro:hover { background-color: #e53e3e; }
+
+.acciones-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}

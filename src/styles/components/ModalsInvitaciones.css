@@ -1,0 +1,49 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    backdrop-filter: blur(5px);
+}
+
+.invitation-modal {
+    background-color: #1b2235;
+    border-radius: 8px;
+    border: 1px solid #2d3748;
+    width: 95%;
+    max-width: 900px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.invitation-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 30px; /* Espacio interno para que las tarjetas no toquen el borde */
+}
+
+.modal-footer {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #2d3748;
+}
+
+/* Botón cerrar del footer */
+.btn-cerrar-footer {
+    background-color: #2d3748;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+}

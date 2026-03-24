@@ -1,0 +1,50 @@
+/* ==========================================
+   1. ESTRUCTURA BASE Y CONTENEDORES (OVERLAY/MODAL)
+   ========================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo bien oscuro para que resalte el azul */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999; /* Por encima de la Navbar fixed */
+}
+
+.modal-content {
+    position: relative; /* <--- CLAVE: Para que respete el contexto del overlay */
+    background-color: #1b2235;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid #2d3748;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+    width: 95%;
+    max-width: 600px;
+    color: #e2e8f0;
+    overflow: hidden;
+    /* Eliminamos cualquier margen que pueda estar empujándolo hacia abajo */
+    margin: auto; 
+    max-height: 95vh; /* Evita que sea más alto que la pantalla */
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    background-color: #242c44; 
+    padding: 10px 20px; /* Reducimos un poco el padding vertical */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #2d3748;
+    position: relative; /* Para control total si fuera necesario */
+}
+
+.modal-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
