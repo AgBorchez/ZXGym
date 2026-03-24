@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { API_USUARIOS_URL } from '../../Constants/config';
-import '../../styles/components/invitaciones.css'; // El CSS de las tarjetas
+import '../../styles/components/Invitaciones.css'; // El CSS de las tarjetas
 
 const InviteManager = () => {
   const [token, setToken] = useState('');
