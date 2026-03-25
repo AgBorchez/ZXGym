@@ -97,6 +97,22 @@
   flex: 1;
 }
 
+.subtitulo-fase {
+  color: #aaa;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  margin-bottom: 20px;  /* Más espacio antes de la caja de patologías */
+  text-align: center;
+}
+
+/* 3. Espaciado entre los botones de acción */
+.login-actions {
+  display: flex;
+  flex-direction: column; /* Mantiene el ATRÁS arriba del FINALIZAR como en tu foto */
+  gap: 12px;             /* Espacio entre el botón gris y el rojo */
+  padding: 0 10px;
+}
+
 /* RESPONSIVIDAD */
 @media (max-width: 480px) {
   .login-page {
@@ -111,4 +127,104 @@
     flex-direction: column;
     gap: 0;
   }
+}
+
+
+
+/* =========================================
+   PASO 3: FICHA MÉDICA (LIMPIO Y COMPACTO)
+   ========================================= */
+
+/* 1. Contenedor Principal */
+.login-fase-medical {
+  margin-top: 0.5rem;
+  max-width: 480px; /* Un poco más compacto */
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 10px;
+}
+
+/* 2. La Grilla Responsiva */
+.patologias-grid-clean {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+  gap: 15px;            /* Aumentamos el espacio ENTRE botones */
+  max-height: 320px;    /* Un poco más de altura para que no scrollee tan rápido */
+  padding: 25px;        /* Aumentamos el espacio entre los botones y el borde de la caja */
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 20px;
+}
+
+/* --------------------------------------------------
+   3. LA CLAVE: ELIMINAR EL CHECKBOX NATIVO
+   Este selector es muy específico para asegurar que muera.
+--------------------------------------------------- */
+.patologias-grid-clean .patologia-item input[type="checkbox"] {
+  position: absolute; /* Lo sacamos del flujo */
+  opacity: 0;         /* Lo hacemos invisible */
+  width: 0;           /* No ocupa espacio */
+  height: 0;
+  margin: 0;
+  padding: 0;
+  pointer-events: none; /* No interfiere con los clicks */
+}
+
+/* 4. Estilo de la "Card" o Botón */
+.patologia-item {
+  display: flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.patologia-box {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 10px 5px; /* Más compacto */
+  border-radius: 6px;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px; /* Altura mínima reducida */
+  box-sizing: border-box;
+}
+
+.patologia-nombre {
+  font-size: 0.75rem; /* Texto compacto */
+  color: #aaa;
+  font-weight: 500;
+  line-height: 1.2;
+  user-select: none;
+}
+
+/* 5. ESTADO SELECCIONADO (El div '.patologia-box' reacciona) */
+.patologia-item input[type="checkbox"]:checked + .patologia-box {
+  background: linear-gradient(145deg, #ff4d4d, #c62828); /* Rojo ZXGym */
+  border-color: #ff4d4d;
+  transform: scale(1.02); /* Efecto sutil */
+  box-shadow: 0 4px 12px rgba(255, 77, 77, 0.2);
+}
+
+.patologia-item input[type="checkbox"]:checked + .patologia-box .patologia-nombre {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* Hover sutil */
+.patologia-box:hover {
+  border-color: #555;
+  background: #222;
+}
+
+/* Scrollbar estética */
+.grid-patologias-moderno::-webkit-scrollbar {
+  width: 4px;
+}
+.grid-patologias-moderno::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 10px;
 }

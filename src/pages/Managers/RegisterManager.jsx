@@ -21,6 +21,12 @@ const RegisterManager = () => {
     confirmPassword: ''
   });
 
+  // --- LÓGICA DE VALIDACIÓN UNIFICADA ---
+  const validateDni = (dni) => {
+    const dniRegex = /^\d{7,8}$/;
+    return dniRegex.test(dni);
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -40,6 +46,12 @@ const RegisterManager = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateDni(formData.dni)) {
+      alert("Por favor, ingresá un DNI válido (7 u 8 dígitos).");
+      return;
+    }
+
     setLoading(true);
 
     const dataToSubmit = {
@@ -101,7 +113,18 @@ const RegisterManager = () => {
               </div>
               <div className="form-group">
                 <label>Confirmar Contraseña</label>
-                <input name="confirmPassword" type="password" placeholder="••••••••" onChange={handleChange} value={formData.confirmPassword} required />
+                <input 
+                  name="confirmPassword" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  onChange={handleChange} 
+                  value={formData.confirmPassword} 
+                  required 
+                  className={formData.confirmPassword && formData.password !== formData.confirmPassword ? 'input-error' : ''}
+                />
+                {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                  <span className="error-text">Las contraseñas no coinciden</span>
+                )}
               </div>
               <button type="submit" className="btn-login-submit">Siguiente</button>
             </>
@@ -119,10 +142,26 @@ const RegisterManager = () => {
                   <input name="lastName" type="text" onChange={handleChange} value={formData.lastName} required />
                 </div>
               </div>
+              
               <div className="form-group">
                 <label>DNI</label>
-                <input name="dni" type="number" onChange={handleChange} value={formData.dni} required />
+                <input 
+                  name="dni" 
+                  type="text" 
+                  inputMode="numeric"
+                  placeholder="Ej: 40123456"
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 8) handleChange({ target: { name: 'dni', value } });
+                  }} 
+                  value={formData.dni} 
+                  required 
+                />
+                {formData.dni && !validateDni(formData.dni) && (
+                  <span className="error-text">Debe tener 7 u 8 dígitos</span>
+                )}
               </div>
+
               <div className="login-actions">
                 <button type="button" className="btn-secondary" onClick={() => setStep(1)}>Atrás</button>
                 <button type="submit" className="btn-login-submit" disabled={loading}>

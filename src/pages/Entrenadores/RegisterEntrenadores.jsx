@@ -22,6 +22,28 @@ const RegisterEntrenador = () => {
     rcpExpirationDate: ''
   });
 
+  const validateDni = (dni) => {
+    const dniRegex = /^\d{7,8}$/;
+    return dniRegex.test(dni);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9+\s-]{8,15}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength <= 2) return phoneNumber;
+    if (phoneNumberLength <= 6) {
+      return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2)}`;
+    }
+    return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 6)}-${phoneNumber.slice(6, 10)}`;
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -41,6 +63,17 @@ const RegisterEntrenador = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateDni(formData.dni)) {
+      alert("Por favor, ingresá un DNI válido (7 u 8 dígitos).");
+      return;
+    }
+
+    if (formData.phone.length < 10) {
+      alert("El teléfono debe tener 10 dígitos.");
+      return;
+    }
+
     setLoading(true);
 
     const dataToSubmit = {
@@ -99,7 +132,18 @@ const RegisterEntrenador = () => {
               </div>
               <div className="form-group">
                 <label>Confirmar Contraseña</label>
-                <input name="confirmPassword" type="password" placeholder="••••••••" onChange={handleChange} value={formData.confirmPassword} required />
+                <input 
+                  name="confirmPassword" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  onChange={handleChange} 
+                  value={formData.confirmPassword} 
+                  required 
+                  className={formData.confirmPassword && formData.password !== formData.confirmPassword ? 'input-error' : ''}
+                />
+                {formData.confirmPassword && formData.password !== formData.confirmPassword && (
+                  <span className="error-text">Las contraseñas no coinciden</span>
+                )}
               </div>
               <button type="submit" className="btn-login-submit">Siguiente</button>
             </>
@@ -120,7 +164,45 @@ const RegisterEntrenador = () => {
 
               <div className="form-group">
                 <label>DNI</label>
-                <input name="dni" type="number" onChange={handleChange} value={formData.dni} required />
+                <input 
+                  name="dni" 
+                  type="text" 
+                  inputMode="numeric"
+                  placeholder="Ej: 40123456"
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 8) handleChange({ target: { name: 'dni', value } });
+                  }} 
+                  value={formData.dni} 
+                  required 
+                />
+                {formData.dni && !validateDni(formData.dni) && (
+                  <span className="error-text">Debe tener 7 u 8 dígitos</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>Teléfono (con característica)</label>
+                <input 
+                  name="phone" 
+                  type="text" 
+                  inputMode="numeric"
+                  placeholder="Ej: 11 1234-5678"
+                  value={formatPhoneNumber(formData.phone)} 
+                  required 
+                  onChange={(e) => {
+                    const soloNumeros = e.target.value.replace(/\D/g, "");
+                    if (soloNumeros.length <= 10) {
+                      handleChange({
+                        target: { name: 'phone', value: soloNumeros }
+                      });
+                    }
+                  }} 
+                  className={formData.phone && formData.phone.length > 0 && formData.phone.length < 10 ? 'input-error' : ''}
+                />
+                {formData.phone && formData.phone.length > 0 && formData.phone.length < 10 && (
+                  <span className="error-text">Ingresá los 10 dígitos</span>
+                )}
               </div>
 
               <div className="form-group">

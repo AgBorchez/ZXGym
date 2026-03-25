@@ -122,6 +122,65 @@ namespace GymManager.api.Controllers
             }
         }
 
+        [HttpPost("register-socio")]
+        public async Task<IActionResult> RegisterSocio([FromBody] RegistroSocioRequest request)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Creamos el usuario base
+                var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(
+                    request.DNI, request.Name, request.LastName, request.Email, request.Password, "Socio");
+
+                // IMPORTANTE: Si tu servicio CrearUsuarioBaseAsync NO hace SaveChangesAsync, 
+                // tenés que agregarlo al contexto manualmente aquí:
+                _context.Usuarios.Add(nuevoUsuario);
+                await _context.SaveChangesAsync(); // <--- ESTO ES CLAVE para que el DNI exista en la DB
+
+                // 2. Ahora sí creamos el Socio
+                var nuevoSocio = new Socio
+                {
+                    DNI = request.DNI,
+                    Name = request.Name,
+                    LastName = request.LastName,
+                    Email = request.Email,
+                    Phone = request.Phone,
+                    PlanId = request.PlanId,
+                    JoinDate = DateTime.UtcNow,
+                    // Ojo: Si PlanId es un ID de tabla, no sumes request.PlanId directamente. 
+                    // Si 1 es un mes, está bien.
+                    EndDate = DateTime.UtcNow.AddMonths(request.PlanId)
+                };
+
+                _context.Socios.Add(nuevoSocio);
+                await _context.SaveChangesAsync(); // Guardamos el socio para tener su ID
+
+                // 3. Patologías
+                if (request.Patologias != null && request.Patologias.Any())
+                {
+                    foreach (var patologiaId in request.Patologias)
+                    {
+                        _context.Socios_Patologias.Add(new Socio_Patologia
+                        {
+                            Socio_Id = nuevoSocio.Id,
+                            Patologia_id = patologiaId
+                        });
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+                return Ok(new { message = "Socio registrado con éxito" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                // Tip: Mirá el "InnerException" si el mensaje es muy genérico
+                var mensajeFull = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                return BadRequest(new { message = "Error al registrar: " + mensajeFull });
+            }
+        }
+
         [HttpGet("{Id}")]
         public async Task<ActionResult<SocioResponseDTO>> GetById(int Id)
         {
@@ -221,40 +280,7 @@ namespace GymManager.api.Controllers
             }
         }
 
-        [HttpPost("register-socio")]
-        public async Task<IActionResult> RegisterSocio([FromBody] RegistroSocioRequest request)
-        {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(request.DNI, request.Name, request.LastName, request.Email, request.Password, "Socio");
-
-                var nuevoSocio = new Socio
-                {
-                    DNI = nuevoUsuario.DNI,
-                    Name = request.Name,
-                    LastName = request.LastName,
-                    Email = request.Email,
-                    Phone = request.Phone,
-                    PlanId = request.PlanId,
-                    JoinDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddMonths(request.PlanId)
-                };
-
-                _context.Usuarios.Add(nuevoUsuario);
-                await _context.SaveChangesAsync();
-                _context.Socios.Add(nuevoSocio);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return Ok(new { message = "Socio registrado con éxito" });
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                return BadRequest(new { message = ex.Message });
-            }
-        }
+        
 
     }
 }

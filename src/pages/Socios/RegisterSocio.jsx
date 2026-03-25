@@ -3,10 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/pages/Inicio/Login.css';
 import { API_SOCIOS_URL } from '../../Constants/config';
 
+const PATOLOGIAS_DB = [
+  { id: 1, nombre: "Hipertensión Arterial" },
+  { id: 2, nombre: "Problemas Cardíacos" },
+  { id: 3, nombre: "Lesiones de Columna" },
+  { id: 4, nombre: "Lesiones Articulares" },
+  { id: 5, nombre: "Asma / Problemas Respiratorios" },
+  { id: 6, nombre: "Diabetes" },
+  { id: 7, nombre: "Cirugías Recientes" },
+  { id: 8, nombre: "Mareos / Vértigo" },
+  { id: 9, nombre: "Embarazo" },
+  { id: 10, nombre: "Medicación Crónica" }
+];
+
 const RegisterSocio = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [patologiasSeleccionadas, setPatologiasSeleccionadas] = useState([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -19,27 +33,22 @@ const RegisterSocio = () => {
     confirmPassword: ''
   });
 
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const validateDni = (dni) => {
     const dniRegex = /^\d{7,8}$/;
     return dniRegex.test(dni);
-  };
-
-  const validatePhone = (phone) => {
-    const phoneRegex = /^[0-9+\s-]{8,15}$/;
-    return phoneRegex.test(phone);
   };
 
   const formatPhoneNumber = (value) => {
     if (!value) return value;
     const phoneNumber = value.replace(/[^\d]/g, '');
     const phoneNumberLength = phoneNumber.length;
-
-    if (phoneNumberLength <= 2) {
-      return phoneNumber;
-    }
-    if (phoneNumberLength <= 6) {
-      return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2)}`;
-    }
+    if (phoneNumberLength <= 2) return phoneNumber;
+    if (phoneNumberLength <= 6) return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2)}`;
     return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 6)}-${phoneNumber.slice(6, 10)}`;
   };
 
@@ -47,37 +56,39 @@ const RegisterSocio = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const togglePatologia = (id) => {
+    setPatologiasSeleccionadas(prev => 
+      prev.includes(id) ? prev.filter(pId => pId !== id) : [...prev, id]
+    );
+  };
+
   const handleNextStep = (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert("Las contraseñas no coinciden. Por favor, verificalas.");
-      return;
+    if (step === 1) {
+      if (formData.password !== formData.confirmPassword) {
+        alert("Las contraseñas no coinciden.");
+        return;
+      }
+      if (!validatePassword(formData.password)) {
+        alert("La contraseña no cumple con los requisitos de seguridad.");
+        return;
+      }
+      setStep(2);
+    } else if (step === 2) {
+      if (!validateDni(formData.dni)) {
+        alert("DNI inválido.");
+        return;
+      }
+      if (formData.phone.length < 10) {
+        alert("Teléfono incompleto.");
+        return;
+      }
+      setStep(3);
     }
-    if (formData.password.length < 6) {
-      alert("La contraseña debe tener al menos 6 caracteres.");
-      return;
-    }
-    setStep(2);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateDni(formData.dni)) {
-      alert("Por favor, ingresá un DNI válido (7 u 8 dígitos, sin puntos).");
-      return;
-    }
-
-    if (!validatePhone(formData.phone)) {
-      alert("El formato del teléfono no es válido. Usá solo números, espacios o '+'.");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      alert("Las contraseñas no coinciden");
-      return;
-    }
-
     setLoading(true);
 
     const dataToSubmit = {
@@ -87,7 +98,8 @@ const RegisterSocio = () => {
       email: formData.email,
       phone: formData.phone,
       planId: parseInt(formData.planId),
-      password: formData.password
+      password: formData.password,
+      Patologias: patologiasSeleccionadas 
     };
 
     try {
@@ -105,7 +117,6 @@ const RegisterSocio = () => {
         alert(`Error: ${errorData.message || 'No se pudo completar el registro'}`);
       }
     } catch (error) {
-      console.error("Error de conexión:", error);
       alert("Hubo un problema al conectar con el servidor.");
     } finally {
       setLoading(false);
@@ -117,10 +128,16 @@ const RegisterSocio = () => {
       <div className="login-card">
         <div className="login-header">
           <Link to="/" className="logo">ZX<span>Gym</span></Link>
-          <h2>{step === 1 ? 'Unite a la comunidad' : 'Completá tu perfil'}</h2>
+          <h2>
+            {step === 1 && 'Unite a la comunidad'}
+            {step === 2 && 'Completá tu perfil'}
+            {step === 3 && 'Ficha Médica'}
+          </h2>
+          <p className="step-indicator">Paso {step} de 3</p>
         </div>
 
-        <form onSubmit={step === 1 ? handleNextStep : handleSubmit} className="login-form">
+        <form onSubmit={step < 3 ? handleNextStep : handleSubmit} className="login-form">
+
           {step === 1 && (
             <>
               <div className="form-group">
@@ -129,22 +146,23 @@ const RegisterSocio = () => {
               </div>
               <div className="form-group">
                 <label>Contraseña</label>
-                <input name="password" type="password" placeholder="••••••••" onChange={handleChange} value={formData.password} required />
+                <input 
+                  name="password" type="password" 
+                  placeholder="Mín. 8 caracteres (Mayús, Núm, Especial)" 
+                  onChange={handleChange} value={formData.password} required 
+                  className={formData.password && !validatePassword(formData.password) ? 'input-error' : ''}
+                />
+                {formData.password && !validatePassword(formData.password) && (
+                  <span className="error-text">Requisitos: 8+ caracteres, Mayúscula, Número y Símbolo.</span>
+                )}
               </div>
               <div className="form-group">
                 <label>Confirmar Contraseña</label>
                 <input 
-                  name="confirmPassword" 
-                  type="password" 
-                  placeholder="••••••••" 
-                  onChange={handleChange} 
-                  value={formData.confirmPassword} 
-                  required 
+                  name="confirmPassword" type="password" placeholder="••••••••" 
+                  onChange={handleChange} value={formData.confirmPassword} required 
                   className={formData.confirmPassword && formData.password !== formData.confirmPassword ? 'input-error' : ''}
                 />
-                {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                  <span className="error-text">Las contraseñas no coinciden</span>
-                )}
               </div>
               <button type="submit" className="btn-login-submit">Siguiente</button>
             </>
@@ -166,51 +184,29 @@ const RegisterSocio = () => {
               <div className="form-group">
                 <label>DNI</label>
                 <input 
-                  name="dni" 
-                  type="text" 
-                  inputMode="numeric" 
-                  placeholder="Ej: 40123456" 
+                  name="dni" type="text" inputMode="numeric" placeholder="Ej: 40123456" 
                   onChange={(e) => {
                     const value = e.target.value.replace(/\D/g, "");
                     if (value.length <= 8) handleChange({ target: { name: 'dni', value } });
                   }} 
-                  value={formData.dni} 
-                  required 
+                  value={formData.dni} required 
                 />
-                {formData.dni && !validateDni(formData.dni) && (
-                  <span className="error-text">Debe tener 7 u 8 dígitos</span>
-                )}
               </div>
 
               <div className="form-group">
-                <label>Teléfono (con característica)</label>
+                <label>Teléfono</label>
                 <input 
-                  name="phone" 
-                  type="text" 
-                  inputMode="numeric" 
-                  placeholder="Ej: 11 1234-5678" 
-                  value={formatPhoneNumber(formData.phone)} 
-                  required 
+                  name="phone" type="text" inputMode="numeric" placeholder="11 1234-5678" 
+                  value={formatPhoneNumber(formData.phone)} required 
                   onChange={(e) => {
                     const soloNumeros = e.target.value.replace(/\D/g, "");
-                    if (soloNumeros.length <= 10) {
-                      handleChange({
-                        target: {
-                          name: 'phone',
-                          value: soloNumeros
-                        }
-                      });
-                    }
+                    if (soloNumeros.length <= 10) handleChange({ target: { name: 'phone', value: soloNumeros } });
                   }} 
-                  className={formData.phone && formData.phone.length > 0 && formData.phone.length < 10 ? 'input-error' : ''}
                 />
-                {formData.phone && formData.phone.length > 0 && formData.phone.length < 10 && (
-                  <span className="error-text">Ingresá los 10 dígitos (ej: 11 1234-5678)</span>
-                )}
               </div>
 
               <div className="form-group">
-                <label>Elegí tu Plan</label>
+                <label>Plan</label>
                 <select name="planId" onChange={handleChange} value={formData.planId} className="form-input">
                   <option value="1">Plan Inicial (1 Mes)</option>
                   <option value="3">Plan Trimestral (3 Meses)</option>
@@ -221,17 +217,39 @@ const RegisterSocio = () => {
 
               <div className="login-actions">
                 <button type="button" className="btn-secondary" onClick={() => setStep(1)}>Atrás</button>
+                <button type="submit" className="btn-login-submit">Siguiente</button>
+              </div>
+            </>
+          )}
+
+          {step === 3 && (
+            <div className="login-fase-medical">
+              <p className="subtitulo-fase">Seleccioná si poseés alguna condición:</p>
+              
+              <div className="patologias-grid-clean">
+                {PATOLOGIAS_DB.map((pat) => (
+                  <label key={pat.id} className="patologia-item">
+                    <input 
+                      type="checkbox" 
+                      checked={patologiasSeleccionadas.includes(pat.id)}
+                      onChange={() => togglePatologia(pat.id)}
+                    />
+                    <div className="patologia-box">
+                      <span className="patologia-nombre">{pat.nombre}</span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+
+              <div className="login-actions">
+                <button type="button" className="btn-secondary" onClick={() => setStep(2)}>Atrás</button>
                 <button type="submit" className="btn-login-submit" disabled={loading}>
                   {loading ? 'Procesando...' : 'Finalizar Registro'}
                 </button>
               </div>
-            </>
+            </div>
           )}
         </form>
-
-        <div className="login-footer">
-          <p>¿Ya sos socio? <Link to="/login">Iniciá sesión</Link></p>
-        </div>
       </div>
     </div>
   );
