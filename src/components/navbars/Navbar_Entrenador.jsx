@@ -7,13 +7,11 @@ function Navbar_Entrenador() {
 
   return (
     <>
-      <nav className="main-nav"> 
+      <nav className="main-nav">
         <div className="nav-container">
-          {/* Logo con el estilo ZXGym Staff */}
           <Link to="/" className="logo">ZX<span>Gym</span></Link>
           
-          {/* Envoltorio principal para alinear links y auth igual que en Staff */}
-          <div className="nav-links"> 
+          <div className="nav-links">
             <ul className="nav-links">
               <li>
                 <NavLink to="/alumnos" className={({ isActive }) => isActive ? "active" : ""}>
@@ -27,11 +25,9 @@ function Navbar_Entrenador() {
               </li>
             </ul>
 
-            {/* Sección de Auth a la derecha */}
             <div className="nav-auth">
               {user && (
                 <div className="user-logged-info">
-                  {/* Mantenemos el prefijo para consistencia visual */}
                   <span className="user-name">Entrenador: {user.nombre}</span>
                   <button onClick={logout} className="btn-logout-nav">
                     Salir
@@ -42,7 +38,6 @@ function Navbar_Entrenador() {
           </div>
         </div>
       </nav>
-      {/* Spacer para evitar que el contenido quede debajo de la nav fixed */}
       <div className="nav-spacer"></div>
     </>
   );

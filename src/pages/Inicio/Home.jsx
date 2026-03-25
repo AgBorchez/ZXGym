@@ -1,9 +1,8 @@
 import React from 'react';
 import '../../styles/pages/Home.css';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-  // Datos de las features (fácil de escalar o mover a un fetch)
   const features = [
     { title: 'Musculación', desc: 'Equipamiento profesional', icon: '' },
     { title: 'Crossfit', desc: 'Entrenamientos funcionales', icon: '' },
@@ -14,7 +13,6 @@ const Home = () => {
   return (
     <div className="home-wrapper">
       <section className="hero-container">
-        {/* Imagen de Fondo Real */}
         <div className="hero-background">
           <img 
             src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070" 
@@ -23,7 +21,6 @@ const Home = () => {
         </div>
         <div className="hero-overlay"></div>
 
-        {/* Contenido Hero */}
         <div className="hero-content">
           <h1 className="hero-title">
             Superá tus <br />
@@ -34,11 +31,10 @@ const Home = () => {
           </p>
           
           <div className="hero-buttons">
-           <Link className="btn-main" to='/register'>Empezar ahora</Link>
+            <Link className="btn-main" to='/register'>Empezar ahora</Link>
             <button className="btn-secondary">Ver más</button>
           </div>
 
-          {/* Estadísticas (las que aparecen abajo del texto en la foto) */}
           <div className="hero-stats">
             <div className="stat-item">
               <span className="stat-number">500+</span>
@@ -56,7 +52,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Sección de Features (los bloques de abajo) */}
       <section className="features-grid">
         {features.map((f, index) => (
           <div key={index} className="feature-card">

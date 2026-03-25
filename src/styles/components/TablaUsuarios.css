@@ -1,8 +1,5 @@
-/* ==========================================================================
-   TABLA DE USUARIOS - DASHBOARD PRO (ADAPTATIVO)
-   ========================================================================== */
+/* TABLA DE USUARIOS - DASHBOARD PRO */
 
-/* Contenedor principal con límites para pantallas grandes y resuello en chicas */
 .tabla-container-pro {
     background-color: #1b2235;
     border-radius: 12px;
@@ -13,17 +10,17 @@
     width: 95%;
     max-width: 1400px;
     display: block;
-    overflow: hidden; /* El scroll lo maneja el área de la tabla */
+    overflow: hidden;
 }
 
-/* Controles superiores (Filtros) */
+/* CONTROLES Y FILTROS */
 .controles-superiores-pro {
     display: flex;
-    justify-content: flex-end; /* Alinea los filtros a la derecha */
+    justify-content: flex-end;
     align-items: center;
     margin-bottom: 20px;
     gap: 20px;
-    flex-wrap: wrap; /* Para que bajen en monitores muy chicos */
+    flex-wrap: wrap;
 }
 
 .grupo-filtros {
@@ -49,7 +46,7 @@
     border-color: #1a56db;
 }
 
-/* Fila de Búsqueda */
+/* BÚSQUEDA */
 .fila-busqueda {
     margin-bottom: 25px;
     width: 100%;
@@ -83,18 +80,18 @@
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
 }
 
-/* ESTRUCTURA DE TABLA CON SCROLL INTERNO */
+/* ÁREA DE TABLA Y SCROLL */
 .tabla-scroll-area {
     width: 100%;
-    overflow-x: auto; /* Scroll horizontal si la tabla no cabe */
+    overflow-x: auto;
     border-radius: 8px;
-    scrollbar-width: thin; /* Para navegadores modernos */
+    scrollbar-width: thin;
     scrollbar-color: #4a5568 #1b2235;
 }
 
 .tabla-estilo {
     width: 100%;
-    min-width: 800px; /* Evita que las columnas se colapsen en monitores chicos */
+    min-width: 800px;
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -119,7 +116,9 @@
     gap: 5px;
 }
 
-.header-label:hover { color: #4299e1; }
+.header-label:hover { 
+    color: #4299e1; 
+}
 
 .resizer {
     position: absolute;
@@ -131,7 +130,7 @@
     z-index: 10;
 }
 
-/* CELDAS Y DATOS */
+/* CELDAS Y FILAS */
 .tabla-estilo td {
     padding: 14px 16px;
     border-bottom: 1px solid #2d3748;
@@ -146,7 +145,7 @@
     background-color: rgba(255, 255, 255, 0.02);
 }
 
-/* BADGES DE ROL */
+/* ESTADOS Y BADGES */
 .badge-rol {
     padding: 4px 8px;
     border-radius: 4px;
@@ -165,6 +164,12 @@
     width: 120px;
 }
 
+.acciones-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 .btn-borrar-pro {
     width: 100%;
     padding: 8px;
@@ -177,10 +182,6 @@
     transition: background 0.2s;
 }
 
-.btn-borrar-pro:hover { background-color: #e53e3e; }
-
-.acciones-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
+.btn-borrar-pro:hover { 
+    background-color: #e53e3e; 
 }

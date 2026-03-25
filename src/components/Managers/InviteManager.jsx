@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { API_USUARIOS_URL } from '../../Constants/config';
-import '../../styles/components/Invitaciones.css'; // El CSS de las tarjetas
+import '../../styles/components/Invitaciones.css';
 
 const InviteManager = () => {
   const [token, setToken] = useState('');
@@ -37,7 +37,6 @@ const InviteManager = () => {
     <div className="invite-card-container">
       <h3>Invitar nuevo Manager</h3>
       
-      {/* Badge de acceso total como en la imagen */}
       <div className="badge-acceso">
         <span className="icon-lock">Acceso total</span> 
       </div>
@@ -46,7 +45,6 @@ const InviteManager = () => {
         Este token permite registrar a un administrador con acceso total al sistema.
       </p>
 
-      {/* Botón principal de acción */}
       <button 
         onClick={generateToken} 
         disabled={loading} 
@@ -55,7 +53,6 @@ const InviteManager = () => {
         {loading ? 'Generando...' : 'Generar Nuevo Token'}
       </button>
 
-      {/* Grupo de Token: Input + Botón Copiar pegados */}
       <div className="token-group">
         <input 
           type="text" 
@@ -69,7 +66,6 @@ const InviteManager = () => {
           className="btn-copy-group"
           disabled={!token}
         >
-          {/* Icono simple de papel/copia */}
           <span className="icon-copy">📋</span> 
           {copied ? 'Copiado' : 'Copiar'}
         </button>

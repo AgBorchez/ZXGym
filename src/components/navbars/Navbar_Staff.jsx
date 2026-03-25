@@ -1,24 +1,19 @@
 import '../../styles/components/Navbar.css';
 import { NavLink, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // Importamos el contexto
+import { useAuth } from '../../context/AuthContext';
 
 function Navbar_Staff() {
   const { user, logout } = useAuth();
 
-  // Verificamos si es Manager para mostrar u ocultar la pestaña "Usuarios"
   const isManager = user && user.tipo === 'Manager';
 
   return (
     <>
-      <nav className="main-nav"> 
+      <nav className="main-nav">
         <div className="nav-container">
-          {/* Logo a la izquierda */}
           <Link to="/" className="logo">ZX<span>Gym</span></Link>
           
-          {/* IMPORTANTE: Agregamos este div envoltorio 
-              para que el CSS de la nav pública funcione igual 
-          */}
-          <div className="nav-links"> 
+          <div className="nav-links">
             <ul className="nav-links">
               {isManager && (
                 <li>
@@ -39,7 +34,6 @@ function Navbar_Staff() {
               </li>
             </ul>
 
-            {/* La parte de Auth (Nombre + Salir) a la derecha */}
             <div className="nav-auth">
               {user && (
                 <div className="user-logged-info">

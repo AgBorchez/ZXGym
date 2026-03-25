@@ -1,246 +1,231 @@
 /* src/styles/Navbar.css */
 
-/* 1. Contenedor Principal (Fixed + Glassmorphism) */
+/* 1. CONTENEDOR PRINCIPAL (Fixed + Glassmorphism) */
 .main-nav {
-    position: fixed; 
-    top: 0;           
-    left: 0;
-    width: 100%;     
-    height: 80px; 
-    
-    /* Efecto de cristal oscuro */
-    background-color: rgba(13, 13, 13, 0.75); 
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
-    
-    display: flex;
-    align-items: center;
-    z-index: 1000;   
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
+  position: fixed; 
+  top: 0;           
+  left: 0;
+  width: 100%;     
+  height: 80px; 
+  background-color: rgba(13, 13, 13, 0.75); 
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  display: flex;
+  align-items: center;
+  z-index: 1000;   
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
 }
 
 .nav-container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 0 8%; /* Ajustado para dar aire a los costados */
-    width: 100%;
-    height: 100%; 
-    box-sizing: border-box
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 0 8%; 
+  width: 100%;
+  height: 100%; 
+  box-sizing: border-box;
 }
 
-/* 2. Logo */
+/* 2. LOGO */
 .logo {
-    font-size: 30px; 
-    font-weight: 800; /* Super grueso */
-    color: white; /* Color para "ZX" */
-    text-decoration: none;
-    letter-spacing: -1.5px;
+  font-size: 30px; 
+  font-weight: 800; 
+  color: white; 
+  text-decoration: none;
+  letter-spacing: -1.5px;
 }
 
 .logo span {
-    color: #ff4d4d; /* El rojo característico de ZXGym */
+  color: #ff4d4d;
 }
 
-/* 3. Enlaces de Navegación */
+/* 3. ENLACES DE NAVEGACIÓN */
 .nav-links { 
-    list-style: none; 
-    display: flex; 
-    gap: 35px; /* Espacio entre links */
-    margin: 0; 
-    padding: 0; 
-    height: 100%; 
+  list-style: none; 
+  display: flex; 
+  gap: 35px; 
+  margin: 0; 
+  padding: 0; 
+  height: 100%; 
 }
 
 .nav-links li { 
-    display: flex; 
-    align-items: center; 
-    position: relative;
+  display: flex; 
+  align-items: center; 
+  position: relative;
 }
 
 .nav-links a {
-    color: rgba(255, 255, 255, 0.6); /* Estética de la foto: grisáceos si no están activos */
-    text-decoration: none;
-    font-size: 16px; 
-    font-weight: 500;
-    padding: 10px 0;
-    transition: color 0.3s ease;
+  color: rgba(255, 255, 255, 0.6); 
+  text-decoration: none;
+  font-size: 16px; 
+  font-weight: 500;
+  padding: 10px 0;
+  transition: color 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: white;
+  color: white;
 }
 
-/* Línea roja debajo del link activo (Estilo Foto 1) */
 .nav-links a.active { 
-    color: white;
+  color: white;
 }
 
 .nav-links a.active::after {
-    content: '';
-    position: absolute;
-    bottom: 20px; /* Alineado al fondo de la nav */
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #ff4d4d;
-    border-radius: 2px;
+  content: '';
+  position: absolute;
+  bottom: 20px; 
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #ff4d4d;
+  border-radius: 2px;
 }
 
-/* 4. Botón de Ingreso (Estirado) */
+/* 4. BOTÓN DE INGRESO E INFO DE USUARIO */
+.nav-auth {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 150px; 
+}
+
 .btn-login {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* Aumentamos el padding lateral a 55px para que sea bien largo */
-    padding: 10px 55px; 
-    min-width: 160px; /* Asegura un ancho mínimo consistente */
-    
-    /* 2. Bordes y Fondo */
-    border: 2px solid rgba(168, 0, 0, 0.4); /* Borde un poco más visible */
-    background-color: transparent;
-    border-radius: 9px; /* Redondeado sutil como la foto */
-    
-    /* 3. Tipografía */
-    color: white;
-    font-size: 15px;
-    font-weight: 600;
-    text-decoration: none;
-    letter-spacing: 0.5px;
-    line-height: 1; /* Evita desplazamientos verticales del texto */
-    
-    /* 4. Animación */
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 55px; 
+  min-width: 160px; 
+  border: 2px solid rgba(168, 0, 0, 0.4); 
+  background-color: transparent;
+  border-radius: 9px; 
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  line-height: 1; 
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
 }
 
 .btn-login:hover {
-    background-color: #ff4d4d;
-    border-color: #ff4d4d;
-    box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
-}
-
-/* 5. Dropdown */
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 80px;
-    right: 0;
-    background-color: #1a1a1a;
-    min-width: 200px;
-    box-shadow: 0px 10px 20px rgba(0,0,0,0.5);
-    border: 1px solid rgba(255,255,255,0.05);
-}
-
-.nav-links li:hover .dropdown-content { 
-    display: block; 
-}
-
-/* 6. Espaciador */
-.nav-spacer {
-    height: 80px;
-}
-
-.nav-auth {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    min-width: 150px; /* Espacio reservado para el botón */
+  background-color: #ff4d4d;
+  border-color: #ff4d4d;
+  box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
 }
 
 .user-logged-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .user-name {
-    color: white;
-    font-weight: 500;
-    font-size: 0.9rem;
-    border-right: 1px solid rgba(255,255,255,0.2);
-    padding-right: 15px;
+  color: white;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-right: 1px solid rgba(255,255,255,0.2);
+  padding-right: 15px;
 }
 
 .btn-logout-nav {
-    background: transparent;
-    border: 1px solid #ff4d4d;
-    color: #ff4d4d;
-    padding: 6px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: all 0.3s;
+  background: transparent;
+  border: 1px solid #ff4d4d;
+  color: #ff4d4d;
+  padding: 6px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s;
 }
 
 .btn-logout-nav:hover {
-    background: #ff4d4d;
-    color: white;
+  background: #ff4d4d;
+  color: white;
 }
 
-/* ... (Todo tu código anterior se mantiene igual hasta el final) ... */
+/* 5. DROPDOWN Y ESPACIADORES */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 80px;
+  right: 0;
+  background-color: #1a1a1a;
+  min-width: 200px;
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.05);
+}
 
-/* 7. RESPONSIVIDAD (Ajustes para pantallas chicas) */
+.nav-links li:hover .dropdown-content { 
+  display: block; 
+}
 
+.nav-spacer {
+  height: 80px;
+}
+
+/* 6. RESPONSIVIDAD */
 @media (max-width: 950px) {
-    .nav-container {
-        padding: 0 4%; /* Reducimos el aire a los costados */
-    }
-    .nav-links {
-        gap: 20px; /* Acortamos espacio entre links */
-    }
+  .nav-container {
+    padding: 0 4%;
+  }
+  .nav-links {
+    gap: 20px;
+  }
 }
 
 @media (max-width: 850px) {
-    .main-nav {
-        height: auto;
-        padding: 15px 0;
-        position: fixed;
-    }
+  .main-nav {
+    height: auto;
+    padding: 15px 0;
+    position: fixed;
+  }
 
-    .nav-container {
-        flex-direction: column; /* Apilamos Logo arriba y Links abajo */
-        gap: 15px;
-    }
+  .nav-container {
+    flex-direction: column; 
+    gap: 15px;
+  }
 
-    .nav-links {
-        height: auto;
-        flex-wrap: wrap; /* Si no entran, que bajen a la siguiente línea */
-        justify-content: center;
-        gap: 15px;
-    }
+  .nav-links {
+    height: auto;
+    flex-wrap: wrap; 
+    justify-content: center;
+    gap: 15px;
+  }
 
-    .nav-links a.active::after {
-        bottom: 0; /* Ajustamos la línea roja para que no flote */
-    }
+  .nav-links a.active::after {
+    bottom: 0;
+  }
 
-    .nav-auth {
-        margin-top: 10px;
-        justify-content: center;
-        width: 100%;
-    }
+  .nav-auth {
+    margin-top: 10px;
+    justify-content: center;
+    width: 100%;
+  }
 
-    .nav-spacer {
-        height: 140px; /* Aumentamos el spacer porque la nav ahora es más alta al ser vertical */
-    }
+  .nav-spacer {
+    height: 140px; 
+  }
 }
 
 @media (max-width: 480px) {
-    .logo {
-        font-size: 24px;
-    }
+  .logo {
+    font-size: 24px;
+  }
 
-    .nav-links a {
-        font-size: 14px;
-    }
+  .nav-links a {
+    font-size: 14px;
+  }
 
-    .btn-login {
-        padding: 8px 30px; /* Botón más chico para celulares */
-        min-width: 120px;
-    }
-    
-    .user-name {
-        display: none; /* Ocultamos el nombre en móviles muy chicos para ahorrar espacio */
-    }
+  .btn-login {
+    padding: 8px 30px; 
+    min-width: 120px;
+  }
+  
+  .user-name {
+    display: none; 
+  }
 }

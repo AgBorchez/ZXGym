@@ -3,8 +3,14 @@ import { API_ENTRENADORES_URL } from '../../Constants/config.js';
 import '../../styles/components/FormularioSocio/FormularioSocio.css';
 
 const estadoInicial = {
-  Name: '', LastName: '', Email: '', Phone: '',
-  Specialty: '', Shift: '', JoinDate: '', RCPExpirationDate: '',
+  Name: '',
+  LastName: '',
+  Email: '',
+  Phone: '',
+  Specialty: '',
+  Shift: '',
+  JoinDate: '',
+  RCPExpirationDate: '',
   IsActive: true
 };
 
@@ -16,7 +22,6 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
     if (entrenadorExistente) {
       setFormData({
         ...entrenadorExistente,
-        // Aseguramos que los nombres coincidan con el estado local
         Name: entrenadorExistente.name || entrenadorExistente.Name || '',
         LastName: entrenadorExistente.lastName || entrenadorExistente.LastName || '',
         Email: entrenadorExistente.email || entrenadorExistente.Email || '',
@@ -38,14 +43,13 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
     if (!formData.Email) nuevosErrores.Email = "El email es obligatorio";
     if (!formData.Specialty) nuevosErrores.Specialty = "La especialidad es obligatoria";
     if (!formData.Shift) nuevosErrores.Shift = "Debes asignar un turno";
-    
-    // Nueva validación de Celular para evitar el Error 400 del Backend
+
     if (!formData.Phone) {
       nuevosErrores.Phone = "El celular es obligatorio";
     } else if (formData.Phone.length < 8) {
       nuevosErrores.Phone = "El número es demasiado corto";
     }
-    
+
     setErrores(nuevosErrores);
     return Object.keys(nuevosErrores).length === 0;
   };
@@ -61,7 +65,6 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
     if (!validarCampos()) return;
 
     const esEdicion = !!entrenadorExistente;
-    // Usamos ID o DNI según manejes tu PK en Entrenadores
     const urlFinal = esEdicion ? `${API_ENTRENADORES_URL}/${formData.id || formData.dni}` : API_ENTRENADORES_URL;
     const metodo = esEdicion ? 'PUT' : 'POST';
 
@@ -94,12 +97,11 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
   return (
     <form onSubmit={enviarFormulario} className="animate-fade-in">
       <div className="form-container-staff">
-        
         <div className="form-row">
           <label>Nombre</label>
           <input name="Name" value={formData.Name} onChange={manejarCambio} className={errores.Name ? "input-error" : ""} />
         </div>
-        
+
         <div className="form-row">
           <label>Apellido</label>
           <input name="LastName" value={formData.LastName} onChange={manejarCambio} className={errores.LastName ? "input-error" : ""} />
@@ -107,11 +109,11 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
 
         <div className="form-row">
           <label htmlFor="Specialty">Especialidad</label>
-          <select 
+          <select
             id="Specialty"
-            name="Specialty" 
-            value={formData.Specialty} 
-            onChange={manejarCambio} 
+            name="Specialty"
+            value={formData.Specialty}
+            onChange={manejarCambio}
             className={errores.Specialty ? "input-error" : ""}>
             <option value="">-- Seleccione una especialidad --</option>
             <option value="Musculación">Musculación</option>
@@ -132,15 +134,14 @@ function FormularioEntrenador({ alGuardar, entrenadorExistente }) {
           </select>
         </div>
 
-        {/* CAMPO CELULAR AGREGADO */}
         <div className="form-row">
           <label>Celular</label>
-          <input 
-            name="Phone" 
-            type="text" 
-            placeholder="Ej: 1123456789" 
-            value={formData.Phone} 
-            onChange={manejarCambio} 
+          <input
+            name="Phone"
+            type="text"
+            placeholder="Ej: 1123456789"
+            value={formData.Phone}
+            onChange={manejarCambio}
             className={errores.Phone ? "input-error" : ""}
           />
         </div>

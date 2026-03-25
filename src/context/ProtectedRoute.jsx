@@ -10,9 +10,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
         return <Navigate to="/login" />;
     }
 
-    // Si pasamos roles permitidos (ej: ['Manager']), verificamos
     if (allowedRoles && !allowedRoles.includes(user.tipo)) {
-        return <Navigate to="/" />; // O a una página de "No autorizado"
+        return <Navigate to="/" />;
     }
 
     return children;

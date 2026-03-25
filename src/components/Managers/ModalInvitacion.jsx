@@ -15,7 +15,6 @@ const ModalInvitacion = ({ isOpen, onClose }) => {
         </div>
         
         <div className="invitation-options">
-          {/* Componentes de generación de tokens */}
           <InviteManager />
           <InviteEntrenador />
         </div>

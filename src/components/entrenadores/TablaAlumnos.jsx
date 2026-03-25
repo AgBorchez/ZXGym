@@ -1,29 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API_SOCIOS_URL } from '../../Constants/config.js'; 
-import { useAuth } from '../../context/AuthContext.jsx'; // Para obtener el ID del entrenador
+import { useAuth } from '../../context/AuthContext.jsx';
 import FilaSocio from '../socios/FilaSocio.jsx';
 import '../../styles/components/TablaSocios.css';
 
 function TablaAlumnos({ onEditar }) {
-  const { user } = useAuth(); // Obtenemos los datos del entrenador logueado
+  const { user } = useAuth();
   const [socios, setSocios] = useState([]);
   const [busqueda, setBusqueda] = useState('');
   const [cargando, setCargando] = useState(false);
-  
-  // Ordenamiento por defecto: Fecha de ingreso más reciente
   const [sortConfig, setSortConfig] = useState({ key: 'JoinDate', isAscending: false });
 
   const traerMisSocios = useCallback(async () => {
-    if (!user?.id) return; // Seguridad: Si no hay ID de entrenador, no disparamos
+    if (!user?.id) return;
 
     try {
       setCargando(true);
       
-      // Armamos la URL apuntando al nuevo endpoint filtrado por ID de entrenador
-      // Ejemplo: /api/socios/mis-socios/5
       let url = `${API_SOCIOS_URL}/mis-socios/${user.id}`;
       
-      // Agregamos parámetros de orden y búsqueda si tu backend los soporta en este endpoint
       const params = new URLSearchParams();
       params.append("SortBy", sortConfig.key);
       params.append("IsAscending", sortConfig.isAscending);
@@ -53,7 +48,6 @@ function TablaAlumnos({ onEditar }) {
     }));
   };
 
-  // Configuración de columnas orientada a SOCIOS (lo que el entrenador necesita ver)
   const columnasConfig = [
     { label: "DNI", key: "DNI", width: "110px" },
     { label: "Nombre", key: "Name", width: "150px" },
@@ -65,7 +59,6 @@ function TablaAlumnos({ onEditar }) {
   ];
 
   return (
-    
     <div className="tabla-container-pro">
       <div className="controles-superiores-pro">
         <h2 style={{ color: 'white', margin: 0 }}>Mis Alumnos Asignados</h2>
@@ -113,7 +106,6 @@ function TablaAlumnos({ onEditar }) {
                   key={socio.id} 
                   socio={socio} 
                   onEditar={onEditar} 
-                  // El entrenador normalmente no borra socios, solo ve su ficha
                   soloLectura={true} 
                 />
               ))

@@ -1,56 +1,55 @@
-/* ==========================================
-   2. ELEMENTOS DE FORMULARIO E INPUTS
-   ========================================== */
+/* ELEMENTOS DE FORMULARIO E INPUTS */
 .form-body {
-    padding: 20px;
-    overflow-y: auto; /* Si el contenido es muy largo, permite scroll interno */
-    flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .form-row {
-    display: grid;
-    grid-template-columns: 150px 1fr; /* Etiqueta a la izquierda, input a la derecha */
-    align-items: center;
-    margin-bottom: 12px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .form-row label {
-    text-align: left;
-    color: #cbd5e0;
-    font-size: 0.9rem;
+  text-align: left;
+  color: #cbd5e0;
+  font-size: 0.9rem;
 }
 
-.form-row input, .form-row select {
-    background-color: #242c44;
-    border: 1px solid #3d4663;
-    color: white;
-    padding: 10px 12px;
-    border-radius: 4px;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
+.form-row input,
+.form-row select {
+  background-color: #242c44;
+  border: 1px solid #3d4663;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
 }
 
 .form-row input:focus {
-    border-color: #4299e1; /* Resalte azul al clickear */
+  border-color: #4299e1;
 }
 
 .input-readonly {
-    background-color: #242c44 !important; /* Mismo que el header */
-    color: #a0aec0 !important; /* Gris para indicar deshabilitado */
-    cursor: not-allowed;
-    border: 1px dashed #4a5568 !important;
+  background-color: #242c44 !important;
+  color: #a0aec0 !important;
+  cursor: not-allowed;
+  border: 1px dashed #4a5568 !important;
 }
 
 input::placeholder {
-  color: rgba(255, 255, 255, 0.3); /* Un blanco muy suave y transparente */
-  font-style: italic; /* Opcional, para diferenciarlo del texto real */
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
   font-size: 0.85rem;
 }
 
 .form-group-validation {
   display: flex;
-  flex-direction: column; /* Apila el form-row y el error */
+  flex-direction: column;
   margin-bottom: 15px;
 }
 
@@ -58,8 +57,7 @@ input::placeholder {
   color: #ff4d4d;
   font-size: 0.75rem;
   font-weight: bold;
-  /* Este margen debe coincidir con el ancho de tus labels para quedar alineado al input */
-  margin-left: 120px; 
+  margin-left: 120px;
   margin-top: 2px;
 }
 

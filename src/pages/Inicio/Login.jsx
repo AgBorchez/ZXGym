@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(''); // Estado para manejar errores visualmente
+  const [error, setError] = useState(''); 
   const navigate = useNavigate();
   
   const { login } = useAuth(); 
@@ -16,7 +16,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(''); // Limpiamos errores previos
+    setError(''); 
 
     try {
       const response = await fetch(`${API_USUARIOS_URL}/login`, {
@@ -28,24 +28,19 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // --- LÓGICA DE CONTRASEÑA PENDIENTE ---
         if (data.status === "PENDING_PASSWORD") {
-          // Redirigimos a la página de configuración de clave pasando el DNI
-          // Usamos el DNI que viene del back para identificar al usuario
           navigate(`/set-password/${data.dni}`, { 
             state: { message: "Es tu primer ingreso. Por favor, configurá tu contraseña." } 
           });
           return;
         }
 
-        // --- LOGIN EXITOSO ---
         login(data); 
 
-        // Redirección por rol
         if (data.tipo === "Manager" || data.tipo === "Entrenador") {
           navigate('/socios');
         } else {
-          navigate('/'); // Home para socios normales
+          navigate('/'); 
         }
 
       } else {

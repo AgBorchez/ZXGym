@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { API_USUARIOS_URL } from '../../Constants/config';
-import '../../styles/components/Invitaciones.css'; // Mantenemos el mismo import
+import '../../styles/components/Invitaciones.css';
 
 const InviteEntrenador = () => {
   const [token, setToken] = useState('');
@@ -35,7 +35,6 @@ const InviteEntrenador = () => {
     <div className="invite-card-container">
       <h3>Invitar Entrenador</h3>
       
-      {/* Badge diferente para distinguir del Manager al golpe de vista */}
       <div className="badge-acceso trainer-badge">
         <span>Staff Técnico</span> 
       </div>
@@ -44,7 +43,6 @@ const InviteEntrenador = () => {
         Generá un código de invitación para que un nuevo profesor se una al staff del gimnasio.
       </p>
 
-      {/* Botón principal (usamos la misma clase btn-action-main) */}
       <button 
         onClick={generateToken} 
         disabled={loading} 
@@ -53,7 +51,6 @@ const InviteEntrenador = () => {
         {loading ? 'Generando...' : 'Obtener Código'}
       </button>
 
-      {/* Estructura de Token Group (Input + Botón pegados) */}
       <div className="token-group">
         <input 
           type="text" 

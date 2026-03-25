@@ -1,9 +1,12 @@
+/* PÁGINA DE USUARIOS */
+
 .page-usuarios-container {
     padding: 20px 40px;
     max-width: 1400px;
     margin: 0 auto;
 }
 
+/* ENCABEZADO DE PÁGINA */
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -24,6 +27,7 @@
     margin: 5px 0 0 0;
 }
 
+/* BOTÓN DE ACCIÓN */
 .btn-primario-pro {
     background-color: #ff4d4d;
     color: white;
@@ -40,6 +44,7 @@
     background-color: #e64040;
 }
 
+/* SECCIÓN DE ESTADÍSTICAS RÁPIDAS */
 .stats-rapidas {
     display: flex;
     gap: 20px;

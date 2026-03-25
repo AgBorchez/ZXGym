@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../../styles/pages/Inicio/Contacto.css'; 
+import '../../styles/pages/Inicio/Contacto.css';
 
 const Contacto = () => {
   const [formData, setFormData] = useState({
@@ -19,13 +19,11 @@ const Contacto = () => {
     e.preventDefault();
     console.log('Datos enviados:', formData);
     alert('¡Gracias por tu mensaje! Te responderemos pronto.');
-    setFormData({ nombre: '', email: '', mensaje: '' }); 
+    setFormData({ nombre: '', email: '', mensaje: '' });
   };
 
   return (
     <div className="page-contacto-dark">
-      
-      {/* 1. HERO SECTION */}
       <header className="contacto-hero">
         <div className="container-pro">
           <h1>CONTÁCTANOS</h1>
@@ -33,48 +31,45 @@ const Contacto = () => {
         </div>
       </header>
 
-      {/* 2. SECCIÓN PRINCIPAL */}
       <section className="contacto-main container-pro">
         <div className="text-center-pro">
-            <h2>Estamos aquí para ayudarte</h2>
-            <p className="subtitulo-seccion">
+          <h2>Estamos aquí para ayudarte</h2>
+          <p className="subtitulo-seccion">
             ¿Quieres saber más o agendar una visita? Contáctanos y te responderemos lo antes posible.
-            </p>
+          </p>
         </div>
 
         <div className="contacto-grid">
-          
-          {/* COLUMNA IZQUIERDA: Formulario */}
           <div className="contacto-form-wrapper">
             <h3>Envíanos un Mensaje</h3>
             <form onSubmit={handleSubmit} className="dark-form">
               <div className="form-group">
-                <input 
-                  type="text" 
-                  name="nombre" 
+                <input
+                  type="text"
+                  name="nombre"
                   value={formData.nombre}
                   onChange={handleChange}
-                  placeholder="Nombre y Apellido" 
-                  required 
+                  placeholder="Nombre y Apellido"
+                  required
                 />
               </div>
               <div className="form-group">
-                <input 
-                  type="email" 
-                  name="email" 
+                <input
+                  type="email"
+                  name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Correo Electrónico" 
-                  required 
+                  placeholder="Correo Electrónico"
+                  required
                 />
               </div>
               <div className="form-group">
-                <textarea 
-                  name="mensaje" 
+                <textarea
+                  name="mensaje"
                   value={formData.mensaje}
                   onChange={handleChange}
-                  placeholder="Tu Mensaje" 
-                  rows="6" 
+                  placeholder="Tu Mensaje"
+                  rows="6"
                   required
                 ></textarea>
               </div>
@@ -82,9 +77,7 @@ const Contacto = () => {
             </form>
           </div>
 
-          {/* COLUMNA DERECHA: Info */}
           <div className="contacto-info-wrapper">
-            
             <div className="info-card-pro">
               <div className="icon-circle phone-icon">📞</div>
               <div className="info-text">
@@ -104,18 +97,16 @@ const Contacto = () => {
             </div>
 
             <div className="info-card-pro">
-                <div className="icon-circle location-icon">📍</div>
-                <div className="info-text">
-                    <h4>Ubicación</h4>
-                    <p>Av. Siempre Viva 742</p>
-                    <span className="info-sub">Springfield, Argentina</span>
-                </div>
+              <div className="icon-circle location-icon">📍</div>
+              <div className="info-text">
+                <h4>Ubicación</h4>
+                <p>Av. Siempre Viva 742</p>
+                <span className="info-sub">Springfield, Argentina</span>
+              </div>
             </div>
-
           </div>
         </div>
       </section>
-
     </div>
   );
 };

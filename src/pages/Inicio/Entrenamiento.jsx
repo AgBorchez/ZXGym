@@ -28,8 +28,6 @@ const Entrenamiento = () => {
 
   return (
     <div className="page-entrenamiento-dark">
-      
-      {/* 1. HERO SECTION */}
       <header className="hero-section">
         <div className="hero-content">
           <h1>ENTRENAMIENTO</h1>
@@ -41,7 +39,6 @@ const Entrenamiento = () => {
         </div>
       </header>
 
-      {/* 2. SECCIÓN DE SERVICIOS */}
       <section className="servicios-section">
         <h2>Nuestros Servicios de Entrenamiento</h2>
         <p className="subtitulo-seccion">
@@ -50,7 +47,6 @@ const Entrenamiento = () => {
         </p>
 
         <div className="tarjetas-container">
-          
           {servicios.map(servicio => (
             <div 
               key={servicio.id} 
@@ -58,18 +54,14 @@ const Entrenamiento = () => {
               style={{ backgroundImage: `url(${servicio.imagenUrl})` }}
             >
               <div className="tarjeta-overlay"></div>
-
               <div className="tarjeta-content">
-                {/* Se eliminó el icon-wrapper */}
                 <h3>{servicio.titulo}</h3>
                 <p>{servicio.descripcion}</p>
               </div>
             </div>
           ))}
-
         </div>
       </section>
-
     </div>
   );
 };

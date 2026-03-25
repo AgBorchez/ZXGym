@@ -1,8 +1,6 @@
-/* ==========================================================================
-   TABLA DE SOCIOS - ESTILO DASHBOARD PRO (DARK THEME) - MODO EMPUJE REAL
-   ========================================================================== */
+/* TABLA DE SOCIOS - ESTILO DASHBOARD PRO (DARK THEME) */
 
-/* Contenedor principal con efecto de profundidad y scroll inteligente */
+/* CONTENEDOR PRINCIPAL */
 .tabla-container-pro {
     background-color: #1b2235;
     border-radius: 12px;
@@ -15,7 +13,7 @@
     display: block;
 }
 
-/* --- NIVEL 1: Controles Superiores (Switch y Filtros) --- */
+/* NIVEL 1: CONTROLES SUPERIORES (SWITCH Y FILTROS) */
 .controles-superiores-pro {
     display: flex;
     justify-content: space-between;
@@ -77,7 +75,7 @@
     background: #48bb78;
 }
 
-/* Filtros de Estado (Todos, Activos...) */
+/* Filtros de Estado */
 .grupo-filtros {
     display: flex;
     gap: 10px;
@@ -100,7 +98,7 @@
     border-color: #1a56db;
 }
 
-/* --- NIVEL 2: Fila de Búsqueda (Ancho Completo) --- */
+/* NIVEL 2: FILA DE BÚSQUEDA */
 .fila-busqueda {
     margin-bottom: 25px;
     width: 100%;
@@ -136,7 +134,7 @@
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
 }
 
-/* --- ESTRUCTURA DE TABLA --- */
+/* ESTRUCTURA DE TABLA */
 .tabla-scroll-area {
     width: 100%;
     overflow-x: auto;
@@ -156,12 +154,10 @@
     background-color: #1b2235;
     color: #718096;
     border-bottom: 2px solid #2d3748;
-    overflow: visible !important; 
     text-align: left;
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-sizing: border-box;
 }
 
 .header-label {
@@ -173,7 +169,9 @@
     transition: color 0.2s;
 }
 
-.header-label:hover { color: #4299e1; }
+.header-label:hover { 
+    color: #4299e1; 
+}
 
 .resizer {
     position: absolute;
@@ -191,26 +189,26 @@
     border-right: 3px solid #4299e1;
 }
 
-/* --- CELDAS Y DATOS --- */
+/* CELDAS Y DATOS */
 .tabla-estilo td {
     padding: 16px;
     border-bottom: 1px solid #2d3748;
     color: #e2e8f0;
     font-size: 0.95rem;
-    box-sizing: border-box;
     text-align: left; 
-    
-    /* 🛡️ FIX PARA ACHICAR COLUMNAS */
     min-width: 0 !important; 
     max-width: 0 !important; 
     width: inherit; 
-    
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-/* Badges para la Vista de Salud (Afecciones) */
+.tabla-estilo tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* BADGES Y ESTADOS */
 .afeccion-badge {
     display: inline-block;
     background: rgba(72, 187, 120, 0.1);
@@ -224,19 +222,35 @@
     font-weight: 500;
 }
 
-/* Ajustes especiales para columna de acciones */
+.badge-plan {
+    background-color: rgba(66, 153, 225, 0.15);
+    color: #90cdf4;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(66, 153, 225, 0.3);
+}
+
+/* ACCIONES */
 .col-acciones, .tabla-estilo td:last-child {
     text-align: center !important;
     max-width: none !important;
     width: 160px;
 }
 
-.tabla-estilo tr:hover {
-    background-color: rgba(255, 255, 255, 0.02);
+.acciones-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
 }
 
-/* --- ACCIONES --- */
-.btn-editar-pro, .btn-borrar-pro {
+.btn-editar-pro, 
+.btn-borrar-pro {
     padding: 8px 16px;
     border-radius: 6px;
     cursor: pointer;
@@ -267,24 +281,4 @@
 .btn-switch:hover {
     background-color: #4a5568;
     color: white;
-}
-
-.acciones-container {
-    display: flex;         /* Activa el modo fila */
-    flex-direction: row;   /* Los pone uno al lado del otro */
-    flex-wrap: nowrap;     /* 🛡️ PROHIBE que el botón baje */
-    align-items: center;   /* Los centra verticalmente */
-    gap: 8px;              /* Espacio entre botones */
-    width: 100%;           /* Que ocupe todo el ancho de la celda */
-    justify-content: center;
-}
-
-.badge-plan {
-    background-color: rgba(66, 153, 225, 0.15);
-    color: #90cdf4;
-    padding: 4px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 1px solid rgba(66, 153, 225, 0.3);
 }

@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // 1. Efecto de Carga Inicial
     useEffect(() => {
         const checkAuth = () => {
             try {
@@ -16,7 +15,7 @@ export const AuthProvider = ({ children }) => {
                 }
             } catch (error) {
                 console.error("Error leyendo el localStorage", error);
-                localStorage.removeItem('user'); // Si está corrupto, lo limpiamos
+                localStorage.removeItem('user');
             } finally {
                 setLoading(false);
             }
@@ -24,8 +23,6 @@ export const AuthProvider = ({ children }) => {
 
         checkAuth();
 
-        // 2. Sincronización entre pestañas
-        // Si cierro sesión en una pestaña, se cierra en todas
         const syncLogout = (e) => {
             if (e.key === 'user' && !e.newValue) {
                 setUser(null);
@@ -43,7 +40,6 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
-        // Opcional: Podés forzar un reload o dejar que el ProtectedRoute redirija
         window.location.href = '/login'; 
     };
 

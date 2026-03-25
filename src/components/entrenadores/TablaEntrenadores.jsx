@@ -1,15 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { API_ENTRENADORES_URL } from '../../Constants/config.js'; // Acordate de agregar esta URL
+import { API_ENTRENADORES_URL } from '../../Constants/config.js'; 
 import FilaEntrenador from './FilaEntrenador'; 
-import '../../styles/components/TablaSocios.css'; // Reutilizamos los estilos generales
+import '../../styles/components/TablaSocios.css';
 
 function TablaEntrenadores({ onEditar }) {
   const [entrenadores, setEntrenadores] = useState([]);
   const [busqueda, setBusqueda] = useState('');
-  const [filtroEstado, setFiltroEstado] = useState('activos'); // Por defecto vemos los que trabajan hoy
+  const [filtroEstado, setFiltroEstado] = useState('activos');
   const [cargando, setCargando] = useState(false);
   
-  // SortConfig adaptado a los campos de Entrenador
   const [sortConfig, setSortConfig] = useState({ key: 'JoinDate', isAscending: false });
 
   const traerEntrenadores = useCallback(async () => {
@@ -20,7 +19,6 @@ function TablaEntrenadores({ onEditar }) {
       params.append("SortBy", sortConfig.key);
       params.append("IsAscending", sortConfig.isAscending);
       
-      // Filtro de actividad laboral
       if (filtroEstado !== 'todos') {
         params.append("ActiveOnly", filtroEstado === 'activos');
       }
@@ -67,7 +65,6 @@ function TablaEntrenadores({ onEditar }) {
     }
   };
 
-  // Configuración de columnas para Entrenadores
   const columnasConfig = [
     { label: "Nombre", key: "Name", width: "150px" },
     { label: "Apellido", key: "LastName", width: "150px" },
@@ -120,7 +117,7 @@ function TablaEntrenadores({ onEditar }) {
                       {col.label}
                       {sortConfig.key === col.key && (sortConfig.isAscending ? ' ↑' : ' ↓')}
                     </span>
-                    <div className="resizer" /* Lógica de redimensionado igual a Socios */ />
+                    <div className="resizer" />
                   </div>
                 </th>
               ))}

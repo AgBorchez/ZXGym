@@ -39,18 +39,15 @@ const ControlUsuarios = () => {
         <TablaUsuarios onEditar={manejarEditar} />
       </main>
 
-      {/* MODAL DE INVITACIONES SEPARADO */}
       <ModalInvitacion
         isOpen={mostrarModalInvite} 
         onClose={() => setMostrarModalInvite(false)} 
       />
 
-      {/* MODAL DE EDICIÓN (Podrías separarlo también en el futuro) */}
       {mostrarModalEdit && (
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Editar Usuario: {usuarioSeleccionado?.name}</h3>
-            {/* Formulario de edición... */}
             <button className="btn-secondary" onClick={() => setMostrarModalEdit(false)}>Cerrar</button>
           </div>
         </div>

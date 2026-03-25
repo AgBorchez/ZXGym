@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { API_USUARIOS_URL } from '../../Constants/config';
-import '../../styles/pages/Inicio/Login.css'; // Usamos tus nuevas clases de Login
+import '../../styles/pages/Inicio/Login.css';
 
 const SetInitialPassword = () => {
     const { dni } = useParams();
@@ -75,7 +75,6 @@ const SetInitialPassword = () => {
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit} className="login-form">
-                        {/* Error visual usando tu clase */}
                         {error && (
                             <p style={{ color: '#ff4d4d', fontSize: '0.85rem', marginBottom: '10px', fontWeight: 'bold' }}>
                                 {error}

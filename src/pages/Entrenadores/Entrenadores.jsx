@@ -7,7 +7,6 @@ function Entrenadores() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [entrenadorAEditar, setEntrenadorAEditar] = useState(null);
 
-  // Función para refrescar la lista después de un POST o PUT
   const refrescarLista = () => {
     setActualizarTabla(prev => prev + 1);
     setMostrarModal(false); 
@@ -30,7 +29,7 @@ function Entrenadores() {
           <h1>Gestión de Staff</h1>
           
           <button 
-            className="btn-nuevo-socio-verde" // Mantenemos la clase del botón verde que te gustó
+            className="btn-nuevo-socio-verde"
             onClick={() => { setEntrenadorAEditar(null); setMostrarModal(true); }}
           >
             + Nuevo Entrenador
@@ -39,10 +38,8 @@ function Entrenadores() {
 
         <hr className="divisor" />
 
-        {/* Pasamos la key para forzar el remonte de la tabla al actualizar */}
         <TablaEntrenadores key={actualizarTabla} onEditar={manejarEditar} />
 
-        {/* Modal de Entrenadores */}
         {mostrarModal && (
           <div className="modal-overlay">
             <div className="modal-content">

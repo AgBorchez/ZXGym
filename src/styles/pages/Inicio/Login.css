@@ -1,115 +1,114 @@
 /* src/styles/Login.css */
 
 .login-page {
-    /* CAMBIO: Usamos min-height en lugar de height fijo para permitir que crezca */
-    min-height: 100vh; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000;
-    background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070');
-    background-size: cover;
-    background-position: center;
-    /* CAMBIO: Agregamos padding arriba y abajo para que no toque los bordes al scrollear */
-    padding: 60px 20px; 
-    box-sizing: border-box;
+  min-height: 100vh; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #000;
+  background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  padding: 60px 20px; 
+  box-sizing: border-box;
 }
 
 .login-card {
-    background: rgba(26, 26, 26, 0.9); /* Un poco más opaco para mejor lectura */
-    backdrop-filter: blur(15px);
-    /* CAMBIO: Reducimos el padding de 50px a 30px para ganar espacio vertical */
-    padding: 30px; 
-    border-radius: 15px;
-    width: 100%;
-    max-width: 450px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    text-align: center;
-    /* CAMBIO: Aseguramos que la altura sea automática */
-    height: auto; 
+  background: rgba(26, 26, 26, 0.9);
+  backdrop-filter: blur(15px);
+  padding: 30px; 
+  border-radius: 15px;
+  width: 100%;
+  max-width: 450px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  height: auto; 
 }
 
 .login-header h2 {
-    color: white;
-    margin: 10px 0 5px; /* Reducimos márgenes */
-    font-size: 1.6rem;
+  color: white;
+  margin: 10px 0 5px;
+  font-size: 1.6rem;
 }
 
 .login-header p {
-    color: #888;
-    margin-bottom: 20px; /* Reducimos margen inferior */
-    font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
 }
 
-/* --- Ajustes en los grupos de formulario para compactar --- */
+/* FORMULARIO */
 .form-group {
-    margin-bottom: 12px; /* Reducimos de 20px a 12px */
+  margin-bottom: 12px;
 }
 
 .form-group label {
-    display: block;
-    color: #ccc;
-    margin-bottom: 5px;
-    font-size: 0.85rem;
+  display: block;
+  color: #ccc;
+  margin-bottom: 5px;
+  font-size: 0.85rem;
 }
 
 .form-group input, 
-.login-form select { /* Agregamos select para que matchee el estilo */
-    width: 100%;
-    padding: 10px 12px; /* Inputs un poco más compactos */
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.95rem;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
+.login-form select {
+  width: 100%;
+  padding: 10px 12px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
 }
 
-/* Estilo para el SELECT de planes */
 .login-form select {
-    appearance: none;
-    cursor: pointer;
+  appearance: none;
+  cursor: pointer;
 }
 
 .btn-login-submit {
-    width: 100%;
-    padding: 12px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: background 0.3s, transform 0.2s;
+  width: 100%;
+  padding: 12px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s, transform 0.2s;
 }
 
-/* --- Filas para Nombre y Apellido --- */
+.btn-login-submit:hover {
+  background-color: #e64040;
+}
+
+/* ESTRUCTURA FLEXIBLE */
 .form-row {
-    display: flex;
-    gap: 15px;
-    width: 100%;
+  display: flex;
+  gap: 15px;
+  width: 100%;
 }
 
 .flex-1 {
-    flex: 1;
+  flex: 1;
 }
 
-/* --- Responsive --- */
+/* RESPONSIVIDAD */
 @media (max-width: 480px) {
-    .login-page {
-        padding: 20px 10px;
-    }
-    
-    .login-card {
-        padding: 20px;
-    }
+  .login-page {
+    padding: 20px 10px;
+  }
+  
+  .login-card {
+    padding: 20px;
+  }
 
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
 }

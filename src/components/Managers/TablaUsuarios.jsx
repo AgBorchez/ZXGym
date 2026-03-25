@@ -1,26 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
-import { API_USUARIOS_URL } from '../../Constants/config.js'; 
-import FilaUsuario from './FilaUsuarios'; 
+import { API_USUARIOS_URL } from '../../Constants/config.js';
+import FilaUsuario from './FilaUsuarios';
 import '../../styles/components/TablaSocios.css';
 
 function TablaUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState('');
-  const [filtroRol, setFiltroRol] = useState('todos'); 
+  const [filtroRol, setFiltroRol] = useState('todos');
   const [cargando, setCargando] = useState(false);
-  
+
   const [sortConfig, setSortConfig] = useState({ key: 'Name', isAscending: true });
 
   const traerUsuarios = useCallback(async () => {
     try {
       setCargando(true);
       const params = new URLSearchParams();
-      
+
       params.append("SortBy", sortConfig.key);
       params.append("IsAscending", sortConfig.isAscending);
-      
+
       if (filtroRol !== 'todos') {
-        params.append("Type", filtroRol); 
+        params.append("Type", filtroRol);
       }
 
       if (busqueda.trim() !== "") {
@@ -95,12 +95,9 @@ function TablaUsuarios() {
 
   return (
     <div className="tabla-container-pro">
-      {/* 1. CONTROLES SUPERIORES: Título a la izquierda, Filtros a la derecha */}
       <div className="controles-superiores-pro">
-        
-        {/* AGREGAMOS EL TÍTULO ACÁ (Igual que en Entrenadores) */}
         <h2 style={{ color: 'white', margin: 0 }}>Gestión Global de Usuarios</h2>
-        
+
         <div className="grupo-filtros">
           {['todos', 'Socio', 'Entrenador', 'Manager'].map((rol) => (
             <button
@@ -114,7 +111,6 @@ function TablaUsuarios() {
         </div>
       </div>
 
-      {/* 2. BUSCADOR (Mismo estilo) */}
       <div className="fila-busqueda">
         <div className="input-wrapper">
           <span className="search-icon">🔍</span>
@@ -128,7 +124,6 @@ function TablaUsuarios() {
         </div>
       </div>
 
-      {/* 3. ÁREA DE TABLA */}
       <div className="tabla-scroll-area">
         <table className="tabla-estilo">
           <thead>
@@ -154,9 +149,9 @@ function TablaUsuarios() {
               <tr><td colSpan="6" style={{ textAlign: 'center', padding: '20px' }}>No se encontraron usuarios</td></tr>
             ) : (
               usuarios.map((usuario) => (
-                <FilaUsuario 
-                  key={usuario.id} 
-                  usuario={usuario} 
+                <FilaUsuario
+                  key={usuario.id}
+                  usuario={usuario}
                   onBorrar={manejarBorrar}
                 />
               ))

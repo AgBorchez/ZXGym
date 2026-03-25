@@ -14,7 +14,7 @@
   background-color: var(--bg-dark);
   color: var(--text-white);
   font-family: 'Poppins', sans-serif;
-  padding-bottom: 100px; /* Espacio al final ya que no hay mapa */
+  padding-bottom: 100px;
 }
 
 .container-pro {
@@ -46,7 +46,7 @@
   margin: 5px 0 0 0;
 }
 
-/* --- 2. MAIN SECTION & GRID (Nivelación Aplicada) --- */
+/* --- 2. MAIN SECTION & GRID --- */
 .contacto-main {
   padding: 80px 5%;
 }
@@ -59,7 +59,7 @@
 .contacto-grid {
   display: flex;
   gap: 50px;
-  align-items: stretch; /* 👈 Obliga a ambas columnas a medir lo mismo */
+  align-items: stretch;
   flex-wrap: wrap;
 }
 
@@ -68,7 +68,7 @@
   flex: 1;
   min-width: 320px;
   display: flex;
-  flex-direction: column; /* Permite control interno del alto */
+  flex-direction: column;
 }
 
 h3 {
@@ -81,7 +81,7 @@ h3 {
 .dark-form {
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* 👈 Hace que el formulario use todo el alto disponible */
+  flex-grow: 1;
 }
 
 .dark-form .form-group {
@@ -102,7 +102,7 @@ h3 {
 }
 
 .dark-form textarea {
-  flex-grow: 1 !important; /* 👈 Se estira para rellenar el hueco */
+  flex-grow: 1 !important;
   min-height: 150px;
   resize: none;
 }
@@ -123,7 +123,7 @@ h3 {
   font-weight: 700;
   font-size: 1.1rem;
   cursor: pointer;
-  margin-top: auto; /* 👈 Se pega a la base de la columna */
+  margin-top: auto;
   transition: all 0.3s;
 }
 
@@ -132,9 +132,9 @@ h3 {
   transform: translateY(-2px);
 }
 
-/* --- TARJETAS DE INFORMACIÓN (Distribuidas) --- */
+/* --- TARJETAS DE INFORMACIÓN --- */
 .contacto-info-wrapper {
-  justify-content: space-between; /* 👈 Separa las 3 tarjetas proporcionalmente */
+  justify-content: space-between;
 }
 
 .info-card-pro {
@@ -145,7 +145,7 @@ h3 {
   display: flex;
   align-items: center;
   gap: 20px;
-  flex: 1; /* 👈 Se estiran para llenar el alto */
+  flex: 1;
   margin-bottom: 20px;
   transition: transform 0.3s;
 }

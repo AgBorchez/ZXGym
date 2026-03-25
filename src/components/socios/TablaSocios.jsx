@@ -10,25 +10,21 @@ function TablaSocios({ onEditar }) {
   const [cargando, setCargando] = useState(false);
   const [vistaAfecciones, setVistaAfecciones] = useState(false);
   
-  // Sincronizado con las keys de tu switch en C#
   const [sortConfig, setSortConfig] = useState({ key: 'id', isAscending: true });
 
   const traerSocios = useCallback(async () => {
     try {
       setCargando(true);
 
-      // Construimos los parámetros exactos de tu controlador C#
       const params = new URLSearchParams();
       params.append("SortBy", sortConfig.key);
       params.append("IsAscending", sortConfig.isAscending);
       params.append("Tabla_Patologias", vistaAfecciones);
       
-      // Manejo de ActiveOnly: tu backend discrimina por fecha actual
       if (filtroEstado !== 'todos') {
         params.append("ActiveOnly", filtroEstado === 'activos');
       }
 
-      // Parámetro de búsqueda para el backend
       if (busqueda.trim() !== "") {
         params.append("buscar", busqueda);
       }
@@ -42,11 +38,9 @@ function TablaSocios({ onEditar }) {
     } finally {
       setCargando(false);
     }
-    // Agregamos busqueda a las dependencias para que el servidor filtre mientras escribes
   }, [sortConfig, filtroEstado, vistaAfecciones, busqueda]);
 
   useEffect(() => {
-    // Implementamos un pequeño debounce para no saturar el servidor al escribir
     const timer = setTimeout(() => {
       traerSocios();
     }, 300);
@@ -95,7 +89,6 @@ function TablaSocios({ onEditar }) {
     document.addEventListener('mouseup', alSoltar);
   };
 
-  // Keys mapeadas exactamente al switch(SortBy.ToLower()) de tu C#
   const columnasConfig = vistaAfecciones 
     ? [
         { label: "DNI", key: "DNI", width: "106px" },
@@ -129,7 +122,7 @@ function TablaSocios({ onEditar }) {
           {['todos', 'activos', 'inactivos'].map((estado) => (
             <button
               key={estado}
-              className={`btn-filtro ${filtroEstado === estado ? 'activo' : ''}`}
+              className={`btn-filtro ${filtroEstado === estado ? 'active' : ''}`}
               onClick={() => setFiltroEstado(estado)}
             >
               {estado.charAt(0).toUpperCase() + estado.slice(1)}

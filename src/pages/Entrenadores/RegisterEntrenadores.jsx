@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import '../../styles/pages/Inicio/Login.css';
-import { API_ENTRENADORES_URL } from '../../Constants/config'; // Usamos la base de tu API
+import { API_ENTRENADORES_URL } from '../../Constants/config';
 
 const RegisterEntrenador = () => {
-  const { token } = useParams(); // Obtenemos el TR-code de la URL
+  const { token } = useParams();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,6 @@ const RegisterEntrenador = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Armamos el payload exacto que espera RegistroEntrenadorRequest en C#
     const dataToSubmit = {
       dni: parseInt(formData.dni),
       name: formData.name,
@@ -54,7 +53,7 @@ const RegisterEntrenador = () => {
       specialty: formData.specialty,
       shift: formData.shift,
       rcpExpirationDate: new Date(formData.rcpExpirationDate).toISOString(),
-      token: token // El token TR- proveniente de la URL
+      token: token
     };
 
     try {
@@ -88,8 +87,6 @@ const RegisterEntrenador = () => {
         </div>
 
         <form onSubmit={step === 1 ? handleNextStep : handleSubmit} className="login-form">
-          
-          {/* PASO 1: ACCESO */}
           {step === 1 && (
             <>
               <div className="form-group">
@@ -108,7 +105,6 @@ const RegisterEntrenador = () => {
             </>
           )}
 
-          {/* PASO 2: DATOS PROFESIONALES */}
           {step === 2 && (
             <>
               <div className="form-row">

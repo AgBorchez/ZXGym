@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { API_SOCIOS_URL } from '../../Constants/config.js'; // Asegúrate que apunte a la base de tu API
+import { API_SOCIOS_URL } from '../../Constants/config.js';
 import '../../styles/components/FormularioSocio/FormularioSocio.css';
 
 const estadoInicial = {
@@ -75,7 +75,6 @@ function FormularioSocio({ alGuardar, socioExistente }) {
         JoinDate: socioExistente.joinDate ? socioExistente.joinDate.split('T')[0] : '',
         EndDate: socioExistente.endDate ? socioExistente.endDate.split('T')[0] : ''
       });
-      // Si el socio tiene patologías registradas, cargarlas aquí si el backend las envía
       if (socioExistente.patologias) setPatologiasSeleccionadas(socioExistente.patologias);
     }
     if (!socioExistente && formData.id !== '') setFormData(estadoInicial);
@@ -85,14 +84,12 @@ function FormularioSocio({ alGuardar, socioExistente }) {
     e.preventDefault();
     const Edicion = !!socioExistente;
     
-    // Cambiamos la URL para que apunte al nuevo método de registro que maneja la transacción
     const urlFinal = Edicion 
       ? `${API_SOCIOS_URL}/${formData.id}` 
       : `${API_SOCIOS_URL}/register-socio`; 
 
     const metodo = Edicion ? 'PUT' : 'POST';
 
-    // Mapeamos los datos para que coincidan con RegistroSocioRequest de C#
     const datosParaCsharp = {
       DNI: parseInt(formData.DNI),
       Name: formData.Name,
@@ -100,7 +97,6 @@ function FormularioSocio({ alGuardar, socioExistente }) {
       Email: formData.Email,
       Phone: formData.Phone,
       PlanId: parseInt(formData.PlanId),
-      // Enviamos Password como null o vacío para que el backend sepa que está pendiente
       Password: "", 
       Patologias: patologiasSeleccionadas
     };

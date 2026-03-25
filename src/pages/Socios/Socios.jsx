@@ -9,27 +9,25 @@ function Socios() {
 
   const refrescarLista = () => {
     setActualizarTabla(prev => prev + 1);
-    setMostrarModal(false); // 2. Cerramos el modal automáticamente al guardar
+    setMostrarModal(false);
   };
 
   const cerrarModal = () => {
     setMostrarModal(false);
-    setSocioAEditar(null); // Limpiamos el socio al cerrar
+    setSocioAEditar(null);
   };
 
   const manejarEditar = (socio) => {
-    setSocioAEditar(socio); // Guardamos los datos del socio elegido
-    setMostrarModal(true);  // Abrimos el mismo modal de siempre
+    setSocioAEditar(socio);
+    setMostrarModal(true);
   };
 
   return (
-    <div className="app-wrapper"> {/* Este envuelve TODO y da el fondo oscuro */}
-      
+    <div className="app-wrapper">
       <div className="container">
         <div className="header-seccion">
           <h1>Gestión de Socios</h1>
           
-          {/* Botón para abrir el modal */}
           <button 
             className="btn-nuevo-socio-verde"
             onClick={() => { setSocioAEditar(null); setMostrarModal(true); }}
@@ -40,10 +38,8 @@ function Socios() {
 
         <hr className="divisor" />
 
-        {/* La tabla con sus filtros internos */}
         <TablaSocios key={actualizarTabla} onEditar={manejarEditar} />
 
-        {/* Lógica del Modal */}
         {mostrarModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -52,12 +48,14 @@ function Socios() {
                 <button className="btn-cerrar-x" onClick={cerrarModal}>&times;</button>
               </div>
               <div className="form-body">
-                <p style={{fontSize: '0.8rem', color: '#a0aec0', marginBottom: '10px'}}>Completa los siguientes campos:</p>
+                <p style={{fontSize: '0.8rem', color: '#a0aec0', marginBottom: '10px'}}>
+                  Completa los siguientes campos:
+                </p>
               
-              <FormularioSocio 
-                alGuardar={refrescarLista} 
-                socioExistente={socioAEditar} 
-              />
+                <FormularioSocio 
+                  alGuardar={refrescarLista} 
+                  socioExistente={socioAEditar} 
+                />
               </div>
             </div>
           </div>

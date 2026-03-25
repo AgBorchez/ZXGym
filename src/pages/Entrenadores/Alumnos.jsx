@@ -34,17 +34,12 @@ function Alumnos() {
               Bienvenido, {user?.nombre}. Aquí tienes la lista de tus alumnos asignados.
             </p>
           </div>
-          
-          {/* El entrenador no crea socios, así que quitamos el botón verde de "Nuevo" 
-              Podrías poner un botón de "Imprimir Reporte" o algo similar aquí si quisieras */}
         </div>
 
         <hr className="divisor" />
 
-        {/* Pasamos el key para refrescar y el manejador de edición (que aquí actúa como Ver Ficha) */}
         <TablaAlumnos key={actualizarTabla} onEditar={manejarVerFicha} />
 
-        {/* Modal de Detalle/Ficha del Alumno */}
         {mostrarModal && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -58,12 +53,10 @@ function Alumnos() {
                   Información detallada y antecedentes médicos del socio.
                 </p>
               
-                {/* Reutilizamos el FormularioSocio pero lo ideal sería que en este modo 
-                    muchos campos sean ReadOnly para el entrenador */}
                 <FormularioSocio 
                   alGuardar={refrescarLista} 
                   socioExistente={socioAEditar} 
-                  esEntrenador={true} // Podrías pasar esta prop para deshabilitar planes/precios en el form
+                  esEntrenador={true} 
                 />
               </div>
             </div>

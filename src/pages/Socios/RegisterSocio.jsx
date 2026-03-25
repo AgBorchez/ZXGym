@@ -19,11 +19,34 @@ const RegisterSocio = () => {
     confirmPassword: ''
   });
 
+  const validateDni = (dni) => {
+    const dniRegex = /^\d{7,8}$/;
+    return dniRegex.test(dni);
+  };
+
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[0-9+\s-]{8,15}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const formatPhoneNumber = (value) => {
+    if (!value) return value;
+    const phoneNumber = value.replace(/[^\d]/g, '');
+    const phoneNumberLength = phoneNumber.length;
+
+    if (phoneNumberLength <= 2) {
+      return phoneNumber;
+    }
+    if (phoneNumberLength <= 6) {
+      return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2)}`;
+    }
+    return `${phoneNumber.slice(0, 2)} ${phoneNumber.slice(2, 6)}-${phoneNumber.slice(6, 10)}`;
+  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Validación para pasar del Paso 1 al Paso 2
   const handleNextStep = (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -40,7 +63,16 @@ const RegisterSocio = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Re-validación final antes de enviar al servidor
+    if (!validateDni(formData.dni)) {
+      alert("Por favor, ingresá un DNI válido (7 u 8 dígitos, sin puntos).");
+      return;
+    }
+
+    if (!validatePhone(formData.phone)) {
+      alert("El formato del teléfono no es válido. Usá solo números, espacios o '+'.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       alert("Las contraseñas no coinciden");
       return;
@@ -89,8 +121,6 @@ const RegisterSocio = () => {
         </div>
 
         <form onSubmit={step === 1 ? handleNextStep : handleSubmit} className="login-form">
-          
-          {/* PASO 1: CREDENCIALES */}
           {step === 1 && (
             <>
               <div className="form-group">
@@ -104,23 +134,22 @@ const RegisterSocio = () => {
               <div className="form-group">
                 <label>Confirmar Contraseña</label>
                 <input 
-                    name="confirmPassword" 
-                    type="password" 
-                    placeholder="••••••••" 
-                    onChange={handleChange} 
-                    value={formData.confirmPassword} 
-                    required 
-                    className={formData.confirmPassword && formData.password !== formData.confirmPassword ? 'input-error' : ''}
+                  name="confirmPassword" 
+                  type="password" 
+                  placeholder="••••••••" 
+                  onChange={handleChange} 
+                  value={formData.confirmPassword} 
+                  required 
+                  className={formData.confirmPassword && formData.password !== formData.confirmPassword ? 'input-error' : ''}
                 />
                 {formData.confirmPassword && formData.password !== formData.confirmPassword && (
-                    <span className="error-text">Las contraseñas no coinciden</span>
+                  <span className="error-text">Las contraseñas no coinciden</span>
                 )}
               </div>
               <button type="submit" className="btn-login-submit">Siguiente</button>
             </>
           )}
 
-          {/* PASO 2: DATOS PERSONALES Y PLAN */}
           {step === 2 && (
             <>
               <div className="form-row">
@@ -136,12 +165,48 @@ const RegisterSocio = () => {
 
               <div className="form-group">
                 <label>DNI</label>
-                <input name="dni" type="number" placeholder="Sin puntos ni espacios" onChange={handleChange} value={formData.dni} required />
+                <input 
+                  name="dni" 
+                  type="text" 
+                  inputMode="numeric" 
+                  placeholder="Ej: 40123456" 
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, "");
+                    if (value.length <= 8) handleChange({ target: { name: 'dni', value } });
+                  }} 
+                  value={formData.dni} 
+                  required 
+                />
+                {formData.dni && !validateDni(formData.dni) && (
+                  <span className="error-text">Debe tener 7 u 8 dígitos</span>
+                )}
               </div>
 
               <div className="form-group">
-                <label>Teléfono</label>
-                <input name="phone" type="tel" placeholder="11 1234 5678" onChange={handleChange} value={formData.phone} required />
+                <label>Teléfono (con característica)</label>
+                <input 
+                  name="phone" 
+                  type="text" 
+                  inputMode="numeric" 
+                  placeholder="Ej: 11 1234-5678" 
+                  value={formatPhoneNumber(formData.phone)} 
+                  required 
+                  onChange={(e) => {
+                    const soloNumeros = e.target.value.replace(/\D/g, "");
+                    if (soloNumeros.length <= 10) {
+                      handleChange({
+                        target: {
+                          name: 'phone',
+                          value: soloNumeros
+                        }
+                      });
+                    }
+                  }} 
+                  className={formData.phone && formData.phone.length > 0 && formData.phone.length < 10 ? 'input-error' : ''}
+                />
+                {formData.phone && formData.phone.length > 0 && formData.phone.length < 10 && (
+                  <span className="error-text">Ingresá los 10 dígitos (ej: 11 1234-5678)</span>
+                )}
               </div>
 
               <div className="form-group">
