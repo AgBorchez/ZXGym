@@ -190,23 +190,18 @@ namespace GymManager.api.Controllers
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            // Iniciamos una transacción para asegurar la integridad de las dos tablas
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                // 1. Buscamos el registro en la tabla Socios
                 var dbsocio = await _context.Socios.FindAsync(Id);
 
                 if (dbsocio == null)
                     return NotFound(new { message = "Socio no encontrado para eliminar" });
 
-                // 2. Buscamos el Usuario vinculado por el DNI
-                // (Asumiendo que DNI es el nexo entre ambas tablas)
                 var dbusuario = await _context.Usuarios
                     .FirstOrDefaultAsync(u => u.DNI == dbsocio.DNI);
 
-                // 3. Marcamos ambos para eliminación
                 _context.Socios.Remove(dbsocio);
 
                 if (dbusuario != null)
@@ -214,7 +209,6 @@ namespace GymManager.api.Controllers
                     _context.Usuarios.Remove(dbusuario);
                 }
 
-                // 4. Guardamos cambios y confirmamos la transacción
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -222,7 +216,6 @@ namespace GymManager.api.Controllers
             }
             catch (Exception ex)
             {
-                // Si algo falla (ej: error de FK), deshacemos todo para no dejar datos huérfanos
                 await transaction.RollbackAsync();
                 return BadRequest(new { message = "Error al eliminar: " + ex.Message });
             }

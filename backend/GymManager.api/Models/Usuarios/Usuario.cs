@@ -9,7 +9,7 @@ namespace GymManager.api.Models.Usuarios
         public int Id { get; set; }
 
         [Required]
-        public int DNI { get; set; } // Campo base para el vínculo futuro
+        public int DNI { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -26,8 +26,6 @@ namespace GymManager.api.Models.Usuarios
         [Required]
         public string Type { get; set; }
 
-        // El '?' es vital: permite que los socios migrados 
-        // no tengan clave hasta que la seteen por primera vez
         public string? Password { get; set; }
     }
 }

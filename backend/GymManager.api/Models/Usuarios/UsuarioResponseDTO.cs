@@ -7,7 +7,7 @@ namespace GymManager.api.Models.Usuarios
         
         public int Id { get; set; }
 
-        public int DNI { get; set; } // Campo base para el vínculo futuro
+        public int DNI { get; set; } 
 
         public string Name { get; set; }
 

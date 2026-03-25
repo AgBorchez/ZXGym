@@ -15,7 +15,6 @@ namespace GymManager.api.Models.Usuarios
 
         public async Task<Usuario> CrearUsuarioBaseAsync(int dni, string name, string lastName, string email, string password, string type)
         {
-            // Validación centralizada de duplicados
             if (await _context.Usuarios.AnyAsync(u => u.Email == email || u.DNI == dni))
                 throw new Exception("El Email o DNI ya existen en el sistema.");
 
@@ -35,7 +34,7 @@ namespace GymManager.api.Models.Usuarios
             }
             else
             {
-                usuario.Password = null; // O string.Empty, según prefieras
+                usuario.Password = null; 
             }
 
             return usuario;

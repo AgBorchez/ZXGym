@@ -33,31 +33,26 @@ namespace GymManager.api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<object>>> GetUsuarios(
     [FromQuery] string? buscar,
-    [FromQuery] string? Type, // Filtro por rol: Socio, Entrenador, Manager
+    [FromQuery] string? Type, 
     [FromQuery] string SortBy = "Name",
     [FromQuery] bool IsAscending = true)
         {
-            // 1. Iniciamos la query sobre la tabla Usuarios (Base)
             var query = _context.Usuarios.AsQueryable();
 
-            // 2. Filtro por Rol (Tipo de usuario)
             if (!string.IsNullOrEmpty(Type) && Type.ToLower() != "todos")
             {
-                // Usamos ILike para que no importe si viene "socio" o "Socio"
                 query = query.Where(u => EF.Functions.ILike(u.Type, Type));
             }
 
-            // 3. Filtro de búsqueda global (DNI, Nombre, Apellido, Email)
             if (!string.IsNullOrEmpty(buscar))
             {
                 query = query.Where(u =>
                     EF.Functions.ILike(u.Name, $"%{buscar}%") ||
                     EF.Functions.ILike(u.LastName, $"%{buscar}%") ||
                     EF.Functions.ILike(u.Email, $"%{buscar}%") ||
-                    u.DNI.ToString().Contains(buscar)); // Búsqueda por DNI
+                    u.DNI.ToString().Contains(buscar)); 
             }
 
-            // 4. Ordenamiento dinámico
             query = SortBy.ToLower() switch
             {
                 "dni" => IsAscending ? query.OrderBy(u => u.DNI) : query.OrderByDescending(u => u.DNI),
@@ -68,7 +63,6 @@ namespace GymManager.api.Controllers
                 _ => IsAscending ? query.OrderBy(u => u.Id) : query.OrderByDescending(u => u.Id),
             };
 
-            // 5. Proyectamos a un objeto anónimo o un DTO para no devolver la contraseña (seguridad)
             var usuariosResponse = await query.Select(u => new UsuarioResponseDTO
             {
                 Id = u.Id,
@@ -100,7 +94,6 @@ namespace GymManager.api.Controllers
         [HttpPost("register-Manager")]
         public async Task<IActionResult> RegisterStaff([FromBody] RegisterStaffRequest request)
         {
-            // 1. IMPORTANTE: Agregamos el 'await' y cambiamos al nuevo nombre del método
             bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "manager");
 
             if (!esTokenValido)
@@ -111,7 +104,6 @@ namespace GymManager.api.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 2. Creamos el usuario base (Identidad)
                 var nuevoStaff = await _usuarioService.CrearUsuarioBaseAsync(
                     request.DNI,
                     request.Name,
@@ -125,14 +117,12 @@ namespace GymManager.api.Controllers
                 await _context.SaveChangesAsync();
                 await _tokenService.AnularTokenAsync(request.Token, "Manager");
 
-                // 3. Consolidamos la transacción
                 await transaction.CommitAsync();
 
                 return Ok(new { message = $"Registro de {request.Type} exitoso." });
             }
             catch (Exception ex)
             {
-                // Si falla el insert, deshacemos todo
                 await transaction.RollbackAsync();
                 var mensajeReal = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return BadRequest(new { message = mensajeReal });
@@ -167,7 +157,6 @@ namespace GymManager.api.Controllers
             }
             catch (Exception ex)
             {
-                // Loguear el error si es necesario
                 return StatusCode(500, new { message = "Error al generar los tokens de invitación", error = ex.Message });
             }
         }
@@ -177,20 +166,16 @@ namespace GymManager.api.Controllers
         {
             try
             {
-                // 1. Generamos los tokens llamando a la lógica asíncrona del servicio
-                // Esto limpia la tabla de tokens viejos e inserta los nuevos
                 var entrenadorToken = await _tokenService.GenerarNuevoTokenAsync("entrenador");
 
-                // 2. Devolvemos los códigos al Manager (Front-end)
                 return Ok(new
                 {
                     entrenadorCode = entrenadorToken,
-                    expiresAt = DateTime.UtcNow.AddHours(24) // Referencia visual para el Front
+                    expiresAt = DateTime.UtcNow.AddHours(24) 
                 });
             }
             catch (Exception ex)
             {
-                // Loguear el error si es necesario
                 return StatusCode(500, new { message = "Error al generar los tokens de invitación", error = ex.Message });
             }
         }

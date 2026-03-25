@@ -28,7 +28,6 @@ namespace GymManager.api.Controllers
             _tokenService = tokenService;
         }
 
-        // GET: api/entrenadores
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EntrenadorResponseDTO>>> GetAll(
             [FromQuery] string? buscar,
@@ -38,10 +37,8 @@ namespace GymManager.api.Controllers
         {
             var query = _context.Entrenadores.AsQueryable();
 
-            // Filtro de Activos / Inactivos
             query = ActiveOnly ? query.Where(e => e.IsActive) : query.Where(e => !e.IsActive);
 
-            // Búsqueda
             if (!string.IsNullOrEmpty(buscar))
             {
                 buscar = buscar.ToLower();
@@ -50,7 +47,6 @@ namespace GymManager.api.Controllers
                                             e.Specialty.ToLower().Contains(buscar));
             }
 
-            // Ordenamiento dinámico
             query = SortBy.ToLower() switch
             {
                 "name" => IsAscending ? query.OrderBy(e => e.Name) : query.OrderByDescending(e => e.Name),
@@ -80,7 +76,6 @@ namespace GymManager.api.Controllers
             return EntrenadoresResponseDTO;
         }
 
-        // GET: api/entrenadores/5
         [HttpGet("{Id}")]
         public async Task<ActionResult<EntrenadorResponseDTO>> GetByDNI(int Id)
         {
@@ -92,7 +87,6 @@ namespace GymManager.api.Controllers
             return Ok(entrenador);
         }
 
-        // POST: api/entrenadores
         [HttpPost]
         public async Task<ActionResult<Entrenador>> Create(EntrenadorCreateDTO nuevoEntrenador)
         {
@@ -128,7 +122,6 @@ namespace GymManager.api.Controllers
             }
         }
 
-        // PUT: api/entrenadores/5
         [HttpPut("{Id}")]
         public async Task<IActionResult> Update(int Id, EntrenadorUpdateDTO entrenadorActualizado)
         {
@@ -152,25 +145,20 @@ namespace GymManager.api.Controllers
             return Ok(entrenadorExistente);
         }
 
-        // DELETE: api/entrenadores/5
         [HttpDelete("{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            // Usamos una transacción para asegurar que se borren ambos registros (Entrenador y Usuario)
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                // 1. Buscamos el registro en la tabla Entrenadores
                 var entrenador = await _context.Entrenadores.FindAsync(Id);
                 if (entrenador == null)
                     return NotFound(new { message = "Entrenador no encontrado." });
 
-                // 2. Buscamos el Usuario vinculado por el DNI
                 var usuario = await _context.Usuarios
                     .FirstOrDefaultAsync(u => u.DNI == entrenador.DNI);
 
-                // 3. Removemos de ambas tablas
                 _context.Entrenadores.Remove(entrenador);
 
                 if (usuario != null)
@@ -178,7 +166,6 @@ namespace GymManager.api.Controllers
                     _context.Usuarios.Remove(usuario);
                 }
 
-                // 4. Guardamos y confirmamos impacto en la DB
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -186,7 +173,6 @@ namespace GymManager.api.Controllers
             }
             catch (Exception ex)
             {
-                // Si falla (por ejemplo, si el entrenador tiene socios asignados y hay restricción de FK)
                 await transaction.RollbackAsync();
                 return BadRequest(new { message = "Error al eliminar: " + ex.Message });
             }
@@ -196,8 +182,6 @@ namespace GymManager.api.Controllers
         [HttpPost("register-Entrenador")]
         public async Task<IActionResult> RegisterEntrenador([FromBody] RegistroEntrenadorRequest request)
         {
-            // 1. Validar el Token (IMPORTANTE: ahora es asincrónico y con Estado)
-            // El método ValidarTokenAsync busca el token, chequea que no tenga +24hs y lo marca como Usado.
             bool esTokenValido = await _tokenService.ValidarTokenAsync(request.Token, "entrenador");
 
             if (!esTokenValido)
@@ -208,8 +192,6 @@ namespace GymManager.api.Controllers
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                // 2. Crear la Identidad (Usuario Base)
-                // Usamos el servicio para generar el hash de la password y el objeto Usuario
                 var nuevoUsuario = await _usuarioService.CrearUsuarioBaseAsync(
                     request.DNI,
                     request.Name,
@@ -222,7 +204,6 @@ namespace GymManager.api.Controllers
                 _context.Usuarios.Add(nuevoUsuario);
                 await _context.SaveChangesAsync();
 
-                // 3. Crear el Perfil de Entrenador (Tabla específica del dominio)
                 var nuevoEntrenador = new Entrenador
                 {
                     DNI = nuevoUsuario.DNI,
@@ -233,25 +214,20 @@ namespace GymManager.api.Controllers
                     Specialty = request.Specialty,
                     Shift = request.Shift,
                     IsActive = true,
-                    // Consistencia UTC para PostgreSQL
                     JoinDate = DateTime.SpecifyKind(request.JoinDate == default ? DateTime.UtcNow : request.JoinDate, DateTimeKind.Utc),
                     RCPExpirationDate = DateTime.SpecifyKind(request.RCPExpirationDate, DateTimeKind.Utc)
                 };
-
-                // 4. Persistencia Atómica: Guardamos Identidad + Perfil
                 
                 _context.Entrenadores.Add(nuevoEntrenador);
                 await _context.SaveChangesAsync();
                 await _tokenService.AnularTokenAsync(request.Token, "Entrenador");
 
-                // Si todo salió bien hasta acá, consolidamos los cambios
                 await transaction.CommitAsync();
 
                 return Ok(new { message = "Entrenador registrado con éxito. ¡Bienvenido al staff!" });
             }
             catch (Exception ex)
             {
-                // Si falla algo (ej. el DNI ya existe en la DB), deshacemos todo para no dejar datos huérfanos
                 await transaction.RollbackAsync();
                 var realMessage = ex.InnerException?.Message ?? ex.Message;
                 return BadRequest(new { message = realMessage });
